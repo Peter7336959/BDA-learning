@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.21">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="何明信">
+<meta name="author" content="蔡朋枝 教授">
+<meta name="dcterms.date" content="2026-01-04">
+
+<title>BDA3_CH2 單參數模型 – Project of BDA</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./0109CH3.html" rel="next">
+<link href="./0102CH1.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-f4eaf0868db56fdc42d103e4e41655ca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="css/w3.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Project of BDA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">介紹Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://peter7336959.github.io/EA/about.html" target="_blank"> 
+<span class="menu-text">咨詢服務</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">了解我們</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./0102CH1.html">基本概念</a></li><li class="breadcrumb-item"><a href="./0104CH2.html">2.單參數模型</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="https://peter7336959.github.io/EA/news.html" class="sidebar-logo-link">
+      <img src="./icon/info-circle.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="./icon/info-circle.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">介紹</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">基本概念</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0102CH1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.機率與推論</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0104CH2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">2.單參數模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0109CH3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.多參數模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">4.D</span>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">貝氏原理</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">layout.qmd</span>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#ch2-單參數模型" id="toc-ch2-單參數模型" class="nav-link active" data-scroll-target="#ch2-單參數模型">CH2 單參數模型</a></li>
+  <li><a href="#a.統計概念澄清" id="toc-a.統計概念澄清" class="nav-link" data-scroll-target="#a.統計概念澄清">A.統計概念澄清</a></li>
+  <li><a href="#b.共軛conjugacy" id="toc-b.共軛conjugacy" class="nav-link" data-scroll-target="#b.共軛conjugacy">B.共軛（Conjugacy）</a></li>
+  <li><a href="#c.拉普拉斯預測" id="toc-c.拉普拉斯預測" class="nav-link" data-scroll-target="#c.拉普拉斯預測">C.拉普拉斯預測</a></li>
+  <li><a href="#後驗機率分佈" id="toc-後驗機率分佈" class="nav-link" data-scroll-target="#後驗機率分佈">後驗機率分佈</a></li>
+  <li><a href="#d.訊息先驗分佈" id="toc-d.訊息先驗分佈" class="nav-link" data-scroll-target="#d.訊息先驗分佈"><strong>D.訊息先驗分佈</strong></a></li>
+  <li><a href="#e.已知變異數的常態分佈" id="toc-e.已知變異數的常態分佈" class="nav-link" data-scroll-target="#e.已知變異數的常態分佈">E.已知變異數的常態分佈</a></li>
+  <li><a href="#f.廣泛的單參數暴露風險模式" id="toc-f.廣泛的單參數暴露風險模式" class="nav-link" data-scroll-target="#f.廣泛的單參數暴露風險模式">F.廣泛的單參數暴露風險模式</a></li>
+  <li><a href="#g.貝氏推論各縣市營造業職災死亡率評估" id="toc-g.貝氏推論各縣市營造業職災死亡率評估" class="nav-link" data-scroll-target="#g.貝氏推論各縣市營造業職災死亡率評估">G.貝氏推論：各縣市營造業職災死亡率評估</a></li>
+  </ul>
+<div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://peter7336959.github.io/EA/news.html"><i class="bi bi-link-45deg"></i>職安衛新知</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./0102CH1.html">基本概念</a></li><li class="breadcrumb-item"><a href="./0104CH2.html">2.單參數模型</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">BDA3_CH2 單參數模型</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">何明信 <a href="mailto:he.peter70@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            創贊
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">蔡朋枝 教授 </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            成功大學環醫所
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 4, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>date: 2026/01/04 - 2026/01/05</p>
+<section id="ch2-單參數模型" class="level2">
+<h2 class="anchored" data-anchor-id="ch2-單參數模型">CH2 單參數模型</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">核心概念</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false"><strong>2.1 估計二項式數據的機率</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false"><strong>2.2 後驗分佈：數據與先驗資訊的折衷 (Posterior as compromise)</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false"><strong>2.3 後驗推論</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false"><strong>2.4 有訊息之先驗分佈 (Informative prior distributions)</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-6" role="tab" aria-controls="tabset-1-6" aria-selected="false"><strong>2.5 常態分佈（已知變異數）</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-7" role="tab" aria-controls="tabset-1-7" aria-selected="false"><strong>2.6 其他標準單參數模型</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-8" role="tab" aria-controls="tabset-1-8" aria-selected="false"><strong>2.7 範例：癌症率的有訊息先驗</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-9-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-9" role="tab" aria-controls="tabset-1-9" aria-selected="false"><strong>2.8 無訊息先驗分佈 (Noninformative prior distributions)</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-10-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-10" role="tab" aria-controls="tabset-1-10" aria-selected="false"><strong>2.9 弱訊息先驗分佈 (Weakly informative prior distributions)</strong></a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<blockquote class="blockquote">
+<ol type="1">
+<li><strong>「貝氏統計讓我們將『過去的經驗（Prior）』與『現在的採樣數據（Data）』結合，形成對暴露風險更穩健的『新認知（Posterior）』。」</strong></li>
+<li>職業衛生（OHS）常需要在「專家經驗」與「稀少的採樣數據」之間做決策。</li>
+</ol>
+</blockquote>
+<hr>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<ul>
+<li><p>單參數？</p>
+<p>使用二項式分佈（Binomial Model）來估計一系列試驗中成功(或失敗)的**比例 <span class="math inline">\theta</span>**。透過貝氏推論，我們可以得到 <span class="math inline">\theta</span> 的後驗分佈。</p></li>
+<li><p><strong>OHS 實務</strong></p>
+<ul>
+<li><strong>場景：</strong> **「超標率（Exceedance Fraction）」**評估。</li>
+<li><strong>應用：</strong> 假設我們採樣了 <span class="math inline">n</span> 個樣本，其中有 <span class="math inline">y</span> 個樣本超過了容許濃度（OEL）。我們想知道該作業環境「真實可靠的超標機率 <span class="math inline">\theta</span>」是多少。</li>
+<li>傳統方法只看<strong>點估計</strong>（例如 10 個樣本有 1 個超標，超標率就是 10%）。</li>
+<li>但，貝氏方法會給出一個機率分佈，告訴我們超標率可能落在哪些範圍（例如：雖然看到 10%，但我們有 95% 的信心認為真實超標率在 2% 到 30% 之間）。ＱＡ❓判斷–&gt;這樣可以接受？</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="0104CH2_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>Figure 2.1</strong>(右圖)展示當樣本數 <span class="math inline">n</span> 不同時，即便比例相同，我們對 <span class="math inline">\theta</span> 的確定程度（曲線的尖銳度）是完全不同的。<strong>(樣本越多，我們越確定)</strong></li>
+</ul>
+<p><img src="images/F2-1.png" class="img-fluid"></p>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<ul>
+<li><p>後驗均值（Posterior Mean）是「先驗均值」與「樣本均值」的加權平均。樣本數 <span class="math inline">n</span> 越大，數據的權重就越重。</p></li>
+<li><p><strong>OHS 實務</strong></p>
+<ul>
+<li><p><strong>場景：</strong> 修正我們對暴露風險的看法。</p></li>
+<li><p><strong>應用：</strong> 假設過去經驗（Prior）告訴我們某製程很安全（超標率低），但今天採樣發現一個超標（Data）。貝氏統計不會立刻讓我們驚慌失措，而是「折衷/調和」兩者。</p></li>
+<li><p>這在我們只有 1-2 個樣本時特別好用，避免了「0 個超標就代表風險為 0」這種<strong>危險(不科學)</strong>的結論。</p></li>
+<li><p><strong>關鍵觀念：</strong> 隨著採樣數據變多，過去的經驗（Prior）影響力會變小，讓數據說話。</p></li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<ul>
+<li><p>如何用數值描述後驗分佈：均值（Mean）、中位數（Median）、眾數（Mode）以及可信區間（Credible Intervals）。</p></li>
+<li><p><strong>OHS 實務</strong></p>
+<ul>
+<li><p><strong>場景：</strong> 撰寫暴露評估報告。</p></li>
+<li><p><strong>應用：</strong> 不要只給一個數字（均值）。要給出<strong>「不確定性範圍」(風險概念)</strong>。</p>
+<ul>
+<li><strong>95% 後驗信賴區間</strong>，可以說「我們有 95% 的把握，該勞工的暴露風險是在 多少之間」。</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-1-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-5-tab">
+<ul>
+<li><p>共軛先驗（Conjugate Prior），如 Beta 分佈對應二項式似然函數。解釋如何將「先驗知識」轉化為數學參數 <span class="math inline">\alpha</span> 和 <span class="math inline">\beta</span> 。</p></li>
+<li><p><strong>OHS 實務</strong></p>
+<ul>
+<li><strong>場景：</strong> 利用「專家評估判斷」或「相似暴露群（SEG）的歷史數據」。</li>
+<li><strong>應用：</strong> 在還沒採樣前，我們作為專家已經知道某些製程（如全密閉管線）風險很低。我們可以設定一個有資訊的先驗分佈（Informative Prior）來反映這個事實。</li>
+<li>Beta 分佈中的 <span class="math inline">\alpha</span> 和 <span class="math inline">\beta</span> 可以被想像成「虛擬的成功與失敗次數」。</li>
+<li>於 OHS 中的「罕見職業病」或「特殊製程安全事故」，即便數據顯示比例稍低，但因為我們有強大的背景知識（暴露致病機率或製程安全指標偏離），後驗分佈會被拉回接近實際背景值。這教導我們不要因為小樣本的極端值而過度反應。</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-1-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-6-tab">
+<ul>
+<li>用於單一觀測值或多個觀測值在常態分佈下的推論。</li>
+<li>已知後驗精確度（Precision，變異數的倒數）是先驗精確度 <span class="math inline">\tau_0^2</span> 與數據精確度<span class="math inline">\sigma^2</span> 之和。</li>
+<li><strong>OHS 實務</strong>
+<ul>
+<li><p><strong>場景：</strong> 噪音劑量(Normal)或對數轉換後的化學品濃度（Lognormal）。</p></li>
+<li><p><strong>應用：</strong> 這是 AIHA 暴露評估策略的基礎模型。通常我們假設量測儀器的誤差（變異數）是已知的或可估計的，我們要推算的是勞工的<strong>平均暴露濃度</strong>。</p></li>
+<li><p>如果採樣儀器很準（<span class="math inline">\sigma^2</span> 小），數據說話大聲；如果專家經驗很豐富（<span class="math inline">\tau_0^2</span> 小），專家說話大聲。</p></li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-1-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-7-tab">
+<ul>
+<li><p>Poisson（計數資料）和 Exponential（等待時間）模型及其共軛先驗。</p></li>
+<li><p><strong>OHS 實務</strong></p>
+<ul>
+<li><strong>Poisson 分佈：</strong> 用於分析<strong>「職災事故件數」或「職業病發生數」</strong>。例如：某工廠每年發生多少次外洩？
+<ul>
+<li>透過 Gamma 先驗分佈，結合「過去十年的事故率」與「今年的事故數」，預估未來的風險。</li>
+</ul></li>
+<li><strong>Exponential 分佈：</strong> 用於<strong>「可靠度工程」或「兩次事故間隔時間」</strong>。
+<ul>
+<li>評估安全防護設備（如呼吸防護具濾毒罐）的失效時間。</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-1-8" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-8-tab">
+<ul>
+<li>分析美國腎臟癌死亡率地圖。發現最高與最低死亡率的縣市都集中在人口稀少的區域（中西部）。這是因為樣本數小（人口少）導致變異數極大。</li>
+<li><strong>OHS 實務</strong>
+<ul>
+<li><p><strong>場景：</strong> 中小企業（SME）vs.&nbsp;大型企業的職傷率比較。</p></li>
+<li><p>我們常看到小工廠（5人）連續 3 年「零職災」，老闆就說很安全。或者小工廠發生 1 件事故，職災率馬上飆升到全台最高。</p></li>
+<li><p>對於小工廠（樣本少），我們不能只看它自己的數據，必須「借用（Borrowing strength）」整體行業的平均值來進行貝氏修正（Shrinkage）。修正後，極端的低死亡率和高死亡率都會被拉回平均值，這才是真實的風險樣貌。</p></li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-1-9" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-9-tab">
+<ul>
+<li><p>當沒有背景知識時，如何設定「客觀」的先驗分佈（如 Uniform 或 Jeffreys Prior），讓數據主導結果。</p></li>
+<li><p><strong>OHS 實務</strong></p>
+<ul>
+<li><p><strong>場景：</strong> 面對全新的化學物質或全新製程。</p></li>
+<li><p><strong>應用：</strong> 當我們完全沒有文獻參考，也不敢亂猜時，我們使用無訊息先驗。</p></li>
+<li><p>雖然聽起來很「客觀」，但在數學上可能有問題（Improper prior，無法積分至 1）。在實務上，完全的無知（Ignorance）很少見，通常我們至少知道濃度不可能小於 0 或大於 1,000,000 ppm。</p></li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-1-10" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-10-tab">
+<ul>
+<li><p>不追求完全無訊息，而是設定一個範圍寬鬆但合理的先驗，目的是「正規化（Regularize）」結果，避免荒謬的極端值。</p></li>
+<li><p><strong>OHS 實務</strong></p>
+<ul>
+<li><p><strong>場景：</strong> 現代暴露評估模型的標準做法。(推薦)</p></li>
+<li><p><strong>應用：</strong> 例如在 Logistic 回歸分析聽力損失風險時，我們設定係數不應過大。</p></li>
+<li><p><strong>「不要假裝你什麼都不知道（無訊息），也不要武斷地說你知道一切（強訊息）。設定一個『合理的物理界線』，剩下的交給數據。」</strong></p></li>
+</ul></li>
+</ul>
+<hr>
+</div>
+</div>
+</div>
+</section>
+<section id="a.統計概念澄清" class="level2">
+<h2 class="anchored" data-anchor-id="a.統計概念澄清">A.統計概念澄清</h2>
+<section id="二項式分佈與單參數模型" class="level4">
+<h4 class="anchored" data-anchor-id="二項式分佈與單參數模型">二項式分佈與單參數模型</h4>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">1. 什麼是二項式分佈 -「從二項式數據估計機率」？</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">2. 為何二項式分佈適用「單參數模型 」？</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">3. 原理為何？ (核心概念：可交換性 Exchangeability)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false">4. <strong>OHS 專業:</strong> 可以科學合理解釋單參數模型？</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<ul>
+<li><p>當數據來自於一個大母群體中抽出的 <span class="math inline">n</span> 次可交換試驗，且每次只有兩種可能的結果（成功/失敗）時，二項式分佈是描述這類數據最自然的數學模型。它不是硬套的公式，而是基於計數邏輯的自然推導。</p></li>
+<li><p>二項式模型（Binomial Model）的目標是從一系列的「伯努利試驗（Bernoulli trials）」結果中，估計一個未知的母群體比例（population proportion）。</p></li>
+<li><p><strong>數據形式：</strong> 數據 <span class="math inline">y_1, ..., y_n</span> 是一連串的 0 與 1。例如在 OHS 領域，1 代表「超標」，0 代表「合規」。</p></li>
+<li><p><strong>目標參數：</strong> 我們想知道的是 <span class="math inline">\theta</span>（theta），即母群體中超標的比例。</p></li>
+<li><p>模型公式：</p>
+<p>二項式採樣模型如下：<span class="math inline">p(y|\theta) = \text{B}(y|n,\theta) = \binom{n}{y}\theta^y(1-\theta)^{n-y}</span>, 其中 <span class="math inline">n</span> 是總採樣數，<span class="math inline">y</span> 是超標的總次數 。</p></li>
+</ul>
+<hr>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<ol type="1">
+<li>唯一未知的純量或參數：在這個模型設定中，我們關注的估計量（Estimand）只有一個維度，那就是 <span class="math inline">\theta</span>（發生的機率或比例）。</li>
+<li>固定要素 (<span class="math inline">n</span>)：總樣本數 <span class="math inline">n</span> 被視為實驗設計的一部分，是固定的已知數，而不是需要估計的參數。</li>
+<li>條件獨立性：所有的機率討論都是基於 <span class="math inline">n</span> 已知的情況下，針對單一未知數 <span class="math inline">\theta</span> 進行推論。</li>
+<li>當我們問：「這個相似暴露群（SEG）的超標率<span class="math inline">\theta</span>是多少？」這就是一個典型的單參數問題。我們不討論變異數、不討論測量誤差（假設已知或忽略），只專注於<strong>「超標率（Rate/Proportion）」</strong>這一個參數。</li>
+</ol>
+<hr>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<ul>
+<li>支撐這個模型能運作的數學與邏輯原理，在於**「可交換性（Exchangeability）」**。</li>
+<li>由於可交換性，數據的所有資訊都可以被濃縮（Summarized）在「總超標次數 <span class="math inline">y</span>」裡面。二項式分佈正是基於 <span class="math inline">n</span> 和 <span class="math inline">y</span> 建立的。這意味著，只要知道 <span class="math inline">n</span> 次中有 <span class="math inline">y</span> 次超標，我們就擁有了推斷 <span class="math inline">\theta</span> 所需的全部數據資訊，這在科學上是非常高效且合理的。</li>
+<li><strong>定義：</strong> 如果我們對數據的順序沒有任何額外資訊（例如我們不知道這是週一還是週五採樣的，或者無法區分樣本之間的差異），我們就判斷這些試驗是「可交換的」。<strong>（假設無自相關，前後樣本是獨立的）</strong></li>
+<li><strong>推論：</strong> 因為具有可交換性，數據的詳細順序（例如「超標、合規、合規」vs「合規、合規、超標」）並不重要，重要的是<strong>「總共出現幾次超標 (</strong><span class="math inline">y</span><strong>)」</strong>。</li>
+<li><strong>轉化為機率：</strong> 可交換性讓我們可以將問題轉化為「獨立同分佈（Independent and Identically Distributed, i.i.d.）」的隨機變數，並用參數 <span class="math inline">\theta</span> 來代表每次試驗成功的機率。</li>
+</ul>
+<hr>
+</div>
+<div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
+<ul>
+<li>從 1763 年 Thomas Bayes 發表的論文開始，二項式模型就是貝氏推論的起點。透過結合先驗分佈（如 Uniform [0,1]），我們可以利用貝氏定理： <span class="math inline">p(\theta|y) \propto \theta^y(1-\theta)^{n-y}</span></li>
+<li>算出 <span class="math inline">\theta</span> 的後驗分佈。這讓我們能科學地量化對參數 <span class="math inline">\theta</span> 的不確定性（例如：超標率 <span class="math inline">\theta</span> 有 95% 的機率落在 0.05 到 0.15 之間），而不僅僅是給出一個點估計值。</li>
+<li>只要我們的採樣是隨機的（可交換性），不管採樣順序為何，我們只需要關心<strong>『採了幾個樣本 (</strong><span class="math inline">n</span><strong>)』</strong>以及<strong>『超標了幾次 (</strong><span class="math inline">y</span><strong>)』</strong>。因為樣本數 <span class="math inline">n</span> 是我們決定的（固定的），剩下的唯一未知數就是<strong>『真實的超標率 (</strong><span class="math inline">\theta</span><strong>)』，</strong>這就是為什麼它叫單參數模型。利用這個模型，我們就能算出該作業環境真實超標風險的機率分佈，而不只是看到表面的超標次數。」</li>
+</ul>
+</div>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="b.共軛conjugacy" class="level2">
+<h2 class="anchored" data-anchor-id="b.共軛conjugacy">B.共軛（Conjugacy）</h2>
+<ul>
+<li>貝氏統計在實務上（特別是早期計算能力不足時）能被廣泛應用的關鍵。</li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">1. 什麼是「二項式分佈與 Beta 分佈共軛」？</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">2. 為何選擇 Beta 分佈？</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false">3. ＯＳＨ範例</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<ul>
+<li>在貝氏定理中，我們有以下關係：</li>
+</ul>
+<p><span class="math inline">\text{後驗分佈 (Posterior)} \propto \text{似然函數 (Likelihood)} \times \text{先驗分佈 (Prior)}</span></p>
+<ul>
+<li>所謂的<strong>「共軛（Conjugate）」，指的是一種</strong>「數學上的門當戶對」。</li>
+<li>當我們的數據模型（似然函數）是 <strong>二項式分佈 (Binomial)</strong> 時，如果我們選擇 <strong>Beta 分佈</strong> 作為先驗分佈，那麼算出來的 <strong>後驗分佈，依然會是 Beta 分佈</strong>。</li>
+</ul>
+<blockquote class="blockquote">
+<p>「這就像是遺傳學。如果你選擇 Beta 家族當『先驗（父母）』，而你的採樣數據是二項式類型，那麼生出來的『後驗（孩子）』，保證還是 Beta 家族的成員，只是長相（參數）稍微變了。這種特性就叫共軛。」</p>
+</blockquote>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<ul>
+<li>因為 Beta 分佈具有兩個完美的特性，非常適合處理「機率」或「比率」問題。</li>
+</ul>
+<p><strong>A. 數學結構的吻合 (Mathematical Convenience)</strong></p>
+<ul>
+<li>二項式似然函數的長相是：<span class="math inline">\theta^y (1-\theta)^{n-y}</span> 。</li>
+<li>Beta 先驗分佈的長相是：<span class="math inline">\theta^{\alpha-1} (1-\theta)^{\beta-1}</span> 。</li>
+<li>當兩者相乘時，底數 <span class="math inline">\theta</span> 和 <span class="math inline">(1-\theta)</span> 是一樣的，我們只需要把指數相加即可。這讓數學運算變得極其簡單，不需要複雜的微積分積分。</li>
+</ul>
+<p><strong>B. 物理意義：它定義在 [0, 1] 區間</strong></p>
+<ul>
+<li>在 OHS 中，我們關心的「超標率」、「患病率」或「防護具失效機率」，數值一定介於 0% 到 100% 之間。</li>
+<li>Beta 分佈的定義域剛好就是 [0, 1]，天生就是用來描述「機率的機率分佈」。</li>
+<li>此外，Beta 分佈形狀非常有彈性。它可以是平坦的（代表無知）、鐘形的（代表確定）、或是偏向一邊的（代表高風險或低風險），足以涵蓋我們所有的專家經驗或先驗資料。</li>
+<li>它讓貝氏統計變得<strong>「可操作」且「直觀」</strong>，計算變得像小學加法一樣簡單。</li>
+<li>因為共軛性，我們不需要做積分。更新知識（從先驗變後驗）只需要更新 Beta 的兩個參數 <span class="math inline">(\alpha, \beta)</span>：
+<ul>
+<li><strong>先驗 (Prior)：</strong> <span class="math inline">\text{Beta}(\alpha, \beta)</span></li>
+<li><strong>數據 (Data)：</strong> <span class="math inline">n</span> 個樣本中有 <span class="math inline">y</span> 個超標，<span class="math inline">n-y</span> 個合規。</li>
+<li><strong>後驗 (Posterior)：</strong> <span class="math inline">\text{Beta}(\alpha + y, \beta + n - y)</span> 。</li>
+</ul></li>
+<li>假設我們先驗認為製程超標率分佈是 <span class="math inline">\text{Beta}(2, 20)</span>（代表我們覺得大概率安全）。
+<ul>
+<li>今天採樣 5 個點，發現 1 個超標 (<span class="math inline">y=1, n=5</span>)。</li>
+<li>新的後驗分佈就是 <span class="math inline">\text{Beta}(2+1, 20+4) = \text{Beta}(3, 24)</span>。就這麼簡單，不用電腦也能算！</li>
+</ul></li>
+<li>參數具有極強的「可解釋性」 (Interpretability)，在 Beta-Binomial 模型中，先驗參數 <span class="math inline">\alpha</span> 和 <span class="math inline">\beta</span> 可以被解釋為「虛擬的數據 (Pseudo-counts)」。
+<ul>
+<li><span class="math inline">\alpha - 1</span> 可以看作是「過去經驗中累積的<strong>超標</strong>次數」。</li>
+<li><span class="math inline">\beta - 1</span> 可以看作是「過去經驗中累積的<strong>合規</strong>次數」。</li>
+<li><span class="math inline">\alpha + \beta - 2</span> 相當於我們過去累積的<strong>樣本總數（證據強度）</strong>。</li>
+</ul></li>
+<li>連續更新 (Sequential Updating)：今天的後驗分佈，可以直接當成明天的先驗分佈。因為形式永遠是 Beta 分佈，我們可以隨著每天新的採樣數據進來，不斷地用加法更新 <span class="math inline">\alpha</span> 和 <span class="math inline">\beta</span>，讓風險評估模型越來越準確。</li>
+<li>為什麼我們要用 Beta 分佈來配合二項式採樣？
+<ul>
+<li><strong>因為它算得快：</strong> 只要會加法就能算出新的風險分佈（後驗），不需要跑複雜的電腦程式。</li>
+<li><strong>因為它聽得懂：</strong> Beta 的參數可以直接翻譯成『過去我們看過多少次超標、多少次合格』，這讓『專家經驗』或先驗資訊可以量化並加入計算。</li>
+<li><strong>因為它合邏輯：</strong> 它保證算出來的機率永遠在 0 到 1 之間，符合物理現實。</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<ul>
+<li>在二項式模型中，只要算出了後驗 Beta 分佈的兩個參數 <span class="math inline">\alpha_{new}</span>（新的 <span class="math inline">\alpha</span>）與 <span class="math inline">\beta_{new}</span>（新的 <span class="math inline">\beta</span>），您就擁有了關於該參數 <span class="math inline">\theta</span>（例如：超標率）的<strong>「完整資訊」</strong>。不需要回頭去翻原始數據，所有的知識都濃縮在這兩個數字裡了，這正是<strong>貝氏統計配合共軛分佈</strong>（Conjugate Distributions）最強大的地方。</li>
+<li><strong>情境：</strong> 您有一個先驗認為超標率很低 (<span class="math inline">\alpha=1, \beta=19</span>，約 5%)。</li>
+<li><strong>數據：</strong> 採樣 10 個點，發現 2 個超標 (<span class="math inline">y=2, n=10</span>)。</li>
+<li><strong>後驗參數：</strong> <span class="math inline">\alpha_{new} = 1+2 = 3</span>, <span class="math inline">\beta_{new} = 19+8 = 27</span>。</li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "後驗平均超標率: 10.0%"</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "95% 可信區間: [2.2%, 22.8%]"</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="0104CH2_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>留意事項：</strong>
+<ul>
+<li><strong>最高後驗密度區域 (Highest Posterior Density, HPD)：</strong> 這是包含 95% 機率且密度最高的區域。當分佈極度歪斜（例如超標率極低，堆在 0 附近）時，HPD 可能比中央區間更準確，但在單參數模型且樣本數稍多時，兩者差異通常不大 。</li>
+<li>在職業衛生法規遵循判斷上，我們有時更關心<strong>「上限（如ＯＥＬ）」</strong>。這時可以計算 95% 上限（即 <code>qbeta(0.95, ...)</code>），這樣可以回答：<strong>「我們有 95% 的信心，超標率不會超過**多少？」</strong>這在保守的風險評估中非常有用。</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="c.拉普拉斯預測" class="level2">
+<h2 class="anchored" data-anchor-id="c.拉普拉斯預測">C.拉普拉斯預測</h2>
+<ul>
+<li>Laplace’s Law of Succession提供了一種簡單卻強大的方法，來解決傳統統計在小樣本下容易做出「過度武斷」結論的問題。</li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">1. 「貝氏的拉普拉斯預測」？</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">2. OHS 應用？</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false">3. 觀念</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-4" role="tab" aria-controls="tabset-4-4" aria-selected="false"><strong>4. 廣義形式</strong></a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<ul>
+<li>當我們想預測「下一次採樣（<span class="math inline">\tilde{y}</span>）」是否會超標時，我們不直接使用傳統的比例 <span class="math inline">\frac{y}{n}</span>，而是使用以下公式：</li>
+</ul>
+<section id="核心公式-ethetay-fracy1n2-或-ptildey1-y-fracy1n2" class="level4">
+<h4 class="anchored" data-anchor-id="核心公式-ethetay-fracy1n2-或-ptildey1-y-fracy1n2"><strong>核心公式</strong> <span class="math inline">E(\theta|y) = \frac{y+1}{n+2}</span> , 或 <span class="math inline">P(\tilde{y}=1 | y) = \frac{y+1}{n+2}</span></h4>
+<ul>
+<li><span class="math inline">y</span>：目前觀測到的超標次數（或事件發生次數）。</li>
+<li><span class="math inline">n</span>：目前的總樣本數。</li>
+<li><span class="math inline">1</span> 與 <span class="math inline">2</span>：這是貝氏修正項（<strong>來自均勻先驗分佈</strong>，也就是 <span class="math inline">\text{Beta}(1, 1)</span>）。
+<ul>
+<li><p><span class="math inline">\text{Beta}(1, 1)</span> 意味著在還沒開始採樣前，我們先「虛擬地」假設已經有 2 次試驗：<strong>一次成功（超標），一次失敗（合規）</strong>。</p></li>
+<li><p>這代表我們先驗認為「超標率」在 0 到 1 之間是均勻分佈的，沒有偏向任何一邊。</p></li>
+</ul></li>
+<li><strong>後驗預測參數均值</strong>（Posterior Predictive Mean）即為 <span class="math inline">\frac{y+1}{n+2}</span> 。</li>
+</ul>
+<hr>
+</section>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<ul>
+<li><p>在職業衛生中，我們最怕的情況是：<strong>「採樣 3 次都沒超標，老闆就以為這裡絕對安全。」</strong></p></li>
+<li><p><strong>傳統統計 (Maximum Likelihood, MLE)：</strong></p>
+<ul>
+<li>若 <span class="math inline">n=3, y=0</span> <span class="math inline">\rightarrow</span> 超標率 = <span class="math inline">0/3 = 0\%</span>。</li>
+<li><strong>結論：</strong> 風險為零。這在小樣本下是極度危險的誤導。</li>
+</ul></li>
+<li><p><strong>拉普拉斯預測：</strong></p>
+<ul>
+<li><p>若 <span class="math inline">n=3, y=0</span> <span class="math inline">\rightarrow</span> 下一次超標機率 = <span class="math inline">\frac{0+1}{3+2} = \frac{1}{5} = 20\%</span>。</p></li>
+<li><p><strong>結論：</strong> 雖然目前沒看到超標，但我們保留了 20% 的可能性，認為下次可能會超標。</p></li>
+</ul></li>
+</ul>
+<hr>
+<section id="情境-a小樣本的ｅａ1" class="level4">
+<h4 class="anchored" data-anchor-id="情境-a小樣本的ｅａ1"><strong>情境 A：小樣本的ＥＡ1</strong></h4>
+<ul>
+<li><strong>狀況：</strong> 某新製程剛運作，您進行了 <strong>5 次</strong> 空氣採樣，結果 <strong>0 次</strong> 超標。超標風險真的是 0 嗎？</li>
+<li>拉普拉斯解讀： <span class="math inline">P(\text{下次超標}) = \frac{0+1}{5+2} = \frac{1}{7} \approx 14.3\%</span></li>
+<li>合理推論：「雖然我們測了 5 次都合格，但因為樣本數太少，統計上我們不能說風險是零。依據貝氏法則保守估計，下一次採樣仍有約 <strong>14%</strong> 的機率可能超標。因此，我們建議維持目前的防護具等級與控制措施，直到累積更多數據為止。」</li>
+</ul>
+</section>
+<section id="情境-b小樣本的ｅａ2避免過度反應" class="level4">
+<h4 class="anchored" data-anchor-id="情境-b小樣本的ｅａ2避免過度反應"><strong>情境 B：小樣本的ＥＡ2（避免過度反應）</strong></h4>
+<ul>
+<li><strong>狀況：</strong> 某工廠發生 <strong>2 次</strong> 意外洩漏，您剛好去測了 <strong>2 次</strong>，結果 <strong>2 次</strong> 都超標。 該工廠是否「百分之百」沒救了？</li>
+<li>拉普拉斯解讀： <span class="math inline">P(\text{下次超標}) = \frac{2+1}{2+2} = \frac{3}{4} = 75\%</span></li>
+<li>傳統算法會說這裡 100% 不合格 (<span class="math inline">\frac{2}{2}</span>)，這可能太過悲觀。拉普拉斯法則告訴我們，預測下一次超標的機率是 <strong>75%</strong>。這意味著雖然現況很糟，但並非毫無改善或出現合格樣本的機會（還有 25% 的合規空間），我們需要更多調查，但現在就應該採行些控制措施。」</li>
+</ul>
+<hr>
+</section>
+</div>
+<div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
+<ol type="1">
+<li><p><strong>平滑化（Smoothing）：</strong> 拉普拉斯預測就像把數據「磨圓」了一點。它避免讓機率變成極端的 0 或 1。</p></li>
+<li><p><strong>保守原則：</strong> 在安全衛生領域，當證據不足（樣本少）時，我們寧可高估風險（從 0% 變成 20%），也不要低估風險，這符合 OHS 的預防原則。</p></li>
+<li><p>隨著樣本增加 (<span class="math inline">n \to \infty</span>)：當 <span class="math inline">n</span> 變得很大時（例如 <span class="math inline">n=1000, y=100</span>），<span class="math inline">\frac{101}{1002} \approx 10.08\%</span> 與 <span class="math inline">\frac{100}{1000} = 10\%</span> 幾乎沒有差別。</p></li>
+<li><p>這體現了貝氏統計的核心精神——<strong>當數據少時，先驗知識（這裡是保守的 50/50 假設）幫助我們穩定預測；當數據多時，就讓數據說話。</strong></p></li>
+<li><p>拉普拉斯連鎖律（Laplace’s Law of Succession）」。它解決了傳統頻率學派（<span class="math inline">\frac{y}{n}</span>）在預測未來單次試驗時最致命的缺陷：<strong>「零機率陷阱」與「過度自信」</strong>。</p></li>
+</ol>
+<hr>
+</div>
+<div id="tabset-4-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-4-tab">
+<ul>
+<li><strong>又稱為</strong>「貝氏後驗平均估計（Bayesian Posterior Mean Estimate）」。</li>
+<li>核心公式： <span class="math inline">E(\theta|y) = \frac{y + \alpha}{n + \alpha + \beta}</span></li>
+<li>在職業衛生實務中，我們有時<strong>並不是</strong>一無所知（Uniform），我們可以使用「<strong>廣義的拉普拉斯預測</strong>」（即一般化的貝氏更新）。
+<ul>
+<li><strong>情境：</strong> 假設過去經驗告訴我們，這類製程通常被穩定控制，大概測定 20 次才會有 1 次超標。</li>
+<li><strong>設定先驗：</strong> 我們可以設 <span class="math inline">\text{Beta}(1, 19)</span>。
+<ul>
+<li><span class="math inline">\alpha=1</span> (虛擬超標 1 次)</li>
+<li><span class="math inline">\beta=19</span> (虛擬合規 19 次)</li>
+<li>先驗平均風險 = <span class="math inline">1/(1+19) = 5\%</span>。</li>
+</ul></li>
+<li><strong>新數據：</strong> 現場採樣 5 次，0 次超標 (<span class="math inline">y=0, n=5</span>)。</li>
+<li>預測公式就變成了：<span class="math inline">\frac{y + \alpha}{n + \alpha + \beta} = \frac{0 + 1}{5 + 1 + 19} = \frac{1}{25} = 4\%</span></li>
+</ul></li>
+<li>「先驗選擇」對「預測結果」的影響，展示如下表：（假設採樣結果皆為：<span class="math inline">n=5</span> 次採樣，<span class="math inline">y=0</span> 次超標）</li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 16%">
+<col style="width: 12%">
+<col style="width: 24%">
+<col style="width: 32%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>預測方法</strong></td>
+<td><strong>先驗假設 (Prior)</strong></td>
+<td><strong>計算公式</strong></td>
+<td><strong>預測下一次超標機率</strong></td>
+<td><strong>OHS 意義</strong></td>
+</tr>
+<tr class="even">
+<td><strong>傳統統計 (MLE)</strong></td>
+<td>無 (完全看數據)</td>
+<td><span class="math inline">\frac{y}{n}</span></td>
+<td><span class="math inline">\frac{0}{5} = \mathbf{0\%}</span></td>
+<td><strong>極度危險</strong>：宣稱零風險，忽視採樣誤差。</td>
+</tr>
+<tr class="odd">
+<td><strong>拉普拉斯預測</strong></td>
+<td><p><strong>均勻先驗</strong> Beta(1,1)</p>
+<p>(假設超標/合規機會均等)</p></td>
+<td><span class="math inline">\frac{y+1}{n+2}</span></td>
+<td><span class="math inline">\frac{1}{7} \approx \mathbf{14.3\%}</span></td>
+<td><strong>最保守/防禦性</strong>：當我們對現場完全陌生時使用。</td>
+</tr>
+<tr class="even">
+<td><strong>廣義貝氏預測</strong></td>
+<td><p><strong>訊息先驗</strong> Beta(1,19)</p>
+<p>(依據過去經驗認為風險低)</p></td>
+<td><span class="math inline">\frac{y+1}{n+20}</span></td>
+<td><span class="math inline">\frac{1}{25} = \mathbf{4.0\%}</span></td>
+<td><strong>折衷/合理</strong>：結合了「現場好紀錄」與「專家經驗」。</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="後驗機率分佈" class="level2">
+<h2 class="anchored" data-anchor-id="後驗機率分佈">後驗機率分佈</h2>
+<section id="決策指標" class="level4">
+<h4 class="anchored" data-anchor-id="決策指標">1. 決策指標</h4>
+<ul>
+<li>理想情況下，我們應該報告整個後驗機率分佈 <span class="math inline">p(\theta|y)</span>，因為它包含了關於參數的所有資訊 。但在實務上，我們需要各種「數值摘要（Numerical Summaries）」來溝通。</li>
+<li>管理者往往只想知道兩個問題：1. <strong>最可能的暴露濃度是多少？</strong>（點估計），2. <strong>你有多大的把握？</strong>（區間估計）」
+<ul>
+<li>位置的摘要：點估計 (Summaries of Location)
+<ol type="1">
+<li><strong>均值 (Mean)：</strong> 後驗期望值 <span class="math inline">E(\theta|y)</span> 。
+<ul>
+<li>代表「長期平均風險」。在 Beta 分佈範例中，均值為 <span class="math inline">\frac{y+\alpha}{n+\alpha+\beta}</span> 。這是做累積暴露評估時最常用的指標。</li>
+</ul></li>
+<li><strong>中位數 (Median)：</strong> 50% 的分位數。
+<ul>
+<li>當數據有極端值（如突然的一次洩漏）導致分佈歪斜時，中位數比均值更穩健（Robust）。</li>
+</ul></li>
+<li><strong>眾數 (Mode)：</strong> 機率密度最高的點，即「最可能的值」。
+<ul>
+<li>在 Beta 分佈中，眾數是 <span class="math inline">\frac{y}{n}</span>（即 MLE），這代表「當下最可能發生的狀況」。</li>
+</ul></li>
+</ol></li>
+<li>不確定性的摘要：區間估計 （通常報告 <strong>95% 區間）</strong>
+<ol type="1">
+<li><strong>中央後驗區間 (Central Posterior Interval)</strong>
+<ul>
+<li><strong>定義：</strong> 直接取後驗分佈的 2.5% 和 97.5% 分位數，中間的範圍包含了 95% 的機率 。可以說成：<strong>『我們有 95% 的信心，真實的暴露風險是落在 X 與 Y 之間。』</strong></li>
+</ul></li>
+<li><strong>最高後驗密度區域 (Highest Posterior Density Region, HPD)</strong>
+<ul>
+<li><strong>定義：</strong> 這是包含 95% 機率的「最短」區間，且區間內所有點的機率密度都高於區間外 。</li>
+<li><strong>與中央區間的差異：</strong> 如果分佈是對稱單峰的，HPD 與中央區間是一樣的 。但如果分佈嚴重歪斜，HPD 會更短、更精確。</li>
+<li>特別適用於暴露濃度呈現<strong>雙峰分佈時。</strong></li>
+</ul></li>
+</ol></li>
+</ul></li>
+</ul>
+<p><strong>善用區間：</strong> 永遠不要只給一個數字（點估計），一定要附上<strong>貝氏可信區間</strong>（Uncertainty），這是專業的表現 。</p>
+<hr>
+</section>
+</section>
+<section id="d.訊息先驗分佈" class="level2">
+<h2 class="anchored" data-anchor-id="d.訊息先驗分佈"><strong>D.訊息先驗分佈</strong></h2>
+<ul>
+<li>當我們對參數 <span class="math inline">\theta</span> 不是一無所知，而是有一些背景知識時，該如何構建先驗分佈，以及這會如何影響最終的推論。</li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">1. 先驗分佈的兩種解釋 (Two Interpretations)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">2. 二項式模型的共軛先驗 (Conjugate Priors for Binomial)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false">3. 後驗均值：數據與信念的加權平均</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-4" role="tab" aria-controls="tabset-5-4" aria-selected="false">4. 非共軛先驗 (Nonconjugate priors)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-5" role="tab" aria-controls="tabset-5-5" aria-selected="false">5. 常態近似 (Normal Approximation)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-6" role="tab" aria-controls="tabset-5-6" aria-selected="false">小結</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<p>Gelman 首先探討了我們為什麼可以設定先驗分佈，提出了兩種哲學觀點 <sup>1</sup>：</p>
+<ol type="1">
+<li><p>母群體解釋 (Population Interpretation)：</p>
+<p>先驗分佈代表一個真實存在的「母群體」。</p>
+<ul>
+<li><em>OHS 例子：</em> 您要評估某個新工廠的職災率。您的先驗分佈可以來自「全台灣同類型工廠過去十年的職災率分佈」。這是有實體數據支持的。</li>
+</ul></li>
+<li><p>知識狀態解釋 (State of Knowledge Interpretation)：</p>
+<p>先驗分佈代表我們主觀的「不確定性」與「信念」。</p>
+<ul>
+<li><em>OHS 例子：</em> 針對一個全新的化學製程，沒有歷史數據。但依據您的毒理學知識與工程控制原理，您「判斷」其洩漏風險應該很低。這種「專家判斷」就是先驗。</li>
+</ul></li>
+</ol>
+<hr>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<ul>
+<li><p>為了讓計算方便（<strong>有封閉解</strong>），選擇與似然函數（二項式）形狀相似的先驗(即 <strong>Beta 分佈)共軛</strong> 。</p></li>
+<li><p><strong>似然函數 (Likelihood):</strong> <span class="math inline">\theta^y (1-\theta)^{n-y}</span></p></li>
+<li><p><strong>先驗分佈 (Prior):</strong> <span class="math inline">\text{Beta}(\alpha, \beta) \propto \theta^{\alpha-1} (1-\theta)^{\beta-1}</span></p></li>
+<li><p><strong>後驗分佈 (Posterior):</strong> <span class="math inline">\text{Beta}(\alpha+y, \beta+n-y)</span></p>
+<ul>
+<li><p><span class="math inline">\alpha - 1</span>：代表我們先驗認為已經發生過的「成功（超標）次數」。</p></li>
+<li><p><span class="math inline">\beta - 1</span>：代表我們先驗認為已經發生過的「失敗（合規）次數」。</p></li>
+</ul></li>
+<li><p><strong>共軛的便利性：</strong> 我們只要把「已有資訊的次數（先驗）」加上「實際看到的次數（數據）」，就是「新的認知（後驗）」，這讓後驗分佈具有高度的可解釋性。</p></li>
+</ul>
+<hr>
+</div>
+<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
+<ul>
+<li><p>後驗均值公式：<span class="math inline">E(\theta|y) = \frac{\alpha+y}{\alpha+\beta+n}</span></p></li>
+<li><p>這個公式可以改寫為加權平均的形式，權重取決於「先驗的強度」與「數據的樣本數」。</p></li>
+<li><p>如果 <span class="math inline">\alpha+\beta</span>（先驗的樣本數）很大，代表專家非常固執（或經驗非常豐富），那麼新的數據 <span class="math inline">n</span> 必須很大才能改變專家的看法。</p></li>
+<li><p>隨著 <span class="math inline">n \to \infty</span>，先驗的影響力會歸零，結果完全由數據決定。</p></li>
+<li><p>可以使用<strong>不同強度的先驗</strong>來進行<strong>敏感度分析 (Sensitivity Analysis)</strong></p></li>
+</ul>
+<hr>
+</div>
+<div id="tabset-5-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-4-tab">
+<ul>
+<li><p>如果我們的知識形狀很奇怪，Beta 分佈描述不了怎麼辦？（例如：我們認為超標率要嘛是 0，要嘛大於 10%，不可能是中間值）。</p></li>
+<li><p><strong>方法：</strong> 使用<strong>網格法 (Grid approach)</strong> :</p></li>
+<li><p><strong>步驟：</strong></p>
+<ol type="1">
+<li><p>把 <span class="math inline">\theta</span> 切成很多小格子（如 0.00, 0.01, …, 1.00）。</p></li>
+<li><p>算出每一格的先驗機率 <span class="math inline">p(\theta)</span>。</p></li>
+<li><p>算出每一格的似然機率 <span class="math inline">p(y|\theta)</span>。</p></li>
+<li><p>相乘並標準化，得到後驗分佈。</p></li>
+</ol></li>
+<li><p><strong>結論：</strong> 即使沒有漂亮的數學公式（共軛），電腦也能幫我們暴力算出結果，這在現代非常容易實現。</p></li>
+</ul>
+<hr>
+</div>
+<div id="tabset-5-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-5-tab">
+<ul>
+<li><p>當樣本數夠大時，後驗分佈會趨近於常態分佈。(中央極限定理)</p></li>
+<li><p><strong>在OHS 實務上，</strong> 為了讓近似更準確，建議對 <span class="math inline">\theta</span> 進行 <strong>Logit 轉換</strong> (<span class="math inline">\log(\frac{\theta}{1-\theta})</span>)，將範圍從 [0,1] 拉展到 <span class="math inline">(-\infty, \infty)</span>，這樣更符合常態分佈的鐘形曲線特性。</p></li>
+</ul>
+<hr>
+</div>
+<div id="tabset-5-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-6-tab">
+<blockquote class="blockquote">
+<ol type="1">
+<li><p><strong>不要浪費你的專業：</strong> 你可以透過設定 <span class="math inline">\alpha</span> 和 <span class="math inline">\beta</span>（共軛先驗），把『這製程通常很安全』這種模糊的概念，轉化為數學上的『虛擬合規次數』，加入模型運算。</p></li>
+<li><p><strong>數據越多，專家越不重要：</strong> 當你採樣了幾百個點之後，先驗設定是多少已經不重要了，數據會說話。</p></li>
+<li><p><strong>敏感度分析：</strong> 如果你不確定先驗該設多少，就試試看不同的設定（如书中的 Table 2.1）。如果結果都差不多，你的結論就是穩健的。」</p></li>
+</ol>
+</blockquote>
+</div>
+</div>
+</div>
+</section>
+<section id="e.已知變異數的常態分佈" class="level2">
+<h2 class="anchored" data-anchor-id="e.已知變異數的常態分佈">E.已知變異數的常態分佈</h2>
+<ul>
+<li><p><strong>Normal distribution with known variance（已知變異數的常態分佈）</strong>適用在職業衛生（OHS）與儀器分析領域是非常基礎且實用的模型，特別是當我們使用的測量設備具有<strong>已知的精確度（Known Precision）</strong>時。</p></li>
+<li><p>我們要做的是：『已知儀器誤差下的平均值推估』。</p></li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">1. 適用於「單參數模型」？</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">2. 精確度的加法</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false">3. OHS情境與應用</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-4" role="tab" aria-controls="tabset-6-4" aria-selected="false">4. 後驗預測分佈 (Posterior Predictive Distribution)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-5" role="tab" aria-controls="tabset-6-5" aria-selected="false">小結</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<ul>
+<li><p>在標準的常態分佈 <span class="math inline">N(\theta, \sigma^2)</span> 中，通常有兩個未知參數：平均值 <span class="math inline">\theta</span> 和變異數 <span class="math inline">\sigma^2</span>。</p></li>
+<li><p>如果做出了一個關鍵假設：<strong>變異數</strong> <span class="math inline">\sigma^2</span> 是已知的（Known）。如果 <span class="math inline">\sigma^2</span> 被視為常數，模型中剩下唯一需要估計的未知數就只有 <strong>平均值</strong> <span class="math inline">\theta</span>。因此，這依然符合「單參數模型（Single-parameter models）」的定義。</p></li>
+<li><p>例如使用直讀式儀器（PID, FID）或噪音計，儀器原廠規格書通常會告知<strong>「測量誤差（儀器精確度）」。</strong>我們可以將這個誤差視為已知的 <span class="math inline">\sigma^2</span>，專心去推估環境中真實的「平均暴露濃度 (<span class="math inline">\theta</span>)」即可。</p></li>
+</ul>
+<hr>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<ol type="1">
+<li><p>在貝氏統計的常態模型中，不用變異數（Variance, <span class="math inline">\sigma^2</span>），常用它的倒數—精確度（Precision, <span class="math inline">1/\sigma^2 ＝\tau_0^2)</span>）。</p></li>
+<li><p>共軛：當我們有一個常態先驗 <span class="math inline">N(\mu_0, \tau_0^2)</span> 和一組常態數據 <span class="math inline">y</span>（已知變異數 <span class="math inline">\sigma^2</span>）時，算出來的後驗分佈依然是常態分佈 <span class="math inline">N(\mu_n, \tau_n^2)</span> 。</p></li>
+<li><p>後驗參數的更新法則：</p>
+<ol type="1">
+<li><p><strong>後驗精確度 = 先驗精確度 + 數據精確度.</strong> <span class="math inline">\frac{1}{\tau_n^2} = \frac{1}{\tau_0^2} + \frac{n}{\sigma^2}</span></p>
+<ul>
+<li>信心（精確度）是累加的。每多採一個樣，你的信心就增加一份（<span class="math inline">1/\sigma^2</span>）。</li>
+</ul></li>
+<li><p><strong>後驗平均值 = 加權平均 (Weighted Average)</strong></p>
+<p><span class="math inline">\mu_n = \frac{\frac{1}{\tau_0^2}\mu_0 + \frac{n}{\sigma^2}\bar{y}}{\frac{1}{\tau_0^2} + \frac{n}{\sigma^2}}</span></p>
+<ul>
+<li>新的估計值 (<span class="math inline">\mu_n</span>) 是「舊信念 (<span class="math inline">\mu_0</span>)」與「新數據 (<span class="math inline">\bar{y}</span>)」的加權平均。權重就是各自的<strong>精確度</strong>。誰的變異數小（精確度高），誰說話就大聲，結果就往誰那邊靠。</li>
+</ul></li>
+</ol></li>
+</ol>
+<hr>
+</div>
+<div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
+<ul>
+<li><p><strong>情境：評估勞工的真實噪音暴露量</strong></p></li>
+<li><p><strong>已知條件 (</strong><span class="math inline">\sigma^2</span>)： 我們使用的噪音計經過校正，原廠手冊說測量標準差是 <span class="math inline">\sigma = 2</span> dB（即變異數 <span class="math inline">\sigma^2 = 4</span>）。這是<strong>已知</strong>的。</p></li>
+<li><p><strong>未知參數 (</strong><span class="math inline">\theta</span>)： 勞工真實的長期平均暴露分貝數。</p></li>
+<li><p><strong>先驗 (</strong><span class="math inline">\mu_0, \tau_0^2</span>)： 根據過去對該製程的了解，我們認為平均暴露大概在 85 dB，但不太確定，所以給一個較寬的變異數 <span class="math inline">\sigma^2 = 16</span>（即標準差 4 dB）。</p>
+<ul>
+<li><em>先驗分佈：</em> <span class="math inline">N(85, 16)</span></li>
+</ul></li>
+<li><p><strong>數據 (</strong><span class="math inline">n, \bar{y}</span>)： 我們測量了 <span class="math inline">n=4</span> 次，平均值是 <span class="math inline">\bar{y} = 90</span> dB。</p></li>
+<li><p><strong>貝氏運算：</strong></p></li>
+</ul>
+<ol type="1">
+<li><p><strong>先驗精確度：</strong> <span class="math inline">1/16 = 0.0625</span></p></li>
+<li><p><strong>數據精確度：</strong> <span class="math inline">4 \times (1/4) = 1.0</span> （因為測了 4 次，每次精確度 0.25）</p></li>
+<li><p><strong>誰說話大聲？</strong> 數據精確度 (1.0) 遠大於先驗精確度 (0.0625)。</p></li>
+<li><p><strong>後驗結果：</strong> 估計值會被強力拉向數據的 90 dB，稍微被先驗的 85 dB 拉回去一點點。</p>
+<ul>
+<li><em>計算：</em> <span class="math inline">\mu_n = \frac{0.0625 \times 85 + 1.0 \times 90}{0.0625 + 1.0} \approx 89.7 \text{ dB}</span></li>
+</ul></li>
+</ol>
+<ul>
+<li>結論：雖然先驗認為是 85 dB，但因為儀器很準（<span class="math inline">\sigma</span> 小）且測了 4 次，證據確鑿，所以我們修正看法，認為真實暴露約為 89.7 dB 6。</li>
+</ul>
+<hr>
+</div>
+<div id="tabset-6-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-4-tab">
+<ul>
+<li><p>如果我們要預測「下一次測量 (<span class="math inline">\tilde{y}</span>」會是多少？</p></li>
+<li><p>結果也是常態分佈，但變異數包含兩部分：</p></li>
+</ul>
+<p><span class="math inline">\text{預測變異數} = \sigma^2 + \tau_1^2</span></p>
+<ol type="1">
+<li><p><span class="math inline">\sigma^2</span> (Aleatoric uncertainty)： 這是物理世界的隨機性（儀器本身的誤差），你測再多次也消除不了。</p></li>
+<li><p><span class="math inline">\tau_1^2</span> (Epistemic uncertainty)： 這是我們對 <span class="math inline">\theta</span> 認知的不確定性。隨著樣本 <span class="math inline">n</span> 增加，這部分會趨近於 0。</p></li>
+</ol>
+</div>
+<div id="tabset-6-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-5-tab">
+<blockquote class="blockquote">
+<ul>
+<li><p>為什麼叫單參數？因為我們假設儀器的誤差（<span class="math inline">\sigma</span>）是已知的常數，只專心猜測環境的真實濃度（<span class="math inline">\theta</span>）。</p></li>
+<li><p>如果你的儀器很爛（<span class="math inline">\sigma</span> 大），或是採樣數很少（<span class="math inline">n</span> 小），貝氏公式會自動叫你多聽聽專家經驗（Prior）。</p></li>
+<li><p>如果你的儀器很準，或者你測了很多次，貝氏公式就會叫你相信數據，把專家經驗放一邊。</p></li>
+<li><p>這就是完全自動化的權重分配系統。</p></li>
+</ul>
+</blockquote>
+</div>
+</div>
+</div>
+</section>
+<section id="f.廣泛的單參數暴露風險模式" class="level2">
+<h2 class="anchored" data-anchor-id="f.廣泛的單參數暴露風險模式">F.廣泛的單參數暴露風險模式</h2>
+<ul>
+<li><p>在職業衛生（OHS）的應用不被侷限在「二項式（超標/合規）」與「常態（平均濃度）」這兩個框架裡。</p></li>
+<li><p><strong>Other standard single-parameter models</strong>：在現實工廠中，我們還有兩類極其重要的數據：</p>
+<ul>
+<li><p><strong>計數數據（Counts）</strong>：今年發生了幾次洩漏？幾個人得了職業病？（這是整數，不是連續的濃度）。</p></li>
+<li><p><strong>時間數據（Waiting Times）</strong>：這個濾毒罐還能撐多久？下次故障或發生火災可能是多久以後？（這是時間，且必須大於 0）。</p></li>
+</ul></li>
+<li><p>以下這介紹 <strong>Poisson（卜瓦松）分佈</strong> 與 <strong>Exponential（指數）分佈</strong> ，它們讓我們能處理更廣泛的單參數風險問題。</p></li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">1. 卜瓦松模型 (Poisson Model)：處理「計數」與「率」</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false">2. 指數模型 (Exponential Model)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false">3. 已知平均值的常態分佈</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-4" role="tab" aria-controls="tabset-7-4" aria-selected="false">4. 負二項式分佈</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-5" role="tab" aria-controls="tabset-7-5" aria-selected="false">給學員的單參數模型整理一覽表</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-6" role="tab" aria-controls="tabset-7-6" aria-selected="false">單參數模型與共軛分佈總結表 (OHS 應用版)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-7" role="tab" aria-controls="tabset-7-7" aria-selected="false"><strong>貝氏統計的共軛「簡潔美」：</strong></a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<ul>
+<li><p>這是 OHS 流行病學與事故分析的核心模型 。適用場景：</p>
+<ul>
+<li><p>當我們計算一定時間或空間內的稀有事件次數時。</p></li>
+<li><p><em>例：</em> 全廠每年的職傷件數、某製程每年的氣體外洩次數、健檢中發現的第三級人數。</p></li>
+</ul></li>
+<li><p><strong>模型架構：</strong></p>
+<ul>
+<li><p>先驗： <span class="math inline">y_i \sim \text{Poisson}(x_i \theta)</span> 。</p>
+<ul>
+<li><p><span class="math inline">y_i</span>：事故件數。</p></li>
+<li><p><span class="math inline">x_i</span>：暴露量（Exposure），在 OHS 中通常指<strong>「總工時（Man-hours）」或「受雇人數」</strong>。</p></li>
+<li><p><span class="math inline">\theta</span>：真正的風險率（例如：每百萬工時的事故率）。</p></li>
+</ul></li>
+<li><p><strong>似然函數 (Likelihood)：</strong> <span class="math inline">p(y|\theta) \propto \theta^{y} e^{-n\theta}</span> 。這裡 <span class="math inline">\theta</span> 代表發生率（Rate）。</p></li>
+<li><p><strong>共軛先驗 (Conjugate Prior)：</strong> <strong>Gamma 分佈 (</strong><span class="math inline">\alpha, \beta</span>) 。</p>
+<ul>
+<li><span class="math inline">\alpha</span> 代表過去觀察到的總事故數，<span class="math inline">\beta</span> 代表過去觀察的總時間（或人時）。</li>
+</ul></li>
+<li><p>後驗分佈 (Posterior)： 依然是 Gamma 分佈。</p>
+<p><span class="math inline">\theta|y \sim \text{Gamma}(\alpha + \sum y, \beta + n)</span></p>
+<ul>
+<li><strong>新的</strong> <span class="math inline">\alpha</span> = 舊事故 + 新事故；新的 <span class="math inline">\beta</span> = 舊時間 + 新時間。</li>
+</ul></li>
+</ul></li>
+<li><p><em>實例：</em> 「氣喘死亡率」。</p>
+<ul>
+<li>假設某城市 20 萬人中有 3 人死於氣喘。若我們有過去的世界平均數據（先驗），就可以結合這單一年度的數據，算出該城市真實的潛在死亡率。這完全可以直接套用在<strong>「工廠職業病發生率」</strong>的估算上。</li>
+</ul></li>
+</ul>
+<hr>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<ul>
+<li><p>處理「壽命」與「時間間隔」，這是可靠度工程（Reliability Engineering）與防護具管理的基礎。</p></li>
+<li><p>適用場景：當我們關注<strong>「要等多久事件才會發生</strong>」（Waiting times）或<strong>「存活時間」</strong>時。</p>
+<ul>
+<li><em>OHS 例子：</em> 呼吸防護具濾罐的破出時間（Breakthrough time）、安全閥兩次故障的間隔時間、感測器失效前的運作時數。</li>
+</ul></li>
+<li><p><strong>模型架構：</strong></p>
+<ul>
+<li><p><strong>似然函數 (Likelihood)：</strong> <span class="math inline">p(y|\theta) = \theta \exp(-y\theta)</span> 。這裡 <span class="math inline">\theta</span> 是「速率（Rate）」，即壽命的倒數。</p></li>
+<li><p><strong>特性：</strong> 無記憶性（Memoryless）。這意味著如果一個零件現在沒壞，它未來的故障機率跟它已經用了多久無關（這適用於隨機失效，雖不完全適用於老化磨損，但常用作基礎模型）。</p></li>
+<li><p><strong>共軛先驗 (Conjugate Prior)：</strong> <strong>Gamma 分佈 (</strong><span class="math inline">\alpha, \beta</span>) 。</p></li>
+<li><p>後驗分佈 (Posterior)： Gamma 分佈。</p>
+<p><span class="math inline">\theta|y \sim \text{Gamma}(\alpha + n, \beta + \sum y)</span></p>
+<ul>
+<li>這裡的 <span class="math inline">\beta</span> 更新是加上「總等待時間（<span class="math inline">\sum y</span>）」。</li>
+</ul></li>
+</ul></li>
+<li><p><strong>OHS 應用：</strong></p>
+<blockquote class="blockquote">
+<p>「如果你想估算工廠泵浦平均多久壞一次（MTTF），但你只觀察到 5 次故障數據。利用 Exponential 模型加上 Gamma 先驗（參考原廠數據），你可以算出比單純平均值更準確的故障率，從而制定更好的維修保養計畫。」</p>
+</blockquote></li>
+</ul>
+<hr>
+</div>
+<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
+<ul>
+<li>(Normal with known mean, unknown variance)，這是一個比較特殊的單參數模型，通常用於<strong>「儀器校正」或「品質控制」</strong>。</li>
+</ul>
+<!-- -->
+<ul>
+<li><p>適用場景：我們已知中心點（平均值 <span class="math inline">\theta</span>），但想知道「變異程度（<span class="math inline">\sigma^2</span>）」有多大。</p>
+<ul>
+<li><em>OHS 例子：</em> 我們買了一個標準氣體（已知濃度 <span class="math inline">\theta = 100</span> ppm），用新的檢測儀器測了 10 次。我們想估算這台新儀器的「精確度/穩定性」（即估計 <span class="math inline">\sigma^2</span>）。</li>
+</ul></li>
+<li><p><strong>模型架構：</strong></p>
+<ul>
+<li><p><strong>共軛先驗：</strong> <strong>反卡方分佈 (Inverse-</strong><span class="math inline">\chi^2</span>) 或 <strong>反伽瑪分佈 (Inverse-Gamma)</strong> 。</p></li>
+<li><p><strong>後驗分佈：</strong> 依然是 <strong>反卡方分佈</strong> 。</p>
+<ul>
+<li>新的估計變異數，會是「先驗變異數」與「數據變異數」的加權平均。</li>
+</ul></li>
+</ul></li>
+</ul>
+<hr>
+</div>
+<div id="tabset-7-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-4-tab">
+<ul>
+<li><p>Negative Binomial，適合於卜瓦松的預測分佈</p></li>
+<li><p><strong>概念：</strong> 如果數據來自 Poisson 分佈，而其參數 <span class="math inline">\theta</span> 本身又有不確定性（Gamma 分佈），那麼這些數據的邊際分佈（Marginal Distribution）就是負二項式分佈。</p></li>
+<li><p>OHS 意義：Poisson 假設變異數等於均值（Mean = Variance）。但在真實的職災數據中，往往有<strong>「過度離散（Overdispersion）</strong>」現象（即變異數 &gt; 均值，例如某年突然發生化工廠大爆炸或局限空間職災）。這時，使用 Negative Binomial 作為預測模型會比 Poisson 更穩健（Robust），因為它允許數據有更大的波動範圍。</p></li>
+</ul>
+<hr>
+</div>
+<div id="tabset-7-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-5-tab">
+<p>在教學時，您可以用這張表總結知道何時該用什麼工具：</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 30%">
+<col style="width: 25%">
+<col style="width: 22%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>數據類型</strong></td>
+<td><strong>OHS 應用問題 (範例)</strong></td>
+<td><strong>推薦模型 (Likelihood)</strong></td>
+<td><strong>搭配的先驗 (Prior)</strong></td>
+</tr>
+<tr class="even">
+<td><strong>二項 (0/1)</strong></td>
+<td>超標了嗎？合規嗎？</td>
+<td><strong>Binomial</strong> (二項式)</td>
+<td><strong>Beta</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>連續數值 (濃度)</strong></td>
+<td>平均暴露濃度是多少？</td>
+<td><p><strong>Normal</strong> (常態)</p>
+<p><em>(已知變異數)</em></p></td>
+<td><strong>Normal</strong></td>
+</tr>
+<tr class="even">
+<td><strong>計數 (整數)</strong></td>
+<td>今年發生幾件職災？幾次外洩？</td>
+<td><strong>Poisson</strong> (卜瓦松)</td>
+<td><strong>Gamma</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>時間 (大於0)</strong></td>
+<td>設備多久會失效？濾罐能撐多久？</td>
+<td><strong>Exponential</strong> (指數)</td>
+<td><strong>Gamma</strong></td>
+</tr>
+<tr class="even">
+<td><strong>連續數值 (誤差)</strong></td>
+<td>這台儀器穩不穩定 (變異數)？</td>
+<td><p><strong>Normal</strong></p>
+<p><em>(已知平均值)</em></p></td>
+<td><p><strong>Inverse-Gamma</strong></p>
+<p>(反伽瑪)</p></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div>
+<div id="tabset-7-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-6-tab">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 14%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 17%">
+<col style="width: 26%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>你的數據類型</strong></td>
+<td><strong>OHS 應用問題 (範例)</strong></td>
+<td><strong>推薦模型 (Likelihood)</strong></td>
+<td><strong>搭配的先驗 (Prior)</strong></td>
+<td><strong>算出來的後驗 (Posterior)</strong></td>
+<td><strong>後驗更新</strong></td>
+</tr>
+<tr class="even">
+<td><strong>二元 (0/1)</strong></td>
+<td>超標了嗎？合規嗎？</td>
+<td><p><strong>Binomial</strong></p>
+<p>(二項式)</p></td>
+<td><p><strong>Beta</strong></p>
+<p>(貝塔)</p></td>
+<td><p><strong>Beta</strong></p>
+<p>(貝塔)</p></td>
+<td><p><strong>次數相加：</strong></p>
+<p>新<span class="math inline">\alpha</span> = 舊<span class="math inline">\alpha</span> + 超標數</p>
+<p>新<span class="math inline">\beta</span> = 舊<span class="math inline">\beta</span> + 合格數</p></td>
+</tr>
+<tr class="odd">
+<td><p><strong>連續數值</strong></p>
+<p>(濃度)</p></td>
+<td>平均暴露濃度是多少？</td>
+<td><p><strong>Normal</strong></p>
+<p>(常態)</p>
+<p><em>(已知變異數)</em></p></td>
+<td><p><strong>Normal</strong></p>
+<p>(常態)</p></td>
+<td><p><strong>Normal</strong></p>
+<p>(常態)</p></td>
+<td><p><strong>加權平均：</strong></p>
+<p>新平均值是「舊平均」與「數據平均」的加權折衷</p></td>
+</tr>
+<tr class="even">
+<td><p><strong>計數</strong></p>
+<p>(整數)</p></td>
+<td><p>今年發生幾件職災？</p>
+<p>幾次外洩？</p></td>
+<td><p><strong>Poisson</strong></p>
+<p>(卜瓦松)</p></td>
+<td><p><strong>Gamma</strong></p>
+<p>(伽瑪)</p></td>
+<td><p><strong>Gamma</strong></p>
+<p>(伽瑪)</p></td>
+<td><p><strong>累加事故：</strong></p>
+<p>新<span class="math inline">\alpha</span> = 舊事故數 + 新事故數</p>
+<p>新<span class="math inline">\beta</span> = 舊觀察時間 + 新時間</p></td>
+</tr>
+<tr class="odd">
+<td><p><strong>時間</strong></p>
+<p>(大於0)</p></td>
+<td><p>設備多久會失效？</p>
+<p>濾罐能撐多久？</p></td>
+<td><p><strong>Exponential</strong></p>
+<p>(指數)</p></td>
+<td><p><strong>Gamma</strong></p>
+<p>(伽瑪)</p></td>
+<td><p><strong>Gamma</strong></p>
+<p>(伽瑪)</p></td>
+<td><p><strong>累加壽命：</strong></p>
+<p>新<span class="math inline">\alpha</span> = 舊觀察數 + 新觀察數</p>
+<p>新<span class="math inline">\beta</span> = 舊總時間 + 新總時間</p></td>
+</tr>
+<tr class="even">
+<td><p><strong>連續數值</strong></p>
+<p>(誤差)</p></td>
+<td><p>這台儀器穩不穩定？</p>
+<p>(變異數)</p></td>
+<td><p><strong>Normal</strong></p>
+<p>(常態)</p>
+<p><em>(已知平均值)</em></p></td>
+<td><p><strong>Inverse-</strong><span class="math inline">\chi^2</span></p>
+<p>(反卡方)</p>
+<p>或 Inv-Gamma</p></td>
+<td><p><strong>Inverse-</strong><span class="math inline">\chi^2</span></p>
+<p>(反卡方)</p>
+<p>或 Inv-Gamma</p></td>
+<td><p><strong>自由度累加：</strong></p>
+<p>新自由度 = 舊自由度 + 樣本數</p>
+<p>新變異 = 加權平均</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tabset-7-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-7-tab">
+<ul>
+<li><p>『先驗』和『後驗』分佈一致。</p>
+<ul>
+<li>共軛性：這意味著我們不需要做複雜的微積分。如果你的先驗是 Beta 分佈（例如你假設超標率 5%），只要加上新的數據，你的後驗<strong>保證</strong>還是 Beta 分佈，只是形狀變了（例如變成超標率 8%）。這讓我們可以不斷地隨著新數據更新風險模型，而不會讓模型變得越來越複雜。」</li>
+</ul></li>
+<li><p>「更新就是做加法」</p>
+<ul>
+<li><p>想算新的超標率分佈？把『看到的超標次數』加到先驗參數上。</p></li>
+<li><p>想算新的職災率分佈？把『看到的職災件數』加到先驗參數上。</p></li>
+</ul></li>
+<li><p>所以，不要被『貝氏機率』這個名詞嚇到，它骨子裡就是一個非常直觀的累加器，幫你把過去的經驗（先驗）和現在的數據（Likelihood）加在一起而已。」</p></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="g.貝氏推論各縣市營造業職災死亡率評估" class="level2">
+<h2 class="anchored" data-anchor-id="g.貝氏推論各縣市營造業職災死亡率評估">G.貝氏推論：各縣市營造業職災死亡率評估</h2>
+<div class="panel.tabset">
+<section id="問題背景地圖上的假象-the-problem" class="level3">
+<h3 class="anchored" data-anchor-id="問題背景地圖上的假象-the-problem">1. 問題背景：地圖上的假象 (The Problem)</h3>
+<ul>
+<li><p>分析台灣職災最高\最低職災率都集中在人口稀少的縣市。</p></li>
+<li><p><strong>連江縣 (馬祖) 的困境：</strong> 勞工人數極少（假設約 3,000 人）。</p>
+<ul>
+<li><p>如果今年 <strong>0 人</strong> 死亡，死亡率是 <strong>0</strong>（全台最低）。</p></li>
+<li><p>如果今年不幸 <strong>1 人</strong> 死亡，死亡率是 <span class="math inline">1/3000 = 33.3</span> (每十萬人)。</p></li>
+</ul></li>
+<li><p><strong>新北市的穩定：</strong> 勞工人數極多（假設約 200 萬人）。</p>
+<ul>
+<li>平均每年約 60 人死亡，死亡率約 <strong>3.0</strong> (每十萬人)。</li>
+</ul></li>
+<li><p>傳統統計的誤導：</p>
+<ul>
+<li>如果您只看「原始死亡率 (<span class="math inline">\frac{y}{n}</span>)」，您會發現全台「最危險」和「最安全」的縣市，永遠都是離島或人口少的縣市（如澎湖、金門、連江）。但這不是因為那裡真的特別危險或安全，純粹是因為樣本數 (<span class="math inline">n</span>) 太小，變異數太大。</li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="建立貝氏模型-the-model" class="level3">
+<h3 class="anchored" data-anchor-id="建立貝氏模型-the-model">2. 建立貝氏模型 (The Model)</h3>
+<ul>
+<li><p>我們使用貝氏方法來修正這個問題。</p></li>
+<li><p>假設模型 (Likelihood)：</p>
+<ul>
+<li><p>假設第 <span class="math inline">j</span> 個縣市的死亡人數 <span class="math inline">y_j</span> 服從卜瓦松分佈：<span class="math inline">y_j \sim \text{Poisson}(n_j \theta_j)</span></p></li>
+<li><p>其中 <span class="math inline">n_j</span> 是該縣市勞工人數，<span class="math inline">\theta_j</span> 是我們想知道的「真實潛在死亡率」。</p></li>
+</ul></li>
+<li><p>建立先驗 (Prior)：</p>
+<ul>
+<li><p>我們需要一個「全國平均標準」作為基準。利用 Gamma 分佈（卜瓦松的共軛先驗）。</p></li>
+<li><p>假設根據過去十年全台數據，營造業平均死亡率約為 每十萬人 4 人 (<span class="math inline">\theta \approx 4 \times 10^{-5}</span>)。</p></li>
+<li><p>我們設定先驗分佈為 <span class="math inline">\text{Gamma}(\alpha=20, \beta=500,000)</span>（這裡的數字是為了湊出平均值 <span class="math inline">20/500,000 = 4 \times 10^{-5}</span>，且 <span class="math inline">\alpha=20</span> 代表我們給予這個先驗約等於 20 個死亡案例的權重，相當穩健）。</p></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="貝氏推論結果" class="level3">
+<h3 class="anchored" data-anchor-id="貝氏推論結果">3. 貝氏推論結果</h3>
+<ul>
+<li><p>數據修正 (The Posterior Results)：後驗分佈為：</p>
+<ul>
+<li><span class="math inline">\theta_j | y_j \sim \text{Gamma}(\alpha + y_j, \beta + n_j)</span></li>
+</ul></li>
+<li><p>後驗平均值（修正後的死亡率）為：</p>
+<ul>
+<li><span class="math inline">E(\theta_j | y_j) = \frac{20 + y_j}{500,000 + n_j}</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="案例-a人口少的離島縣-small-population" class="level3">
+<h3 class="anchored" data-anchor-id="案例-a人口少的離島縣-small-population"><strong>案例 A：人口少的「離島縣」 (Small Population)</strong></h3>
+<ul>
+<li><p><strong>情境：</strong> 勞工 <span class="math inline">n_j = 5,000</span> 人。</p></li>
+<li><p><strong>狀況 1 (運氣好)：</strong> 今年 <strong>0 人</strong> 死亡 (<span class="math inline">y_j=0</span>)。</p>
+<ul>
+<li><p><strong>原始率：</strong> <strong>0</strong> (看似超安全)。</p></li>
+<li><p><strong>貝氏修正：</strong> <span class="math inline">\frac{20 + 0}{500,000 + 5,000} \approx \frac{20}{505,000} \approx \textbf{3.96} \text{ (每十萬人)}</span>。</p></li>
+<li><p><em>解讀：</em> 雖然沒死人，但模型知道你只是人少運氣好，真實風險被拉回接近全國平均 (4.0)。</p></li>
+</ul></li>
+<li><p><strong>狀況 2 (運氣差)：</strong> 今年 <strong>1 人</strong> 死亡 (<span class="math inline">y_j=1</span>)。</p>
+<ul>
+<li><p><strong>原始率：</strong> <span class="math inline">1/5,000 = \textbf{20.0}</span> (每十萬人)。<strong>驚人的高！是全國平均的 5 倍！</strong></p></li>
+<li><p><strong>貝氏修正：</strong> <span class="math inline">\frac{20 + 1}{500,000 + 5,000} \approx \frac{21}{505,000} \approx \textbf{4.16} \text{ (每十萬人)}</span>。</p></li>
+<li><p><em>解讀：</em> 模型知道這 1 人死亡在小樣本中可能是偶然，因此將極端值 20.0 強力「收縮 (Shrinkage)」回 4.16 <sup>7</sup>。<strong>縣市管理者不會因為這單一事件被冤枉成「績效極差」。</strong></p></li>
+</ul></li>
+</ul>
+<section id="案例-b人口多的直轄市-large-population" class="level4">
+<h4 class="anchored" data-anchor-id="案例-b人口多的直轄市-large-population"><strong>案例 B：人口多的「直轄市」 (Large Population)</strong></h4>
+<ul>
+<li><p><strong>情境：</strong> 勞工 <span class="math inline">n_j = 1,000,000</span> 人 (100萬人)。</p></li>
+<li><p><strong>狀況：</strong> 今年 <strong>40 人</strong> 死亡 (<span class="math inline">y_j=40</span>)。</p>
+<ul>
+<li><p><strong>原始率：</strong> <span class="math inline">40/1,000,000 = \textbf{4.0}</span> (每十萬人)。</p></li>
+<li><p><strong>貝氏修正：</strong> <span class="math inline">\frac{20 + 40}{500,000 + 1,000,000} = \frac{60}{1,500,000} = \textbf{4.0} \text{ (每十萬人)}</span>。</p></li>
+<li><p><em>解讀：</em> 對於大縣市，數據量 (<span class="math inline">n_j</span>) 夠大，足以壓倒先驗 (<span class="math inline">\beta</span>)。貝氏估計值幾乎等於原始數據 。</p></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="小結-2" class="level3">
+<h3 class="anchored" data-anchor-id="小結-2">4. 小結</h3>
+<blockquote class="blockquote">
+<p>「當我們在比較各廠區或各縣市的職災率時，千萬不能只看『發生率』的數字大小，尤其是那些人數很少的小廠。</p>
+<p>透過貝氏推論（Poisson-Gamma 模型），我們可以<strong>借用全國的平均經驗</strong>來修正這些極端值，給出一個公允、抗雜訊的真實風險評估。這才是科學的職安衛管理。」</p>
+</blockquote>
+</section>
+</div>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./0102CH1.html" class="pagination-link" aria-label="1.機率與推論">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">1.機率與推論</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./0109CH3.html" class="pagination-link" aria-label="3.多參數模型">
+        <span class="nav-page-text">3.多參數模型</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2026, 何明信</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
