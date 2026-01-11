@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.21">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="何明信">
-<meta name="author" content="蔡朋枝 教授">
 
 <title>0109CH3 多參數模型 – Project of BDA</title>
 <style>
@@ -40,10 +39,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f4eaf0868db56fdc42d103e4e41655ca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-bcc2b4e864fb2217c649f7e1f6d25d6b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -148,7 +147,7 @@ window.Quarto = {
 <span class="menu-text">咨詢服務</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="https://peter7336959.github.io/EA/about.html"> 
 <span class="menu-text">了解我們</span></a>
   </li>  
 </ul>
@@ -257,13 +256,18 @@ window.Quarto = {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#ａ.-鋪陳" id="toc-ａ.-鋪陳" class="nav-link active" data-scroll-target="#ａ.-鋪陳">Ａ. 鋪陳</a></li>
-  <li><a href="#a.對滋擾參數進行平均" id="toc-a.對滋擾參數進行平均" class="nav-link" data-scroll-target="#a.對滋擾參數進行平均">A.對「滋擾參數」進行平均</a></li>
-  <li><a href="#b.職業衛生中的滋擾參數從-gsd-到測量誤差" id="toc-b.職業衛生中的滋擾參數從-gsd-到測量誤差" class="nav-link" data-scroll-target="#b.職業衛生中的滋擾參數從-gsd-到測量誤差">B.職業衛生中的滋擾參數：從 GSD 到測量誤差</a></li>
-  <li><a href="#c.工具expostats-與-aiha-bda" id="toc-c.工具expostats-與-aiha-bda" class="nav-link" data-scroll-target="#c.工具expostats-與-aiha-bda">C.工具：Expostats 與 AIHA BDA</a></li>
-  <li><a href="#d.常態分佈均值與變異數未知" id="toc-d.常態分佈均值與變異數未知" class="nav-link" data-scroll-target="#d.常態分佈均值與變異數未知">D.常態分佈均值與變異數未知</a></li>
+  <li><a href="#介紹" id="toc-介紹" class="nav-link active" data-scroll-target="#介紹">介紹</a></li>
+  <li><a href="#a-對滋擾參數進行平均" id="toc-a-對滋擾參數進行平均" class="nav-link" data-scroll-target="#a-對滋擾參數進行平均">3.1A 對「滋擾參數」進行平均</a></li>
+  <li><a href="#b-職業衛生中的滋擾參數從-gsd-到測量誤差" id="toc-b-職業衛生中的滋擾參數從-gsd-到測量誤差" class="nav-link" data-scroll-target="#b-職業衛生中的滋擾參數從-gsd-到測量誤差">3.1B 職業衛生中的滋擾參數：從 GSD 到測量誤差</a></li>
+  <li><a href="#c-工具expostats-與-aiha-bda" id="toc-c-工具expostats-與-aiha-bda" class="nav-link" data-scroll-target="#c-工具expostats-與-aiha-bda">3.1C 工具：Expostats 與 AIHA BDA</a></li>
+  <li><a href="#d常態分佈均值與變異數未知" id="toc-d常態分佈均值與變異數未知" class="nav-link" data-scroll-target="#d常態分佈均值與變異數未知">3.1D常態分佈均值與變異數未知</a></li>
   <li><a href="#常態數據與無訊息先驗分布" id="toc-常態數據與無訊息先驗分布" class="nav-link" data-scroll-target="#常態數據與無訊息先驗分布">3.2 常態數據與無訊息先驗分布</a></li>
   <li><a href="#具有共軛先驗分佈的常態數據" id="toc-具有共軛先驗分佈的常態數據" class="nav-link" data-scroll-target="#具有共軛先驗分佈的常態數據">3.3 <strong>具有共軛先驗分佈的常態數據</strong></a></li>
+  <li><a href="#類別數據的多項式模型" id="toc-類別數據的多項式模型" class="nav-link" data-scroll-target="#類別數據的多項式模型"><strong>3.4 類別數據的多項式模型</strong></a></li>
+  <li><a href="#已知變異數的多變量常態模型" id="toc-已知變異數的多變量常態模型" class="nav-link" data-scroll-target="#已知變異數的多變量常態模型"><strong>3.5 已知變異數的多變量常態模型</strong></a></li>
+  <li><a href="#未知平均值與變異數的多變量常態分佈" id="toc-未知平均值與變異數的多變量常態分佈" class="nav-link" data-scroll-target="#未知平均值與變異數的多變量常態分佈"><strong>3.6 未知平均值與變異數的多變量常態分佈</strong></a></li>
+  <li><a href="#生物檢體測定bioassay範例剖析" id="toc-生物檢體測定bioassay範例剖析" class="nav-link" data-scroll-target="#生物檢體測定bioassay範例剖析"><strong>3.7 生物檢體測定（Bioassay）範例剖析</strong></a></li>
+  <li><a href="#總結" id="toc-總結" class="nav-link" data-scroll-target="#總結"><strong>3.8 總結</strong></a></li>
   </ul>
 <div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://peter7336959.github.io/EA/news.html"><i class="bi bi-link-45deg"></i>職安衛新知</a></li></ul></div></nav>
     </div>
@@ -277,8 +281,8 @@ window.Quarto = {
 
 
 <div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Authors</div>
-  <div class="quarto-title-meta-heading">Affiliations</div>
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
   
     <div class="quarto-title-meta-contents">
     <p class="author">何明信 <a href="mailto:he.peter70@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
@@ -286,14 +290,6 @@ window.Quarto = {
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
             創贊
-          </p>
-      </div>
-    <div class="quarto-title-meta-contents">
-    <p class="author">蔡朋枝 教授 </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-        <p class="affiliation">
-            成功大學環醫所
           </p>
       </div>
   </div>
@@ -311,8 +307,8 @@ window.Quarto = {
 
 
 <p>date: 2026/01/09 - 2026/01/10</p>
-<section id="ａ.-鋪陳" class="level2">
-<h2 class="anchored" data-anchor-id="ａ.-鋪陳">Ａ. 鋪陳</h2>
+<section id="介紹" class="level2">
+<h2 class="anchored" data-anchor-id="介紹">介紹</h2>
 <ul>
 <li><p>幾乎所有統計學中的實際問題都涉及不止一個未知或無法觀測的量。</p>
 <ul>
@@ -340,13 +336,13 @@ window.Quarto = {
 </ul>
 <hr>
 </section>
-<section id="a.對滋擾參數進行平均" class="level2">
-<h2 class="anchored" data-anchor-id="a.對滋擾參數進行平均">A.對「滋擾參數」進行平均</h2>
+<section id="a-對滋擾參數進行平均" class="level2">
+<h2 class="anchored" data-anchor-id="a-對滋擾參數進行平均">3.1A 對「滋擾參數」進行平均</h2>
 <ul>
 <li>現代貝氏計算（包括 MCMC、Gibbs Sampling）的邏輯基石。</li>
 </ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset border">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">3.1.1 什麼是「滋擾參數」？</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">3.1.2 數學架構的建立</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">3.1.3 核心邏輯：條件機率的混合</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">3.1.4 計算策略：模擬積分</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">3.1.1 什麼是「滋擾參數」？</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">3.1.2 數學架構的建立</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">3.1.3 核心邏輯：條件機率的混合</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">3.1.4 計算策略：模擬積分</a></li></ul>
 <div class="tab-content border">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <ul>
@@ -380,9 +376,9 @@ window.Quarto = {
 </ul>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 48%">
+<col style="width: 26%">
+<col style="width: 21%">
+<col style="width: 51%">
 </colgroup>
 <tbody>
 <tr class="odd">
@@ -452,13 +448,13 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="b.職業衛生中的滋擾參數從-gsd-到測量誤差" class="level2">
-<h2 class="anchored" data-anchor-id="b.職業衛生中的滋擾參數從-gsd-到測量誤差">B.職業衛生中的滋擾參數：從 GSD 到測量誤差</h2>
+<section id="b-職業衛生中的滋擾參數從-gsd-到測量誤差" class="level2">
+<h2 class="anchored" data-anchor-id="b-職業衛生中的滋擾參數從-gsd-到測量誤差">3.1B 職業衛生中的滋擾參數：從 GSD 到測量誤差</h2>
 <ul>
 <li>在 OSH 領域，最惡名昭彰的滋擾參數就是 <strong>幾何標準差（GSD）</strong>。</li>
 </ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset border">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">4.1 對數常態分佈中的 <span class="math inline">\mu</span> 與 <span class="math inline">\sigma</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">4.2 傳統方法的失敗：Plug-in 估計</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false">4.3 貝氏方法的優越性</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false">4.4 其他滋擾參數：測量誤差</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">4.1 對數常態分佈中的 <span class="math inline">\mu</span> 與 <span class="math inline">\sigma</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">4.2 傳統方法的失敗：Plug-in 估計</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">4.3 貝氏方法的優越性</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">4.4 其他滋擾參數：測量誤差</a></li></ul>
 <div class="tab-content border">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <ul>
@@ -512,10 +508,10 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="c.工具expostats-與-aiha-bda" class="level2">
-<h2 class="anchored" data-anchor-id="c.工具expostats-與-aiha-bda">C.工具：Expostats 與 AIHA BDA</h2>
+<section id="c-工具expostats-與-aiha-bda" class="level2">
+<h2 class="anchored" data-anchor-id="c-工具expostats-與-aiha-bda">3.1C 工具：Expostats 與 AIHA BDA</h2>
 <div class="tabset-margin-container"></div><div class="panel-tabset border">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">5.1 Expostats：貝氏工具箱</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">5.2 AIHA 貝氏決策分析（BDA）</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">5.1 Expostats：貝氏工具箱</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">5.2 AIHA 貝氏決策分析（BDA）</a></li></ul>
 <div class="tab-content border">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <ul>
@@ -550,11 +546,11 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="d.常態分佈均值與變異數未知" class="level2">
-<h2 class="anchored" data-anchor-id="d.常態分佈均值與變異數未知">D.常態分佈均值與變異數未知</h2>
+<section id="d常態分佈均值與變異數未知" class="level2">
+<h2 class="anchored" data-anchor-id="d常態分佈均值與變異數未知">3.1D常態分佈均值與變異數未知</h2>
 <p>理解「平均掉滋擾參數」的威力。</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset border">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">6.1 標準常態模型</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">6.2 滋擾參數的邊際後驗</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false">6.3 關注參數的邊際後驗</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-4" role="tab" aria-controls="tabset-4-4" aria-selected="false">E.小結</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">6.1 標準常態模型</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">6.2 滋擾參數的邊際後驗</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false" href="">6.3 關注參數的邊際後驗</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-4" role="tab" aria-controls="tabset-4-4" aria-selected="false" href="">E.小結</a></li></ul>
 <div class="tab-content border">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
 <ul>
@@ -588,10 +584,10 @@ window.Quarto = {
 </ul>
 <table class="caption-top table">
 <colgroup>
+<col style="width: 11%">
 <col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
+<col style="width: 28%">
+<col style="width: 33%">
 </colgroup>
 <tbody>
 <tr class="odd">
@@ -650,7 +646,7 @@ window.Quarto = {
 </ul>
 <hr>
 <div class="tabset-margin-container"></div><div class="panel-tabset border">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true"><strong>Ａ. 傳統頻率學派的侷限性</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false"><strong>B. 貝氏統計的直觀優勢</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false"><strong>C. 常態數據與無訊息先驗分布</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-4" role="tab" aria-controls="tabset-5-4" aria-selected="false"><strong>2. OHS實務問題</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-5" role="tab" aria-controls="tabset-5-5" aria-selected="false"><strong>D. 貝氏決策分析（BDA）的應用</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-6" role="tab" aria-controls="tabset-5-6" aria-selected="false"><strong>E. 計算實作：Expostats 工具箱的演進</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-7" role="tab" aria-controls="tabset-5-7" aria-selected="false"><strong>F. 常見誤區</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-8" role="tab" aria-controls="tabset-5-8" aria-selected="false"><strong>G. 結論</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-9-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-9" role="tab" aria-controls="tabset-5-9" aria-selected="false"><strong>附表：小樣本暴露評估方法的比較摘要</strong></a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href=""><strong>Ａ. 傳統頻率學派的侷限性</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href=""><strong>B. 貝氏統計的直觀優勢</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href=""><strong>C. 常態數據與無訊息先驗分布</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-4" role="tab" aria-controls="tabset-5-4" aria-selected="false" href=""><strong>2. OHS實務問題</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-5" role="tab" aria-controls="tabset-5-5" aria-selected="false" href=""><strong>D. 貝氏決策分析（BDA）的應用</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-6" role="tab" aria-controls="tabset-5-6" aria-selected="false" href=""><strong>E. 計算實作：Expostats 工具箱的演進</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-7" role="tab" aria-controls="tabset-5-7" aria-selected="false" href=""><strong>F. 常見誤區</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-8" role="tab" aria-controls="tabset-5-8" aria-selected="false" href=""><strong>G. 結論</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-9-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-9" role="tab" aria-controls="tabset-5-9" aria-selected="false" href=""><strong>附表：小樣本暴露評估方法的比較摘要</strong></a></li></ul>
 <div class="tab-content border">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
 <ul>
@@ -806,10 +802,10 @@ window.Quarto = {
 <div id="tabset-5-9" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-9-tab">
 <table class="caption-top table">
 <colgroup>
-<col style="width: 23%">
-<col style="width: 24%">
+<col style="width: 21%">
+<col style="width: 22%">
 <col style="width: 28%">
-<col style="width: 23%">
+<col style="width: 26%">
 </colgroup>
 <tbody>
 <tr class="odd">
@@ -874,7 +870,7 @@ window.Quarto = {
 <li><p><strong>後驗預測分佈</strong>：如何預測「下一個工人」的暴露風險（Exceedance Fraction）。</p></li>
 </ol>
 <div class="tabset-margin-container"></div><div class="panel-tabset border page-columns page-full">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true"><strong>第一部分：理論背景與職業衛生脈絡</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false"><strong>第二部分：共軛先驗分佈</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false"><strong>第三部分：後驗分佈的推導與更新機制</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-4" role="tab" aria-controls="tabset-6-4" aria-selected="false"><strong>第四部分：邊際後驗分佈</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-5" role="tab" aria-controls="tabset-6-5" aria-selected="false"><strong>第五部分：後驗預測分佈</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-6" role="tab" aria-controls="tabset-6-6" aria-selected="false"><strong>第六部分：職業衛生實務案例演練</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-7" role="tab" aria-controls="tabset-6-7" aria-selected="false"><strong>第七部分：進階議題與軟體應用</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-8" role="tab" aria-controls="tabset-6-8" aria-selected="false">結論</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href=""><strong>第一部分：理論背景與職業衛生脈絡</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href=""><strong>第二部分：共軛先驗分佈</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false" href=""><strong>第三部分：後驗分佈的推導與更新機制</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-4" role="tab" aria-controls="tabset-6-4" aria-selected="false" href=""><strong>第四部分：邊際後驗分佈</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-5" role="tab" aria-controls="tabset-6-5" aria-selected="false" href=""><strong>第五部分：後驗預測分佈</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-6" role="tab" aria-controls="tabset-6-6" aria-selected="false" href=""><strong>第六部分：職業衛生實務案例演練</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-7" role="tab" aria-controls="tabset-6-7" aria-selected="false" href=""><strong>第七部分：進階議題與軟體應用</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-8" role="tab" aria-controls="tabset-6-8" aria-selected="false" href="">結論</a></li></ul>
 <div class="tab-content border page-columns page-full">
 <div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
 <section id="觀念轉換" class="level5">
@@ -1030,6 +1026,1193 @@ window.Quarto = {
 </div>
 </div>
 </div>
+</section>
+<section id="類別數據的多項式模型" class="level2">
+<h2 class="anchored" data-anchor-id="類別數據的多項式模型"><strong>3.4 類別數據的多項式模型</strong></h2>
+<ul>
+<li><p>如何在數據稀缺（Data Scarcity）的現實下，做出關乎勞工暴露風險的重大決策？</p></li>
+<li><p>傳統的頻率學派統計（Frequentist Statistics）在樣本數充足時表現優異，但在面對僅有 3 至 6 個樣本的相似暴露群（Similar Exposure Group, SEG）時，往往顯得捉襟見肘。計算出的信賴區間（Confidence Interval）常寬至涵蓋 0.1 倍到 10 倍的容許暴露標準（OEL），這種「可能極其安全，也可能極其危險」的結論，對於需要決定是否投資百萬改善通風設備的管理層而言，似乎沒有實質指導意義。</p></li>
+<li><p>我們為職業衛生專業人員引介一套更為強大的決策邏輯——<strong>貝氏統計（Bayesian Statistics）</strong>，從數學原理出發，推導至 AIHA 暴露分級（Categories 0-4）的實務應用，展示如何將專家的專業判斷（Professional Judgment）轉化為嚴謹的數學參數，從而實現從「合規管理」到「風險治理」的精神。</p></li>
+</ul>
+</section>
+<div class="tabset-margin-container"></div><div class="panel-tabset border">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href=""><strong>A.核心觀點</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href=""><strong>Ｂ.多項式分佈</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false" href=""><strong>Ｃ.數學模型：似然函數</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-4" role="tab" aria-controls="tabset-7-4" aria-selected="false" href=""><strong>D. 共軛先驗：狄利克雷分佈（The Dirichlet Prior）</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-5" role="tab" aria-controls="tabset-7-5" aria-selected="false" href=""><strong>E. 後驗分佈：信念的更新機制</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-6" role="tab" aria-controls="tabset-7-6" aria-selected="false" href=""><strong>F. OHS實務</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-7" role="tab" aria-controls="tabset-7-7" aria-selected="false" href=""><strong>G. Expostats Tool 3 工具應用</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-8" role="tab" aria-controls="tabset-7-8" aria-selected="false" href=""><strong>Ｈ. 綜合應用案例：半導體廠暴露管控儀表板</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-9-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-9" role="tab" aria-controls="tabset-7-9" aria-selected="false" href=""><strong>I. 小結</strong></a></li></ul>
+<div class="tab-content border">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<ul>
+<li><p>在職業衛生中，我們雖然測量的是連續的濃度數據（如 ppm, mg/m³），但最終的管理決策往往是「類別」的。例如：</p>
+<ul>
+<li><p><strong>Category 1</strong>：高度控制（放心）。</p></li>
+<li><p><strong>Category 2</strong>：良好控制（注意）。</p></li>
+<li><p><strong>Category 4</strong>：控制不良（立即改善）。</p></li>
+</ul></li>
+<li><p>當我們的關注點從「平均濃度是多少」轉變為「該 SEG 屬於哪一個管理等級」時，<u><strong>統計模型</strong></u>就必須從常態分佈（Normal Distribution）轉向<strong>多項式模型（Multinomial Model）</strong>。</p></li>
+</ul>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<ul>
+<li><p>在職業衛生現場，每一個「作業環境」類似一個「SEG」，其暴露風險依 AIHA 定義的暴露分級（Category 0-4）來分。</p>
+<ul>
+<li><p><strong>調查 SEG</strong>（相似暴露群）→ <strong>暴露控制等級</strong>（Category 0, 1, 2, 3, 4）。</p></li>
+<li><p><strong>調查結果</strong> → <strong>各等級的SEG數量</strong>（例如：在全廠50個SEG中，有10個屬於Cat 1，20個屬於Cat 2…）。</p></li>
+</ul></li>
+<li><p>多項式模型處理的是<strong>計數數據（Count Data）</strong>，如果你面對的是單一 SEG 內的 6 個採樣數據，那是連續數據的推論（用對數常態分佈）；但如果你是工安主管，面對的是全廠 50 個 SEG 的管理狀態分佈，這就是多項式模型的主場。</p></li>
+</ul>
+</div>
+<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
+<ul>
+<li><p>在貝氏分析中，一切始於資料生成的機制。若我們觀察到一組分類數據 y，它服從什麼規律？</p></li>
+<li><p>多項式分佈的機率質量函數（ＰＭＦ）表示為：</p>
+<ul>
+<li><p><span class="math inline">p(y|\theta) \propto \prod_{j=1}^{k} \theta_j^{y_j}</span></p></li>
+<li><p>其中：</p>
+<ul>
+<li><p><span class="math inline">y = (y_1, y_2, \dots, y_k)</span> 是觀測到的各類別計數。</p></li>
+<li><p><span class="math inline">\theta = (\theta_1, \theta_2, \dots, \theta_k)</span> 是母體中各類別的真實比例（機率），且 <span class="math inline">\sum \theta_j = 1</span>。</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<!-- -->
+<ul>
+<li><p>職業衛生場景應用：</p>
+<p>假設我們定義了 <span class="math inline">k=3</span> 個管理等級：</p>
+<ul>
+<li><p><span class="math inline">\theta_1</span>：工廠內屬於「優良管理」的區域比例。</p></li>
+<li><p><span class="math inline">\theta_2</span>：工廠內屬於「尚可」的區域比例。</p></li>
+<li><p><span class="math inline">\theta_3</span>：工廠內屬於「危險」的區域比例。</p></li>
+</ul></li>
+<li><p>如果我們在ＳＥＧ中隨機抽查了 10 個樣本，發現 2 個優良、5 個尚可、3 個危險，則 <span class="math inline">y=(2, 5, 3)</span>。 似然函數 <span class="math inline">p(y|\theta) \propto \theta_1^2 \cdot \theta_2^5 \cdot \theta_3^3</span> 告訴我們：在目前的參數 <span class="math inline">\theta</span> 設定下，看到這組數據的可能性有多大？這幫助我們去回推ＳＥＧ最可能的 <span class="math inline">\theta</span> 值。</p></li>
+</ul>
+</div>
+<div id="tabset-7-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-4-tab">
+<ul>
+<li><p>貝氏統計的靈魂在於<strong>先驗（Prior）</strong>，即在看數據之前我們對世界的認知。對於<strong>多項式分佈</strong>的參數 <span class="math inline">\theta</span>（一組加總為1的機率向量），數學上最完美的搭檔（共軛先驗）是<u><strong>狄利克雷分佈</strong></u><strong>（Dirichlet Distribution）</strong>。</p></li>
+<li><p>多項式似然函數的共軛先驗分佈是狄利克雷分佈，我們明確地將 <span class="math inline">\theta</span> 的先驗分佈表示為 Dirichlet(<span class="math inline">\alpha_1, \dots, \alpha_k</span>)。</p>
+<ul>
+<li><span class="math inline">\alpha</span> 參數（The “Pseudocounts”，偽計數）。</li>
+</ul></li>
+<li><p>在 Dirichlet 分佈中，參數 <span class="math inline">\alpha = (\alpha_1, \dots, \alpha_k)</span> 代表了我們在實際採樣之前，「想像中」或「基於過去經驗」已經觀察到的各類別次數。</p>
+<ul>
+<li><p><span class="math inline">\alpha_j</span> 的意義：代表先驗經驗中，屬於第 <span class="math inline">j</span> 類的次數。</p></li>
+<li><p><span class="math inline">\alpha_0 = \sum \alpha_j</span> 的意義：代表先驗信念的<strong>強度</strong>（Strength of Belief），相當於「虛擬樣本數」。</p></li>
+</ul></li>
+<li><p>OHS實務：假設您是一位資深工業衛生師，剛接手一家半導體廠ＥＡ。根據您的專業經驗（30年），這類工廠的化學品管理通常非常嚴格。</p>
+<ul>
+<li><p><strong>您的信念</strong>：大約 80% 的區域是高度控制（Cat 1），15% 是良好控制（Cat 2），只有 5% 可能屬失控（Cat 4）。</p></li>
+<li><p><strong>設定先驗</strong> <span class="math inline">\alpha</span>：</p>
+<ul>
+<li><p>如果您非常有信心（覺得這經驗等同於看過 100 個類似廠房），您可以設定：</p>
+<p><span class="math inline">\alpha = (80, 15, 5)</span>。這裡 <span class="math inline">\alpha_0 = 100</span>，表示您的信念非常強，新數據很難動搖您。</p></li>
+<li><p>如果您雖然有這個趨勢認知，但對這家特定新廠不太確定（經驗僅等同於看過 10 個廠），您可以設定：</p>
+<p><span class="math inline">\alpha = (8, 1.5, 0.5)</span>。這裡 <span class="math inline">\alpha_0 = 10</span>，表示您的信念較弱，容易被新數據修正。</p></li>
+</ul></li>
+</ul></li>
+<li><p><strong>貝氏統計允許我們將「專家的直覺」量化為「虛擬的數據」，並納入計算模型中。</strong></p></li>
+</ul>
+</div>
+<div id="tabset-7-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-5-tab">
+<ul>
+<li><p>當我們有了先驗（Dirichlet）和數據（Multinomial），貝氏定理告訴我們如何更新信念得到後驗分佈<strong>（Posterior Calculation）</strong>。</p>
+<ul>
+<li><p><span class="math inline">\theta</span> 的後驗分佈為 Dirichlet(<span class="math inline">\alpha_1 + y_1, \dots, \alpha_k + y_k</span>)。</p></li>
+<li><p>加法原理的優雅「計數的累加」</p>
+<ul>
+<li>後驗參數 = 先驗參數（偽計數） + 觀測數據（真實計數）</li>
+</ul></li>
+</ul></li>
+<li><p>OHS實務：延續半導體廠的例子：</p>
+<ul>
+<li><p><strong>先驗</strong>：我設定 <span class="math inline">\alpha_{Cat4} = 0.5</span>（認為失控機率極低，且信心不強）。</p></li>
+<li><p><strong>數據</strong>：我實際對ＳＥＧ採樣了 20 個樣本，發現有 5 個屬於 Category 4（控制不良）。即 <span class="math inline">y_{Cat4} = 5</span>。</p></li>
+<li><p><strong>後驗</strong>：新的參數 <span class="math inline">\alpha'_{Cat4} = 0.5 + 5 = 5.5</span>。</p></li>
+</ul></li>
+<li><p><strong>OHS決策的改變</strong>：</p>
+<ul>
+<li><p>在採樣前(先驗)，認為失控比例期望值是 <span class="math inline">0.5 / 10 = 5\%</span>。</p></li>
+<li><p>在採樣後(後驗修正)，認為失控比例期望值是 <span class="math inline">5.5 / (10 + 20) = 5.5 / 30 \approx 18.3\%</span>。</p></li>
+</ul></li>
+<li><p>數據（發現 5 個失控）強烈地修正了我的先驗（認為只有 5% 失控）為18.3%。</p>
+<ul>
+<li><p>這就是<strong>貝氏更新（Bayesian Updating）</strong>—隨著證據的累積，我們的認知逐漸逼近真相。</p></li>
+<li><p>Hewett 在文獻1中提到的「反饋機制（Feedback Mechanism）」 正是基於此數學原理：如果後驗與先驗差異巨大，代表您的初始判斷有誤，必須查證與修正。</p></li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-7-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-6-tab">
+<section id="aiha-暴露分級與-hewett-的貝氏決策分析" class="level5">
+<h5 class="anchored" data-anchor-id="aiha-暴露分級與-hewett-的貝氏決策分析"><strong>AIHA 暴露分級與 Hewett 的貝氏決策分析</strong></h5>
+<ul>
+<li>理解了 Gelman 的數學模型後，我們需要將其應用於具體的職業衛生場景。這需要引入 Hewett 等人（2006）在文獻1 中提出的貝氏決策分析（Bayesian Decision Analysis, BDA）架構，以及 AIHA 的暴露分級系統。 &nbsp;</li>
+</ul>
+</section>
+<section id="aiha-暴露控制分級exposure-categories-0-4" class="level4">
+<h4 class="anchored" data-anchor-id="aiha-暴露控制分級exposure-categories-0-4"><strong>1. AIHA 暴露控制分級（Exposure Categories 0-4）</strong></h4>
+<ul>
+<li>在 Hewett 的架構中，暴露評估不再是單純的「濃度 vs 標準」，而是將暴露分佈（Exposure Profile）歸類為五個管理等級。(連結統計數據與管理行動的介面)</li>
+</ul>
+<p>AIHA暴露控制分級的定義、統計意義與建議行動（整合自文獻1 ）： &nbsp;</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 39%">
+<col style="width: 13%">
+<col style="width: 34%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>暴露分級 (Category)</td>
+<td>定義描述 (Qualitative Description)</td>
+<td>統計定義 (X95​ vs OEL)</td>
+<td>管理意涵與建議行動 (Action)</td>
+</tr>
+<tr class="even">
+<td><p><strong>Category 0</strong></p>
+<p>(微不足道)</p></td>
+<td><strong>Trivial</strong>：暴露極微或不存在。員工幾乎無吸入接觸。</td>
+<td>X95​≤1%&nbsp;OEL</td>
+<td><strong>無需行動</strong> (No action)。資源可移轉至其他高風險區。</td>
+</tr>
+<tr class="odd">
+<td><p><strong>Category 1</strong></p>
+<p>(高度控制)</p></td>
+<td><strong>Highly Controlled</strong>：暴露極低。偶爾發生但頻率極低（&lt;5%時間）。</td>
+<td>1%&lt;X95​≤10%&nbsp;OEL</td>
+<td><strong>一般危害通識</strong>。定期（如每數年）確認製程未變更。</td>
+</tr>
+<tr class="even">
+<td><p><strong>Category 2</strong></p>
+<p>(良好控制)</p></td>
+<td><strong>Well Controlled</strong>：常有低濃度接觸，極少有高濃度接觸。</td>
+<td>10%&lt;X95≤50%&nbsp;OEL</td>
+<td><strong>化學品特定危害通識</strong>。需定期監測以防惡化。</td>
+</tr>
+<tr class="odd">
+<td><p><strong>Category 3</strong></p>
+<p>(受控)</p></td>
+<td><strong>Controlled</strong>：在標準內，但安全裕度小。偶有高濃度（&gt;OEL）但不頻繁。</td>
+<td>50%&lt;X95≤100%&nbsp;OEL</td>
+<td><strong>加強管理</strong>：化學品特定通識、暴露監測、醫學檢測、作業檢討。</td>
+</tr>
+<tr class="even">
+<td><p><strong>Category 4</strong></p>
+<p>(控制不良)</p></td>
+<td><strong>Poorly Controlled</strong>：經常超過容許暴露標準。</td>
+<td>X95&gt;100%&nbsp;OEL</td>
+<td><strong>立即改善</strong>：工程控制（通風）、呼吸防護計畫、密集監測。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p><strong>為什麼要這樣分類？</strong> 傳統的合規性檢測（Compliance Testing）是二分法（過/不過）。但在 AIHA 架構下，我們將「未超標」的區域細分為 0-3 四個等級。這不僅是為了精確，更是為了<strong>資源分配</strong>。</p>
+<ul>
+<li><p>對於 Cat 0 和 Cat 1，我們幾乎可以「放手」，將寶貴的採樣分析資源集中到 Cat 3。</p></li>
+<li><p>這就是為什麼我們需要計算「屬於各 Category 的機率」，而不僅僅是「P95 是多少」。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="貝氏決策分析bda" class="level4">
+<h4 class="anchored" data-anchor-id="貝氏決策分析bda"><strong>2 貝氏決策分析（BDA）</strong></h4>
+<ul>
+<li><p>Hewett 提出的 BDA ，實際上是在單一 SEG 層次上應用貝氏推論。這個過程產出的結果，正是多項式模型所需的輸入數據。</p></li>
+<li><p><strong>ＢＤＡ流程：</strong></p></li>
+</ul>
+<ol type="1">
+<li><p><strong>建立先驗決策分佈（Prior Decision Distribution）</strong>： 工業衛生師根據製程知識、物理模型或同業經驗，主觀判斷該 SEG 屬於各 Category 的可能性。</p>
+<ul>
+<li><em>例如</em>：這是一個封閉管路系統，經驗顯示這類系統 90% 是 Cat 1，10% 是 Cat 2。這就是經驗先驗。</li>
+</ul></li>
+<li><p><strong>計算似然決策分佈（Likelihood Decision Distribution）</strong>： 進行現場採樣（例如 n=6）。利用統計方法（如對數常態分佈的似然函數）<strong>計算這組數據「最像」哪一類</strong>。</p>
+<ul>
+<li><em>例如</em>：數據顯示 GM = 5% OEL，GSD = 1.8。這組數據在統計上強烈支持 Cat 1。</li>
+</ul></li>
+<li><p><strong>導出後驗決策分佈（Posterior Decision Distribution）</strong>： 結合 Prior 與 Likelihood，得出最終判定。</p>
+<ul>
+<li><em>結果</em>：95% 機率是 Cat 1，5% 機率是 Cat 2。</li>
+</ul></li>
+</ol>
+<ul>
+<li>Hewett 的方法產出了「單一 SEG 屬於各類別的機率」。當我們管理整個工廠時，我們會對數十個 SEG 進行這樣的評估，然後將這些分類結果（Categorical Data）彙整起來，這時就回到了 Gelman的 Dirichlet-Multinomial 模型，用來評估「整廠的暴露控制績效」。</li>
+</ul>
+</section>
+</div>
+<div id="tabset-7-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-7-tab">
+<ul>
+<li>理論與架構完備後，我們需要強大的運算工具。Lavoué 等人開發的 <strong>Expostats</strong> 是目前職業衛生領域最先進的貝氏分析工具箱，其中的 <strong>Tool 3</strong> 專門用於處理類別數據的比較。 &nbsp;</li>
+</ul>
+<section id="tool-3群組比較group-comparison" class="level4">
+<h4 class="anchored" data-anchor-id="tool-3群組比較group-comparison"><strong>1. Tool 3群組比較（Group Comparison）</strong></h4>
+<ul>
+<li><p>根據文獻2 ，Tool 3 的設計核心是回答：「不同群組之間的暴露分佈是否有顯著差異？」這在本質上就是類別數據分析的應用。 &nbsp;</p></li>
+<li><p><strong>介入成效評估</strong>：這是 Tool 3 最典型的應用。將數據分為「改善前（Group A）」與「改善後（Group B）」。這裡的「前/後」就是類別變數。</p></li>
+<li><p><strong>群組同質性驗證</strong>：比較「早班」與「晚班」，或「一廠」與「二廠」。</p></li>
+</ul>
+</section>
+<section id="處理受限數據censored-data" class="level4">
+<h4 class="anchored" data-anchor-id="處理受限數據censored-data"><strong>2. 處理受限數據（Censored Data）</strong></h4>
+<ul>
+<li><p>職業衛生數據常包含「低於偵測極限（&lt;LOD）」的值，稱為左受限數據（Left-censored data）。傳統統計常簡單地用 LOD/2 或 LOD/2​ 取代，這會嚴重扭曲 P95 的估計，導致錯誤的分類（例如將 Cat 2 誤判為 Cat 1）。</p></li>
+<li><p>Expostats 利用 <strong>JAGS (Just Another Gibbs Sampler)</strong> 進行蒙地卡羅模擬（MCMC），能<strong>精確處理各種受限數據（左受限、右受限、區間受限）</strong>。這意味著： &nbsp;</p></li>
+</ul>
+<ol type="1">
+<li><p>即便是充滿 “ND”（未檢出）的數據，Expostats 也能給出合理的 P95 估計區間。</p></li>
+<li><p>這保證了我們將 SEG 歸類到 Category 0-4 時的準確性，為後續的多項式模型分析提供高品質的輸入數據。</p></li>
+</ol>
+</section>
+<section id="輸出與決策" class="level4">
+<h4 class="anchored" data-anchor-id="輸出與決策"><strong>3. 輸出與決策</strong></h4>
+<ul>
+<li><p>決策聲明例如：「改善後，P95 下降的機率為 98%。」</p></li>
+<li><p>決策聲明例如：「改善後，該 SEG 屬於 Category 4 的機率從 80% 降至 5%。」</p></li>
+<li><p>這種直接的機率語言，比起傳統的「t檢定 p &lt; 0.05」，更容易讓工廠經理理解介入措施的價值。</p></li>
+</ul>
+</section>
+</div>
+<div id="tabset-7-8" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-8-tab">
+<ul>
+<li><p>讓我們設計一個完整的實務案例，來展示如何結合 Gelman 的數學模型、Hewett 的分級架構與 Expostats 的計算能力，解決真實的EA管理問題。</p></li>
+<li><p><strong>案例背景：</strong> 您是一家大型半導體廠的工安經理。廠內有 50 個不同的化學品操作單元（SEGs）。總經理問您：「我們廠的化學品暴露控制到底做得好不好？有多少比例是高風險的？」</p></li>
+</ul>
+<section id="步驟-1建立先驗the-prior--專家直覺的量化我們專業團隊的介入" class="level4">
+<h4 class="anchored" data-anchor-id="步驟-1建立先驗the-prior--專家直覺的量化我們專業團隊的介入"><strong>步驟 1：建立先驗（The Prior）- 專家直覺的量化(我們專業團隊的介入)</strong></h4>
+<ul>
+<li><p><strong>情境</strong>：基於過去的稽核經驗與同業水準，我們認為大部分單元控制良好，但仍有少數死角。</p></li>
+<li><p><strong>設定 Dirichlet 先驗參數</strong> <span class="math inline">\alpha</span>（偽計數）：</p>
+<ul>
+<li><p><span class="math inline">\alpha_0</span> (Cat 0): 5 (相當有把握有些地方極微量)</p></li>
+<li><p><span class="math inline">\alpha_1</span> (Cat 1): 15 (高度控制區應是主流)</p></li>
+<li><p><span class="math inline">\alpha_2</span> (Cat 2): 20 (良好控制區)</p></li>
+<li><p><span class="math inline">\alpha_3</span> (Cat 3): 8 (邊緣區)</p></li>
+<li><p><span class="math inline">\alpha_4</span> (Cat 4): 2 (預期很少有失控區)</p></li>
+<li><p><strong>總信心強度</strong>：<span class="math inline">\sum \alpha = 50</span>。這代表您的經驗強度相當於已經評估過 50 個 SEG。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="步驟-2數據收集與個別評估the-data--expostats-的應用" class="level4">
+<h4 class="anchored" data-anchor-id="步驟-2數據收集與個別評估the-data--expostats-的應用"><strong>步驟 2：數據收集與個別評估（The Data）- Expostats 的應用</strong></h4>
+<ul>
+<li><p><strong>執行</strong>：對這 50 個 SEG 進行採樣（受限於預算，每組僅測 3-6 個樣本）。</p></li>
+<li><p><strong>運算</strong>：使用 <strong>Expostats</strong> 計算每個 SEG 的 P95，並處理 &lt;LOD 數據。</p></li>
+<li><p><strong>分類</strong>：根據 Hewett 的標準（P95 vs OEL），將每個 SEG 歸類。</p>
+<ul>
+<li><p><strong>實際觀測結果</strong> <span class="math inline">y</span>：</p>
+<ul>
+<li><p><span class="math inline">y_0</span> (Cat 0): 8 個</p></li>
+<li><p><span class="math inline">y_1</span> (Cat 1): 12 個</p></li>
+<li><p><span class="math inline">y_2</span> (Cat 2): 18 個</p></li>
+<li><p><span class="math inline">y_3</span> (Cat 3): 10 個</p></li>
+<li><p><span class="math inline">y_4</span> (Cat 4): 2 個</p></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="步驟-3貝氏更新the-posterior--gelman-3.4-的計算" class="level4">
+<h4 class="anchored" data-anchor-id="步驟-3貝氏更新the-posterior--gelman-3.4-的計算"><strong>步驟 3：貝氏更新（The Posterior）- Gelman 3.4 的計算</strong></h4>
+<ul>
+<li><p>利用多項式模型的共軛性質更新參數 (<span class="math inline">\alpha_{new} = \alpha_{old} + y</span>)：</p>
+<ul>
+<li><p><span class="math inline">\alpha'_0 = 5 + 8 = 13</span></p></li>
+<li><p><span class="math inline">\alpha'_1 = 15 + 12 = 27</span></p></li>
+<li><p><span class="math inline">\alpha'_2 = 20 + 18 = 38</span></p></li>
+<li><p><span class="math inline">\alpha'_3 = 8 + 10 = 18</span></p></li>
+<li><p><span class="math inline">\alpha'_4 = 2 + 2 = 4</span></p></li>
+<li><p><span class="math inline">\sum \alpha' = 50 + 50 = 100</span></p></li>
+</ul></li>
+</ul>
+</section>
+<section id="步驟-4決策與報告---風險儀表板" class="level4">
+<h4 class="anchored" data-anchor-id="步驟-4決策與報告---風險儀表板">步驟 4：決策與報告 - 風險儀表板</h4>
+<ul>
+<li><p>現在可以回答總經理的問題了。</p></li>
+<li><p><strong>控制不良率（Cat 4）估計</strong>：後驗期望值為 <span class="math inline">4 / 100 = 4\%</span>。</p>
+<ul>
+<li>雖然實際只測到 2 個（佔4%），且先驗也預估 4%，這顯示目前的高風險區域比例穩定在 4% 左右。</li>
+</ul></li>
+<li><p><strong>高風險警示（Cat 3 + Cat 4）</strong>：<span class="math inline">(18+4)/100 = 22\%</span>。</p>
+<ul>
+<li>全廠有約 22% 的區域處於風險邊緣或失控狀態。這比您原先預期的 <span class="math inline">(8+2)/50 = 20\%</span> 稍高。這是一個警訊。</li>
+</ul></li>
+<li><p><strong>行動建議</strong>：建議針對這 22% 的區域（Cat 3 &amp; 4）啟動專案改善計畫，並利用 Expostats Tool 3 追蹤改善前後的成效。</p></li>
+</ul>
+</section>
+<section id="步驟-5敏感度分析sensitivity-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="步驟-5敏感度分析sensitivity-analysis">步驟 5：敏感度分析（Sensitivity Analysis）</h4>
+<ul>
+<li><p>如果懷疑：「先驗設得太樂觀了！」</p></li>
+<li><p>我們可以試著將先驗改為「均勻分佈（Uniform Prior）」，即 <span class="math inline">\alpha = (1,1,1,1,1)</span>。</p></li>
+<li><p>新的後驗 Cat 4 期望值：<span class="math inline">(1+2) / (5+50) = 3/55 \approx 5.45\%</span>。</p></li>
+<li><p>結果顯示，即使移除專家的樂觀先驗，Cat 4 的比例也僅上升到 5.5% 左右。這證明了我們的結論是<strong>穩健（Robust）</strong>的。</p></li>
+</ul>
+</section>
+</div>
+<div id="tabset-7-9" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-9-tab">
+<ul>
+<li><p>貝氏統計並非只是理論，它可以解決職業衛生「數據稀缺」與「決策不確定性」的最佳工具。</p></li>
+<li><p>Gelman 的 <strong>Dirichlet-Multinomial 模型</strong> 為我們處理「暴露分級」這類數據提供了堅實的數學骨架。它證明了「專家經驗」可以合法且科學地轉化為「偽計數」參與運算。</p></li>
+<li><p>Hewett 的 <strong>AIHA 暴露分級（Cat 0-4）</strong> 將連續的濃度數據轉化為具體的管理行動，是連結統計與決策的介面。它讓我們從糾結於「0.49 ppm vs 0.51 ppm」的泥淖中解脫，轉向關注「控制等級」的宏觀觀點。</p></li>
+<li><p>Lavoué 的 <strong>Expostats</strong> 解決了繁瑣的運算問題，特別是 Tool 3 提供了群組比較與介入評估的強大功能，讓貝氏分析可以是現場職業安全衛生管理師手中的利器。</p></li>
+<li><p>未來的職業衛生管理，將從「合規導向（Compliance-based）」轉向「風險導向（Risk-based）」。掌握這套從連續數據到類別決策、從單一評估到群體推論的邏輯，將是每一位高階職安衛人員必備的核心能力。</p></li>
+</ul>
+<p>我們鼓勵所有OHS從業人員：</p>
+<ul>
+<li><p><strong>擁抱不確定性</strong>：不要害怕數據少，利用貝氏方法量化它。</p></li>
+<li><p><strong>善用先驗知識</strong>：您的現場經驗是有價值的數據，可將其納入模型。</p></li>
+<li><p><strong>使用現代工具</strong>：嘗試開始使用 Expostats 進行完整的機率評估。</p></li>
+</ul>
+<p><em>(本報告參考文獻整合)</em></p>
+<ul>
+<li><p>Gelman, A., et al.&nbsp;(2013). <em>Bayesian Data Analysis, 3rd Edition</em>. (Chapter 3). &nbsp;</p></li>
+<li><p>Hewett, P., et al.&nbsp;(2006). <em>Rating Exposure Control Using Bayesian Decision Analysis</em>. Journal of Occupational and Environmental Hygiene. &nbsp;</p></li>
+<li><p>Lavoué, J., et al.&nbsp;(2019). <em>Expostats: A Bayesian Toolkit to Aid the Interpretation of Occupational Exposure Measurements</em>. Annals of Work Exposures and Health. &nbsp;</p></li>
+</ul>
+</div>
+</div>
+</div>
+<section id="已知變異數的多變量常態模型" class="level2">
+<h2 class="anchored" data-anchor-id="已知變異數的多變量常態模型"><strong>3.5 已知變異數的多變量常態模型</strong></h2>
+<p>（Multivariate normal model with known variance）</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset border">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">A. 多變量常態模型</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href="">B. 暴露概況的向量化</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-3" role="tab" aria-controls="tabset-8-3" aria-selected="false" href="">C. 變異數-共變異數矩陣 (<span class="math inline">\Sigma</span>)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-4" role="tab" aria-controls="tabset-8-4" aria-selected="false" href="">D. OHS實務應用</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-5" role="tab" aria-controls="tabset-8-5" aria-selected="false" href="">E. 小結</a></li></ul>
+<div class="tab-content border">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<ul>
+<li>我們先建立對「多變量」（Multivariate）世界的直觀理解。在傳統的統計課程中，我們習慣處理單一變數（Scalar），例如某位工人的 8 小時時量平均濃度（TWA）是 5 ppm。但在多變量模型中，我們的基本單元不再是一個數字，而是一個「向量」（Vector）。</li>
+</ul>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<ul>
+<li><p>假設我們正在評估一組石化廠維修工人的暴露情況，他們同時暴露於苯（Benzene）、甲苯（Toluene）、乙苯（Ethylbenzene）和二甲苯（Xylene），即所謂的 BTEX 混合物。對於每一次的正式採樣，我們獲得的不是一個數據，而是一組數據。</p></li>
+<li><p>我們定義觀察值向量 <span class="math inline">y</span> 為一個 <span class="math inline">d \times 1</span> 的欄向量（Column Vector），其中 <span class="math inline">d</span> 代表化學物質的數量（維度）。對於 BTEX 案例， <span class="math inline">d=4</span>。</p>
+<ul>
+<li><span class="math inline">y = \begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_d \end{pmatrix}</span></li>
+</ul></li>
+<li><p>在職業衛生實務中，環境測测數據通常呈現對數常態分佈（Lognormal Distribution），這意味著數據受限於正值且具有右偏的長尾特性。為了符合常態分佈的假設，我們通常會先將濃度取自然對數（ln）。因此，<span class="math inline">y_1</span> 代表苯濃度的對數值，<span class="math inline">y_2</span> 代表甲苯濃度的對數值，依此類推。</p></li>
+<li><p>在這個模型中，我們想要推論的未知參數不再是單一的平均值 <span class="math inline">\theta</span>，而是一個 <strong>平均數向量（Mean Vector）</strong> <span class="math inline">\mu</span>：</p>
+<ul>
+<li><span class="math inline">\mu = \begin{pmatrix} \mu_1 \\ \mu_2 \\ \vdots \\ \mu_d \end{pmatrix}</span></li>
+</ul></li>
+<li><p>這個向量 <span class="math inline">\mu</span> 代表了該相似暴露群（Similar Exposure Group, SEG）在長期暴露下的真實中心趨勢。它是一個多維空間中的「點」，代表了該群體暴露的重心。</p></li>
+</ul>
+</div>
+<div id="tabset-8-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-3-tab">
+<ul>
+<li><p>在單變量統計中，我們用變異數 <span class="math inline">\sigma^2</span> 來描述數據的分散程度。但在多變量世界裡，分散程度的描述變得更加複雜，因為我們不僅要關心每一種化學物質本身的變異，還要關心它們之間的「連動關係」。這就是 <strong>變異數-共變異數矩陣（Variance-Covariance Matrix）</strong> <span class="math inline">\Sigma</span> 的角色。</p>
+<ul>
+<li><p><span class="math inline">\Sigma = \begin{pmatrix} \sigma_1^2 &amp; \sigma_{12} &amp; \dots &amp; \sigma_{1d} \\\sigma_{21} &amp; \sigma_2^2 &amp; \dots &amp; \sigma_{2d} \\\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\\sigma_{d1} &amp; \sigma_{d2} &amp; \dots &amp; \sigma_d^2 \end{pmatrix}</span></p></li>
+<li><p><strong>對角線元素 (</strong><span class="math inline">\sigma_j^2</span>)： 代表第 <span class="math inline">j</span> 種化學物質的變異數（Variance）。例如，<span class="math inline">\sigma_1^2</span> 反映了苯濃度在不同天數或不同工人間的波動幅度。在職業衛生中，這通常與幾何標準差（GSD）有關。</p></li>
+<li><p><strong>非對角線元素 (</strong><span class="math inline">\sigma_{ij}</span>)： 代表第 <span class="math inline">i</span> 種與第 <span class="math inline">j</span> 種化學物質之間的共變異數（Covariance）。這是多變量模型的核心靈魂。如果 <span class="math inline">\sigma_{12}</span> 是正值且數值很大，這意味著當苯濃度升高時，甲苯濃度通常也會升高。</p></li>
+</ul></li>
+<li><p>為什麼化學物質會「共變」？</p></li>
+</ul>
+<ol type="1">
+<li><p><strong>共同來源：</strong> BTEX 通常來自同一個液體混合物（如汽油或溶劑）。當溶劑揮發時，根據拉午耳定律（Raoult’s Law），所有成分會同時釋放到空氣中。因此，它們的濃度呈現高度正相關。</p></li>
+<li><p><strong>共同控制機制：</strong> 通風系統的效率影響所有污染物的移除。如果局部排氣裝置故障，所有污染物的濃度會同時飆升。</p></li>
+<li><p><strong>負相關的可能性：</strong> 雖然較少見，但也可能發生。例如，如果工人輪流執行兩個任務，任務 A 產生化學物質 X，任務 B 產生化學物質 Y。花在任務 A 的時間越多，花在任務 B 的時間就越少，這可能導致 X 與 Y 的日暴露量呈現負相關。</p></li>
+</ol>
+<ul>
+<li>假設：<strong>變異數矩陣</strong> <span class="math inline">\Sigma</span> 是已知的，這意味著我們假設我們已經完全掌握了該暴露群的波動特性和物質間的相關結構，唯一的未知數是它們的平均濃度 <span class="math inline">\mu</span>。</li>
+</ul>
+<section id="概似函數the-likelihood-function數據的聲音" class="level4">
+<h4 class="anchored" data-anchor-id="概似函數the-likelihood-function數據的聲音"><strong>3.1 概似函數（The Likelihood Function）：數據的聲音</strong></h4>
+<ul>
+<li>在貝氏分析中，概似函數描述了「已知參數下，觀察到這組數據的機率」。</li>
+</ul>
+</section>
+<section id="共軛先驗分佈conjugate-prior專家的直覺" class="level4">
+<h4 class="anchored" data-anchor-id="共軛先驗分佈conjugate-prior專家的直覺">3.2 共軛先驗分佈（Conjugate Prior）：專家的直覺</h4>
+<ul>
+<li><p>貝氏分析的精髓在於引入「先驗資訊」（Prior Information）。在進行昂貴的採樣之前，資深的工業衛生師通常對暴露情況已有預判。這些預判可能來自：</p>
+<ul>
+<li><p><strong>物理模型</strong>：根據化學品的蒸氣壓、使用量和通風率進行的推估 <sup>3</sup>。</p></li>
+<li><p><strong>歷史數據</strong>：該工廠過去十年的監測紀錄。</p></li>
+<li><p><strong>類似暴露群（SEG）的類推</strong>：參考同業其他類似製程的數據。</p></li>
+</ul></li>
+<li><p>對於平均數向量 <span class="math inline">\mu</span>，其共軛先驗分佈也是一個多變量常態分佈。</p></li>
+<li><p>「共軛性」（Conjugacy）：如果先驗是常態分佈，概似函數是常態分佈，那麼數學推導出來的後驗分佈（Posterior Distribution）保證也是常態分佈 。這大大簡化了計算，讓我們可以直接獲得解析解（Analytical Solution），而不需要依賴複雜的蒙地卡羅模擬（MCMC）。</p></li>
+</ul>
+</section>
+<section id="後驗分佈the-posterior知識的融合" class="level4">
+<h4 class="anchored" data-anchor-id="後驗分佈the-posterior知識的融合"><strong>3.3 後驗分佈（The Posterior）：知識的融合</strong></h4>
+<ul>
+<li><strong>借用力量（Borrowing Strength）</strong>。假設 <span class="math inline">\Sigma</span> 顯示苯和甲苯高度相關。在某次採樣中，苯的數據因為感測器干擾而變得非常不穩定（變異數大），但甲苯的數據非常精確且顯示濃度偏高。透過矩陣乘法，甲苯的資訊會「流向」苯的估計。模型會推斷：「既然甲苯這麼高，且兩者通常正相關，那麼那個模糊不清的苯讀數，很可能也是偏高的。」這修正了單獨看苯數據可能產生的誤判。這就是多變量貝氏分析在職業衛生中最具價值的特性之一：利用相關性來彌補數據品質的不足。</li>
+</ul>
+</section>
+</div>
+<div id="tabset-8-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-4-tab">
+<section id="案例背景石化廠維修作業" class="level4">
+<h4 class="anchored" data-anchor-id="案例背景石化廠維修作業">1 案例背景：石化廠維修作業</h4>
+<ul>
+<li><p>假設我們關某石化廠的維修工人，他們負責維修輸送重組油（Reformate）的泵浦。重組油富含芳香烴，主要成分為 BTEX。</p></li>
+<li><p><strong>危害特性：</strong> 苯是確認的人類致癌物（白血病風險），甲苯和二甲苯則是中樞神經抑制劑，並可能導致耳毒性（聽力損失）。</p></li>
+<li><p><strong>暴露情境：</strong> 暴露發生在法蘭拆卸時的瞬間洩漏。由於來源相同，我們預期這些化學物質的濃度會同步波動。</p></li>
+</ul>
+</section>
+<section id="設定已知變異數矩陣-sigma" class="level4">
+<h4 class="anchored" data-anchor-id="設定已知變異數矩陣-sigma">2 設定「已知變異數矩陣」 <span class="math inline">\Sigma</span></h4>
+<ul>
+<li><p>根據文獻 1，環境中的 BTEX 相關係數通常很高（<span class="math inline">r &gt; 0.7</span>）。我們可以設定如下的結構（假設為對數尺度）：</p>
+<ul>
+<li><p>變異數（對角線）：假設 GSD 為 2.5（職業暴露的典型值），換算成對數變異數約為 <span class="math inline">\sigma^2 \approx 0.84</span>。</p></li>
+<li><p>相關係數（非對角線）：設苯與甲苯的相關係數為 0.8。</p></li>
+<li><p>這給了我們一個強大的 <span class="math inline">\Sigma</span> 矩陣，告訴模型：「這些物質是同進同退的」。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="應用一缺失數據的插補" class="level4">
+<h4 class="anchored" data-anchor-id="應用一缺失數據的插補">3 應用一：缺失數據的插補</h4>
+<ul>
+<li><p>情境：工廠進行了 5 次全班次採樣。但在第 3 次採樣中，實驗室回報苯的樣本分析失敗（例如採樣管破損或層析圖干擾），但甲苯、乙苯和二甲苯的數據是有效的，且顯示當天濃度異常高（高暴露日）。</p></li>
+<li><p>傳統做法（頻率學派）：</p>
+<ul>
+<li>直接刪除第 3 筆數據。這可能會導致嚴重偏差，因為我們刪除了一個「高暴露日」的數據，導致最終評估低估了工人的平均暴露風險。</li>
+</ul></li>
+<li><p>貝氏多變量做法：</p>
+<ul>
+<li><p>利用條件後驗分佈（也是常態分佈），</p></li>
+<li><p>我們可以計算： <span class="math inline">p(\text{苯} | \text{甲苯}, \text{乙苯}, \text{二甲苯}, \mu, \Sigma)</span>。</p>
+<ul>
+<li><p>由於 <span class="math inline">\Sigma</span> 包含強正相關，模型會利用當天偏高的甲苯數據，預測出當天的苯濃度也應該偏高，並給出一個帶有不確定性範圍的估計值。</p></li>
+<li><p>這種方法稱為「聯合模型插補」（Joint Modeling Imputation），它保留了高暴露日的資訊，提供了更誠實的風險評估。</p></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="應用二混合物風險評估與法規符合度" class="level4">
+<h4 class="anchored" data-anchor-id="應用二混合物風險評估與法規符合度">4 應用二：混合物風險評估與法規符合度</h4>
+<ul>
+<li><p>傳統的法規符合度評估是針對個別化學物質。例如，檢查苯是否超過 1 ppm，甲苯是否超過 100 ppm。</p></li>
+<li><p>然而，ACGIH 和 NIOSH 建議對於具有相似毒理作用的物質（如有機溶劑對中樞神經的影響），應評估其加成效應（Additive Effect）。</p>
+<ul>
+<li><p>我們需要計算混合物指標（Hazard Index, HI）：</p>
+<ul>
+<li><span class="math inline">HI = \frac{C_{\text{Benzene}}}{OEL_{\text{Benzene}}} + \frac{C_{\text{Toluene}}}{OEL_{\text{Toluene}}} + \dots</span></li>
+</ul></li>
+</ul></li>
+<li><p>使用多變量貝氏模型，我們不僅得到每個物質的平均濃度 <span class="math inline">\mu</span> 的點估計，我們得到的是 <span class="math inline">\mu</span> 的<strong>聯合後驗分佈（Joint Posterior Distribution）</strong>。這是一團位於多維空間中的「機率雲」。</p></li>
+<li><p>我們可以計算這團雲落在「安全區域」（即 <span class="math inline">HI &lt; 1</span> 的區域）內的體積比例。</p></li>
+<li><p>如果苯和甲苯呈負相關（極少見，但在某些輪替工作中可能發生），高苯會伴隨低甲苯，混合風險可能較低。</p></li>
+<li><p>如果呈正相關（常見情況），高苯伴隨高甲苯，發生聯合超標（Joint Exceedance）的機率會急劇上升。</p></li>
+<li><p>多變量貝氏模型能夠精確地捕捉這種相關性對總體風險的放大效應，這是單變量分析完全無法做到的。這對於保護工人健康至關重要，因為忽略相關性往往會低估混合暴露的風險。</p></li>
+</ul>
+</section>
+<section id="應用三貝氏決策分析bda" class="level4">
+<h4 class="anchored" data-anchor-id="應用三貝氏決策分析bda">5 應用三：貝氏決策分析（BDA）</h4>
+<ul>
+<li><p>Snippet 提到利用貝氏方法將暴露分級（Category 0-4）。這通常涉及計算第 95 百分位數（P95）超過容許濃度（OEL）的機率。</p></li>
+<li><p>在多變量情境下，我們可以設定一個更複雜的決策規則。例如：「是否有超過 5% 的機率，苯的 P95 超標 或者 混合物 HI 超標？」</p></li>
+<li><p>透過固定變異數 <span class="math inline">\Sigma</span>（使用保守的預設值，如 GSD=3.0），我們可以快速篩選出高風險的相似暴露群（SEG），決定哪些群體需要立即實施工程控制（如密閉製程或局部排氣），哪些只需要行政管理。</p></li>
+</ul>
+</section>
+</div>
+<div id="tabset-8-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-5-tab">
+<ol type="1">
+<li><p><strong>世界是多變量的：</strong> 不要只盯著單一化學物質看，學習看到數據背後的「關聯結構」。</p></li>
+<li><p><strong>相關性即資訊：</strong> 透過多變量模型，我們可以利用容易測量的物質（如甲苯）來推斷難以測量或數據缺失的物質（如苯）。</p></li>
+<li><p><strong>貝氏更新是加權平均：</strong> 後驗估計是我們「先驗信念」與「數據證據」之間的拉鋸戰，而權重取決於誰更「精確」。</p></li>
+<li><p><strong>已知變異數是工具而非真理：</strong> 它簡化了問題，讓我們能專注於評估平均暴露水準，但在應用時必須保持對變異數不確定性的警覺。</p></li>
+</ol>
+<ul>
+<li>在未來，當你面對複雜的混合暴露、稀缺的監測數據以及保護工人健康的重責大任時，希望你們能想起這個模型，並利用它做出更科學、更合理的決策。</li>
+</ul>
+<hr>
+<section id="此節參考文獻" class="level4">
+<h4 class="anchored" data-anchor-id="此節參考文獻">此節參考文獻</h4>
+<p>本報告綜合了 Gelman 等人的貝氏統計理論架構，以及多項關於 BTEX 職業暴露、尿液生物指標 、缺失數據插補與貝氏決策分析 的研究成果。</p>
+<hr>
+</section>
+</div>
+</div>
+</div>
+</section>
+<section id="未知平均值與變異數的多變量常態分佈" class="level2">
+<h2 class="anchored" data-anchor-id="未知平均值與變異數的多變量常態分佈"><strong>3.6 未知平均值與變異數的多變量常態分佈</strong></h2>
+<ul>
+<li><p>當我們面對真實世界中複雜的化學品暴露——特別是多種有機溶劑、金屬燻煙或粉塵同時存在的「混合暴露（Mixed Exposure）」情境時，傳統的單變量（Univariate）統計模型往往顯得捉襟見肘。</p></li>
+<li><p>對於職業衛生師來說，理解單一參數（如二項分佈的機率 <span class="math inline">\theta</span> 或常態分佈的平均值 <span class="math inline">\mu</span>）相對容易，因為它符合我們對「平均值」的直觀認知。但在 OSH 實務中，我們幾乎從未遇到只有一個未知數的情況。當我們進入現場進行空氣採樣時，我們既不知道真實的長期平均濃度（Long-term Average, <span class="math inline">\mu</span>），也不知道該環境中濃度的變異程度（Variance, <span class="math inline">\sigma^2</span>）。更甚者，當勞工同時暴露於苯（Benzene）與甲苯（Toluene）時，我們還面臨第三個未知數：這兩者之間的相關性（Correlation, <span class="math inline">\rho</span>）。</p></li>
+<li><p>貝氏統計提供了一個統一且強大的框架來處理這些多重未知數。不同於頻率學派將參數視為固定常數，貝氏學派將所有未知參數（<span class="math inline">\mu, \sigma</span>）視為隨機變數，並透過機率分佈來描述我們對它們的認知狀態。這種思維模式特別適合 OSH 領域，因為我們經常需要在數據極度稀缺（Small Sample Size，例如 <span class="math inline">N &lt; 6</span>）的情況下做出關乎勞工健康的重大決策。</p></li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset border">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true" href=""><strong>A. 職業衛生中的多變量常態模型</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false" href=""><strong>Ｂ. 共軛先驗的選擇</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-3" role="tab" aria-controls="tabset-9-3" aria-selected="false" href="">Ｃ. 後驗分佈的推導</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-4" role="tab" aria-controls="tabset-9-4" aria-selected="false" href="">D. 邊際後驗分佈：處理滋擾參數與 t 分佈的回歸</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-5" role="tab" aria-controls="tabset-9-5" aria-selected="false" href="">E. Expostats 實務應用與計算模擬</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-6" role="tab" aria-controls="tabset-9-6" aria-selected="false" href="">F. 小結</a></li></ul>
+<div class="tab-content border">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<section id="為什麼我們需要多變量模型" class="level4">
+<h4 class="anchored" data-anchor-id="為什麼我們需要多變量模型"><strong>1 為什麼我們需要多變量模型？</strong></h4>
+<ul>
+<li><p>在傳統的工業衛生實務中，若我們要評估一個噴漆作業員的健康風險，我們通常會分別測量其接觸的甲苯、二甲苯與丁酮濃度，並分別計算其是否符合各自的容許濃度標準（PEL）。如果三者具有相似的毒理作用（例如中樞神經抑制），我們可能會計算「加成效應指數（Hazard Index, HI）」。</p></li>
+<li><p>這種做法隱含了一個假設：<strong>各個化學物質的濃度波動是相互獨立的。</strong>事實上，在同一個工作場所中，汙染物的濃度往往呈現高度的「正相關性」。可能因為：</p>
+<ul>
+<li><p><strong>共同來源（Common Source）：</strong> 當通風系統效率下降時，甲苯濃度升高，二甲苯濃度通常也會隨之升高。</p></li>
+<li><p><strong>製程配方（Formulation）：</strong> 油漆中的溶劑比例是固定的，這導致揮發到空氣中的成分比例也具有某種線性關係。</p></li>
+</ul></li>
+<li><p>如果我們忽略這種相關性（Correlation），我們就會低估「聯合超標」的風險。例如，在獨立假設下，甲苯與二甲苯同時出現極端高值的機率很低；但在高度正相關的真實世界中，這卻是常態。多變量常態模型（Multivariate Normal Model, MVN）正是為了捕捉這種複雜的相關結構而生 。 &nbsp;</p></li>
+</ul>
+</section>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<section id="常態-逆韋沙分佈normal-inverse-wishart" class="level4">
+<h4 class="anchored" data-anchor-id="常態-逆韋沙分佈normal-inverse-wishart"><strong>常態-逆韋沙分佈（Normal-Inverse-Wishart）</strong></h4>
+<ul>
+<li>在貝氏統計中，為了讓後驗分佈具有解析解（Analytical Solution），我們通常會選擇<strong>共軛先驗（Conjugate Prior）</strong>。對於「未知平均值、未知變異數」的多變量常態模型，其共軛先驗家族被稱為 <strong>常態-逆韋沙分佈（Normal-Inverse-Wishart, NIW）</strong> 。</li>
+</ul>
+</section>
+</div>
+<div id="tabset-9-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-3-tab">
+<ul>
+<li><p>當我們先驗的信念（Prior）遇到現場採樣的數據（Likelihood），我們就利用貝氏定理進行更新，得到<strong>後驗分佈（Posterior Distribution）</strong>。</p></li>
+<li><p>對於 <strong>常態-逆韋沙分佈</strong> Normal-Inverse-Wishart 模型，後驗分佈 <span class="math inline">p(\mu, \Sigma | y)</span> 依然是 <strong>常態-逆韋沙分佈</strong>，形式完全不變，只是四個超參數被「更新」了。</p></li>
+</ul>
+<section id="後驗參數的更新公式" class="level4">
+<h4 class="anchored" data-anchor-id="後驗參數的更新公式">後驗參數的更新公式</h4>
+<p>我們將更新後的參數標記為下标 <span class="math inline">n</span>（代表納入了 <span class="math inline">n</span> 個樣本）：</p>
+<ul>
+<li><p>平均值的更新（<span class="math inline">\mu_n</span>）： <span class="math inline">\mu_n = \frac{\kappa_0}{\kappa_0 + n} \mu_0 + \frac{n}{\kappa_0 + n} \bar{y}</span></p></li>
+<li><p>解讀： 這是一個經典的加權平均（Weighted Average）。後驗平均值 <span class="math inline">\mu_n</span> 是「先驗猜測 <span class="math inline">\mu_0</span>」與「數據平均 <span class="math inline">\bar{y}</span>」的折衷。權重取決於 <span class="math inline">\kappa_0</span>（先驗強度）與 <span class="math inline">n</span>（數據量）的比例。</p>
+<ul>
+<li><p><strong>情境 A：</strong> 新製程，數據少（<span class="math inline">n=3</span>），但我們對同類製程很有經驗（<span class="math inline">\kappa_0=10</span>）。此時 <span class="math inline">\mu_n</span> 會被拉向 <span class="math inline">\mu_0</span>，避免因少數幾個隨機樣本而誤判。</p></li>
+<li><p><strong>情境 B：</strong> 進行了大規模採樣（<span class="math inline">n=100</span>）。此時 <span class="math inline">n \gg \kappa_0</span>，數據說話，<span class="math inline">\mu_n</span> 會幾乎等於 <span class="math inline">\bar{y}</span>。</p></li>
+</ul></li>
+<li><p>信心強度的更新（<span class="math inline">\kappa_n</span> 與 <span class="math inline">\nu_n</span>）：</p>
+<ul>
+<li><p><span class="math inline">\kappa_n = \kappa_0 + n</span></p></li>
+<li><p><span class="math inline">\nu_n = \nu_0 + n</span></p></li>
+<li><p>解讀： 這代表「資訊量的累積」。每多採樣一個樣本，我們對系統的了解就增加一分，自由度也隨之增加。這反映了貝氏統計是一個不斷學習、累積知識的過程。</p></li>
+<li><p>有兩個關鍵的超參數（Hyperparameters），作為實務專家，我們必須懂得如何設定它們：</p>
+<ul>
+<li><p><span class="math inline">\nu_0</span>（自由度，Degrees of Freedom）：</p>
+<ul>
+<li><p><strong>數學意義：</strong> 它決定了分佈的「集中程度」或我們對先驗資訊的「信心強度」。<span class="math inline">\nu_0</span> 必須大於 <span class="math inline">d-1</span> 才能保證分佈是合法的（Proper）。</p></li>
+<li><p><strong>OSH 實務解讀：</strong> <span class="math inline">\nu_0</span> <strong>可以被視為我們先驗資訊的「等效樣本數」</strong>。如果你根據過去 20 年的同業資料庫，非常有信心認為甲苯和二甲苯的相關係數在 0.8 左右，你可以設定一個較大的 <span class="math inline">\nu_0</span>（例如 50）。如果你對這個新製程完全陌生，心裡沒底，你應該設定 <span class="math inline">\nu_0</span> 為最小值（例如 <span class="math inline">d+1</span>），這代表一種「弱訊息先驗（Weakly Informative Prior）」，讓現場數據主導結果。</p>
+<ul>
+<li>假設我們對一位勞工進行了 <span class="math inline">n</span> 次監測，每次監測包含 <span class="math inline">d</span> 種化學物質（例如 <span class="math inline">d=2</span> 代表苯與甲苯）。</li>
+</ul></li>
+</ul></li>
+<li><p><span class="math inline">\kappa_0</span>（先驗樣本數係數）：</p>
+<ul>
+<li><p>這控制了我們對 <span class="math inline">\mu_0</span> 的信心。請注意，<span class="math inline">\mu</span> 的變異數被設定為 <span class="math inline">\Sigma / \kappa_0</span>。</p></li>
+<li><p><strong>OSH 實務解讀</strong>：它意味著我們對「平均值」的不確定性，是與「環境本身的變異程度（<span class="math inline">\Sigma</span>）」掛鉤的。如果一個作業環境本身濃度忽高忽低（<span class="math inline">\Sigma</span> 大），我們對其真實平均值的估計自然也比較沒把握（<span class="math inline">\mu</span> 的變異數大）。這完全符合工業衛生的直覺。<span class="math inline">\kappa_0</span> <strong>越大，代表我們先驗信心越強</strong>，<span class="math inline">\mu</span> 就越被鎖定在 <span class="math inline">\mu_0</span> 附近。</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>當事實（數據）與預期（先驗）發生衝突時，貝氏模型會自動增加後驗的變異數。換句話說，<strong>衝突導致不確定性增加</strong>。這是一個非常健康的風險管理機制，它提醒我們：「你的模型可能有問題，或者情況比你想像的更混亂。」</p></li>
+</ul>
+</section>
+</div>
+<div id="tabset-9-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-4-tab">
+<ul>
+<li><p>在職業衛生暴露評估中，我們通常最關心的是 <span class="math inline">\mu</span>（真實平均暴露濃度），因為這直接關係到是否符合 8 小時日時量平均容許濃度（PEL-TWA）。而 <span class="math inline">\Sigma</span>（變異數矩陣）雖然決定了變異程度，但在判斷「平均值是否超標」時，它往往被視為<strong>滋擾參數（Nuisance Parameter）</strong>。</p></li>
+<li><p>貝氏分析的強大之處在於，我們可以透過積分將滋擾參數「積掉（Integrate out）」，從而得到僅關於 <span class="math inline">\mu</span> 的邊際後驗分佈。</p></li>
+</ul>
+</div>
+<div id="tabset-9-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-5-tab">
+<ul>
+<li>現代工具如 <strong>Expostats</strong> 是建立在這些貝氏原理之上 。</li>
+</ul>
+<section id="方法從公式到模擬" class="level4">
+<h4 class="anchored" data-anchor-id="方法從公式到模擬">1 方法：從公式到模擬</h4>
+<ul>
+<li>在 BDA的時代，我們不再依賴查表，而是使用電腦模擬（Simulation）來解這些分佈。對於<strong>多變量常態分佈</strong>的模型，我們可以採用直接抽樣（Direct Sampling）策略，因為它是共軛模型，無需動用複雜的 MCMC。</li>
+</ul>
+</section>
+<section id="案例混合溶劑暴露評估" class="level4">
+<h4 class="anchored" data-anchor-id="案例混合溶劑暴露評估">2 案例：混合溶劑暴露評估</h4>
+<ul>
+<li>情境： 某印刷廠使用含有甲苯與丁酮（MEK）的溶劑。兩者皆有 OEL = 200 ppm。我們採集了 5 個樣本 (<span class="math inline">n=5</span>)。問題： 勞工是否面臨聯合暴露超標的風險？</li>
+</ul>
+<p><strong>分析步驟：</strong></p>
+<ol type="1">
+<li><p><strong>設定先驗：</strong> 根據過往經驗，設定 <span class="math inline">\mu_0</span> 為 ，並設定 <span class="math inline">\Lambda_0</span> 反映兩者有正相關（例如 <span class="math inline">\rho=0.6</span>），因為它們來自同一溶劑揮發。</p></li>
+<li><p><strong>輸入數據：</strong> 輸入 5 組採樣數據，計算 <span class="math inline">\bar{y}</span> 和 <span class="math inline">S</span>。</p></li>
+<li><p><strong>更新參數：</strong> 計算 <span class="math inline">\mu_n, \Lambda_n, \nu_n</span>。</p></li>
+<li><p>模擬風險： 產生 10,000 組後驗樣本。對於每一組 <span class="math inline">(\mu^{(j)}, \Sigma^{(j)})</span>，我們可以計算該情境下的「加成效應指數（Hazard Index, HI）」超過 1 的機率。</p>
+<ul>
+<li><span class="math inline">P(\text{HI} &gt; 1) = \frac{1}{10000} \sum_{j=1}^{10000} I\left( \frac{\mu_{\text{tol}}^{(j)}}{200} + \frac{\mu_{\text{mek}}^{(j)}}{200} &gt; 1 \right)</span></li>
+</ul></li>
+</ol>
+<p>結果解讀：</p>
+<ul>
+<li>如果我們忽略相關性（假設 <span class="math inline">\Sigma</span> 是對角矩陣），我們可能算出超標機率只有 5%。但因為考慮了正相關（當甲苯高時 MEK 也高），多變量模型可能告訴我們超標機率高達 20%。這 15% 的差距，就是忽略相關性所帶來的隱藏風險。</li>
+</ul>
+</section>
+<section id="expostats-的連結" class="level4">
+<h4 class="anchored" data-anchor-id="expostats-的連結">3 Expostats 的連結</h4>
+<ul>
+<li><p>Expostats 工具包中的 <strong>Tool 2</strong> 處理「工人內（Within-worker）」與「工人均（Between-worker）」的變異。這本質上是一個<strong>多層次模型（Hierarchical Model）</strong>。</p></li>
+<li><p>在該模型中，每個工人的平均暴露 <span class="math inline">\mu_i</span> 被視為從一個母群體分佈中抽樣出來的。</p></li>
+<li><p>Expostats 利用貝氏方法計算「個別工人過度暴露的機率（Probability of Individual Overexposure）」，這正是利用了後驗預測分佈的概念，將參數不確定性與個體變異性整合起來。</p></li>
+</ul>
+</section>
+</div>
+<div id="tabset-9-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-6-tab">
+<ul>
+<li>未知平均值與變異數的多變量常態分佈，是職業衛生邁向精準化管理的基石。</li>
+</ul>
+<ol type="1">
+<li><p><strong>還原真實：</strong> 它允許我們建立包含相關結構的模型，真實反映混合物暴露的風險，避免了獨立性假設帶來的偏差。</p></li>
+<li><p><strong>擁抱不確定性：</strong> 透過 t 分佈與 NIW 先驗，它量化了我們因樣本稀缺而產生的無知，強迫我們在決策時保留安全係數。</p></li>
+<li><p><strong>整合知識：</strong> 它提供了一個數學管道（先驗參數），讓資深專家的經驗與歷史數據能合法、客觀地進入風險評估流程，穩定了小樣本下的決策品質。</p></li>
+</ol>
+<ul>
+<li>對於 OSH 專家而言，掌握這些貝氏工具不僅是統計能力的提升，更是對勞工生命安全做出更嚴謹承諾的表現。</li>
+</ul>
+<p><strong>單變量與多變量常態模型貝氏推論對照表</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 29%">
+<col style="width: 28%">
+<col style="width: 27%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>特徵</strong></td>
+<td><strong>單變量常態模型 (Sec 3.2)</strong></td>
+<td><strong>多變量常態模型 (Sec 3.6)</strong></td>
+<td><strong>OSH 實務意義</strong></td>
+</tr>
+<tr class="even">
+<td><strong>觀測值</strong></td>
+<td>純量 <span class="math inline">y_i</span> (如：苯濃度)</td>
+<td>向量 <span class="math inline">y_i</span> (如：[苯, 甲苯])</td>
+<td>能夠同時評估多種危害因子</td>
+</tr>
+<tr class="odd">
+<td><strong>平均值參數</strong></td>
+<td>純量 <span class="math inline">\mu</span></td>
+<td>向量 <span class="math inline">\mu</span></td>
+<td>估計多種物質的 GM</td>
+</tr>
+<tr class="even">
+<td><strong>變異數參數</strong></td>
+<td>純量 <span class="math inline">\sigma^2</span></td>
+<td>矩陣 <span class="math inline">\Sigma</span> (共變異數矩陣)</td>
+<td>捕捉物質間的相關性 (Correlation)</td>
+</tr>
+<tr class="odd">
+<td><strong>共軛先驗</strong></td>
+<td>Normal-Inverse-<span class="math inline">\chi^2</span></td>
+<td>Normal-Inverse-Wishart (NIW)</td>
+<td>數學結構一致，矩陣運算取代純量</td>
+</tr>
+<tr class="even">
+<td><strong>先驗參數</strong></td>
+<td><span class="math inline">\mu_0, \kappa_0, \nu_0, \sigma_0^2</span></td>
+<td><span class="math inline">\mu_0, \kappa_0, \nu_0, \Lambda_0</span></td>
+<td><span class="math inline">\Lambda_0</span> 設定了預期的相關結構</td>
+</tr>
+<tr class="odd">
+<td><strong>邊際後驗</strong></td>
+<td>Student’s t 分佈</td>
+<td>Multivariate Student’s t 分佈</td>
+<td>變異數未知導致厚尾，風險評估更保守</td>
+</tr>
+<tr class="even">
+<td><strong>主要優勢</strong></td>
+<td>簡單直觀，適合單一物質</td>
+<td>考慮相關性，適合混合物</td>
+<td>避免低估聯合暴露風險</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div>
+</div>
+</div>
+</section>
+<section id="生物檢體測定bioassay範例剖析" class="level2">
+<h2 class="anchored" data-anchor-id="生物檢體測定bioassay範例剖析"><strong>3.7 生物檢體測定（Bioassay）範例剖析</strong></h2>
+<ul>
+<li>當我們想要評估勞工的平均暴露濃度（<span class="math inline">\mu</span>）是否超過容許濃度（PEL）時，我們同時也面臨著暴露變異數（<span class="math inline">\sigma^2</span>）未知的情況。這個變異數雖然不是我們決策的直接目標，但在模型中卻是不可或缺的。在貝氏統計中，這類參數被稱為「擾亂參數」（Nuisance parameters）。本節將引導讀者理解如何透過積分運算「處理掉」這些擾亂參數，從而獲得我們真正關心的參數的邊際後驗分佈（Marginal Posterior Distribution）。</li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset border">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true" href="">A. 擾亂參數的處理與邊際化</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false" href="">B. 常態數據與無訊息先驗</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-3" role="tab" aria-controls="tabset-10-3" aria-selected="false" href="">C. 多變量常態模型</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-4" role="tab" aria-controls="tabset-10-4" aria-selected="false" href="">D. 職業衛生應用的延伸</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-5" role="tab" aria-controls="tabset-10-5" aria-selected="false" href="">E. 小結</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-6" role="tab" aria-controls="tabset-10-6" aria-selected="false" href="">表 1：傳統方法與貝氏方法在生物檢定分析中的比較</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-7" role="tab" aria-controls="tabset-10-7" aria-selected="false" href="">表 2：BDA3 第三章概念在職業衛生中的應用對照</a></li></ul>
+<div class="tab-content border">
+<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
+<section id="擾亂參數的概念與挑戰" class="level4">
+<h4 class="anchored" data-anchor-id="擾亂參數的概念與挑戰">1 擾亂參數的概念與挑戰</h4>
+<ul>
+<li><p>想像我們正在評估一個噴漆作業員的甲苯暴露風險。我們最關心的是他的長期平均暴露濃度（<span class="math inline">\theta_1</span>），因為這直接關係到慢性健康的風險。然而，要準確估計這個平均值，我們必須知道暴露數據的波動程度，也就是標準差（<span class="math inline">\theta_2</span>）。如果數據波動很大，我們對平均值的估計就會變得非常不確定；反之，如果波動很小，平均值的估計就會精準許多。</p></li>
+<li><p>在這種情境下，標準差 <span class="math inline">\theta_2</span> 就是一個「擾亂參數」。它本身並非我們決策的最終依據（我們不會因為標準差很大就直接開罰單，而是看濃度是否超標），但它卻深刻影響著我們對 <span class="math inline">\theta_1</span> 的判斷。在傳統統計中，我們往往被迫使用點估計（Point Estimate）來固定 <span class="math inline">\theta_2</span>，<strong>例如直接使用樣本標準差</strong> <span class="math inline">s</span> <strong>來代替母體標準差</strong> <span class="math inline">\sigma</span><strong>。</strong>這種做法在樣本數很大時是可以接受的，但在職業衛生常見的小樣本數據中，這種做法會嚴重低估我們的不確定性，導致「虛假的精確」（False Precision）。</p></li>
+</ul>
+</section>
+<section id="貝氏邊際化的數學原理" class="level4">
+<h4 class="anchored" data-anchor-id="貝氏邊際化的數學原理">2 貝氏邊際化的數學原理</h4>
+<ul>
+<li><p>貝氏分析提供了一種優雅的解決方案，即透過積分將擾亂參數「平均」掉。這一過程稱為邊際化（Marginalization）。我們的目標是獲得感興趣參數 <span class="math inline">\theta_1</span> 的邊際後驗機率密度函數 <span class="math inline">p(\theta_1 | y)</span>。</p></li>
+<li><p>根據機率法則，我們可以從聯合後驗分佈 <span class="math inline">p(\theta_1, \theta_2 | y)</span> 出發。這個聯合分佈同時描述了平均值和變異數的所有可能組合及其機率。為了得到僅關於 <span class="math inline">\theta_1</span> 的資訊，我們對 <span class="math inline">\theta_2</span> 進行積分：</p>
+<ul>
+<li><span class="math inline">p(\theta_1 | y) = \int p(\theta_1, \theta_2 | y) \, d\theta_2</span></li>
+</ul></li>
+<li><p>這個積分式告訴我們，<span class="math inline">\theta_1</span> 的邊際後驗機率，實際上是所有可能的 <span class="math inline">\theta_2</span> 值所對應的條件機率 <span class="math inline">p(\theta_1 | \theta_2, y)</span> 的加權平均，而權重正是 <span class="math inline">\theta_2</span> 本身的後驗機率 <span class="math inline">p(\theta_2 | y)</span>。</p></li>
+<li><p>這可以用下式更清晰地表達：</p>
+<ul>
+<li><span class="math inline">p(\theta_1 | y) = \int p(\theta_1 | \theta_2, y) p(\theta_2 | y) \, d\theta_2</span></li>
+</ul></li>
+<li><p>這意味著，我們不需要假設變異數是某個固定值，而是考慮了變異數可能是 <span class="math inline">0.5</span>、<span class="math inline">1.0</span> 或 <span class="math inline">5.0</span> 等所有可能性，並根據數據支持這些變異數的程度（權重），將對應的平均值分佈疊加起來。這種方法誠實地反映了因為變異數未知而帶來的額外不確定性，這對於涉及人命安全的職業衛生決策至關重要。</p></li>
+</ul>
+</section>
+<section id="模擬策略的應用" class="level4">
+<h4 class="anchored" data-anchor-id="模擬策略的應用">3 模擬策略的應用</h4>
+<ul>
+<li>在實際操作中，尤其是當積分難以解析計算時，我們採用MCMC模擬（Simulation）的方法來實現這一過程。這是現代貝氏計算的基石。我們可以分兩步進行：</li>
+</ul>
+<ol type="1">
+<li><p>首先，從擾亂參數的邊際後驗分佈 <span class="math inline">p(\theta_2 | y)</span> 中抽取一個樣本 <span class="math inline">\theta_2^*</span>。</p></li>
+<li><p>接著，利用這個抽出的 <span class="math inline">\theta_2^*</span>，從條件後驗分佈 <span class="math inline">p(\theta_1 | \theta_2^*, y)</span> 中抽取我們感興趣的參數 <span class="math inline">\theta_1^*</span>。</p></li>
+</ol>
+<ul>
+<li>重複這個過程數千次，我們就得到了一組 <span class="math inline">\theta_1</span> 的樣本，這組樣本自然地形成了解析積分後的邊際分佈。在職業衛生暴露評估工具（如 Expostats）中，這正是背後運算的邏輯基礎。我們不假設我們確切知道勞工的變異係數（GSD），而是模擬出成千上萬種可能的 GSD 情境，從而推導出超標風險的真實機率分佈。</li>
+</ul>
+</section>
+</div>
+<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
+<section id="normal-data-with-a-noninformative-prior-distribution" class="level4">
+<h4 class="anchored" data-anchor-id="normal-data-with-a-noninformative-prior-distribution">（Normal data with a noninformative prior distribution）</h4>
+<ul>
+<li>直接對應到日常處理的連續型暴露數據（如噪音分貝數、空氣中有害物濃度）。</li>
+</ul>
+</section>
+<section id="模型的建立與先驗的選擇" class="level4">
+<h4 class="anchored" data-anchor-id="模型的建立與先驗的選擇">1 模型的建立與先驗的選擇</h4>
+<ul>
+<li><p>假設我們有一組獨立的觀測值 <span class="math inline">y_1, \dots, y_n</span>，它們服從常態分佈 <span class="math inline">N(\mu, \sigma^2)</span>。這兩個參數 <span class="math inline">\mu</span>（平均值）和 <span class="math inline">\sigma^2</span>（變異數）都是未知的。這正是我們在進行作業環境監測時最常遇到的情況。</p></li>
+<li><p>為了進行貝氏推論，我們需要設定先驗分佈。在缺乏先前資訊的情況下（例如一個全新的製程，我們沒有任何歷史數據），我們使用「無訊息先驗」（Noninformative Prior）。對於位置參數 <span class="math inline">\mu</span> 和尺度參數 <span class="math inline">\sigma</span>，標準的無訊息先驗假設它們是獨立的，且 <span class="math inline">\mu</span> 在實數軸上是均勻分佈的，而 <span class="math inline">\sigma^2</span> 的對數是均勻分佈的。這導出了著名的傑弗里斯先驗（Jeffreys’ Prior）：</p>
+<ul>
+<li><span class="math inline">p(\mu, \sigma^2) \propto (\sigma^2)^{-1}</span></li>
+</ul></li>
+<li><p>這個先驗的選擇保證了分析結果具有尺度不變性（Scale Invariance），也就是說，無論我們是用 ppm 還是 mg/m³ 來計量，推論的結果都是一致的。</p></li>
+</ul>
+</section>
+<section id="聯合後驗分佈的推導" class="level4">
+<h4 class="anchored" data-anchor-id="聯合後驗分佈的推導">2 聯合後驗分佈的推導</h4>
+<ul>
+<li><p>將上述先驗與常態分佈的概似函數（Likelihood）相乘，我們得到聯合後驗分佈：</p>
+<ul>
+<li><span class="math inline">p(\mu, \sigma^2 | y) \propto \sigma^{-n-2} \exp \left( -\frac{1}{2\sigma^2} \left[ (n-1)s^2 + n(\bar{y} - \mu)^2 \right] \right)</span></li>
+</ul></li>
+<li><p>這裡的 <span class="math inline">\bar{y}</span> 是樣本平均值，<span class="math inline">s^2</span> 是樣本變異數。這個公式雖然看起來複雜，但它包含了所有我們對這組數據的知識。它告訴我們，<span class="math inline">\mu</span> 和 <span class="math inline">\sigma^2</span> 之間存在著依賴關係：數據的分散程度（<span class="math inline">\sigma^2</span>）會影響我們對中心位置（<span class="math inline">\mu</span>）的判斷。</p></li>
+</ul>
+</section>
+<section id="變異數的邊際後驗分佈逆卡方分佈" class="level4">
+<h4 class="anchored" data-anchor-id="變異數的邊際後驗分佈逆卡方分佈">3 變異數的邊際後驗分佈：逆卡方分佈</h4>
+<ul>
+<li><p>為了處理擾亂參數，我們先對 <span class="math inline">\mu</span> 進行積分，得到 <span class="math inline">\sigma^2</span> 的邊際後驗分佈。數學推導的結果顯示，<span class="math inline">\sigma^2</span> 服從一個「縮放逆卡方分佈」（Scaled Inverse-Chi-Square Distribution）：</p>
+<ul>
+<li><span class="math inline">\sigma^2 | y \sim \text{Inv-}\chi^2(n-1, s^2)</span></li>
+</ul></li>
+<li><p>它告訴我們，儘管我們不知道真實的變異數，但我們可以確定它的分佈形狀完全由樣本數（<span class="math inline">n</span>）和樣本變異數（<span class="math inline">s^2</span>）決定。對於職業衛生專家來說，這解釋了為什麼在小樣本下（自由度 <span class="math inline">n-1</span> 很小），我們會看到變異數的分佈呈現長尾形狀，這意味著真實的暴露變異可能遠大於我們僅從 3-5 個樣本中觀察到的變異。這也提醒我們，在小樣本下直接使用樣本標準差作為母體標準差的點估計是非常危險的，極易低估風險。</p></li>
+</ul>
+</section>
+<section id="平均值的邊際後驗分佈" class="level4">
+<h4 class="anchored" data-anchor-id="平均值的邊際後驗分佈">4 平均值的邊際後驗分佈</h4>
+<section id="學生-t-分佈" class="level5">
+<h5 class="anchored" data-anchor-id="學生-t-分佈">學生 t 分佈</h5>
+<ul>
+<li><p>如果我們將聯合分佈中的 <span class="math inline">\sigma^2</span> 積分掉，<span class="math inline">\mu</span> 的邊際後驗分佈會是什麼樣子？答案是：</p>
+<ul>
+<li><span class="math inline">\frac{\mu - \bar{y}}{s/\sqrt{n}} \bigg| y \sim t_{n-1}</span></li>
+</ul></li>
+<li><p>這正是 <strong>t 分佈（Student’s t-distribution）</strong>。在傳統統計學中，我們被告知當變異數未知時要用 t 檢定；而在貝氏統計中，我們透過數學證明了，當我們對變異數的不確定性進行積分（平均化）後，常態分佈自然地演變成了 t 分佈。</p></li>
+<li><p>t 分佈比常態分佈有著更厚的尾部（Heavier Tails）。這反映了因為我們不知道真實的 <span class="math inline">\sigma</span>，所以極端值出現的機率比常態分佈預測的要高。當樣本數 <span class="math inline">n</span> 增加時，t 分佈逐漸收斂於常態分佈，這與我們的直覺一致：數據越多，不確定性越小。對於只有 6 個採樣點的暴露評估，使用 t 分佈的貝氏區間估計，能比單純使用常態假設提供更保守、更安全的防護建議。</p></li>
+</ul>
+</section>
+</section>
+<section id="實例分析" class="level4">
+<h4 class="anchored" data-anchor-id="實例分析">5 實例分析</h4>
+<section id="光速測量與暴露異常值" class="level5">
+<h5 class="anchored" data-anchor-id="光速測量與暴露異常值">光速測量與暴露異常值</h5>
+<p>BDA3 書中引用了 Simon Newcomb 在 1882 年測量光速的經典案例。Newcomb 進行了 66 次測量，數據大致呈現常態分佈，但有兩個極低的異常值（Outliers）。</p>
+<ul>
+<li><p>在使用常態模型進行貝氏分析時，這兩個異常值會顯著拉低平均值的後驗分佈，並極大得拉寬變異數的估計。</p></li>
+<li><p>這給職業衛生數據分析帶來了深刻的意涵：我們在現場經常會遇到「異常值」（例如採樣泵故障、工人意外接觸洩漏源）。標準的常態模型對異常值非常敏感。這暗示了在進階分析中，我們可能需要更穩健（Robust）的模型，例如直接假設數據服從 t 分佈而非常態分佈。</p></li>
+</ul>
+</section>
+</section>
+</div>
+<div id="tabset-10-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-3-tab">
+<section id="multivariate-normal-model-with-known-variance" class="level4">
+<h4 class="anchored" data-anchor-id="multivariate-normal-model-with-known-variance"><strong>（Multivariate normal model with known variance）</strong></h4>
+<ul>
+<li>在職業衛生領域，勞工往往不只是暴露於單一危害因子。油漆工同時接觸甲苯、二甲苯和乙酸乙酯；銲接工同時吸入錳、鉻和鎳的燻煙。這些暴露之間往往存在高度的<strong>相關性</strong>（Correlation）。</li>
+</ul>
+</section>
+<section id="從單變量到多變量" class="level4">
+<h4 class="anchored" data-anchor-id="從單變量到多變量">1 從單變量到多變量</h4>
+<ul>
+<li><p>將單變量的概念推廣到多變量常態分佈（Multivariate Normal, MVN）。在這裡，觀測值 <span class="math inline">y</span> 不再是一個數，而是一個向量；平均值 <span class="math inline">\mu</span> 也是一個向量，而變異數 <span class="math inline">\sigma^2</span> 則變成了一個共變異數矩陣（Covariance Matrix, <span class="math inline">\Sigma</span>）。</p>
+<ul>
+<li><span class="math inline">y \sim N(\mu, \Sigma)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="相關性的實務意義" class="level4">
+<h4 class="anchored" data-anchor-id="相關性的實務意義">2 相關性的實務意義</h4>
+<ul>
+<li><p>為什麼我們要使用多變量模型？假設我們在評估一個混合溶劑的健康風險。如果我們分別獨立分析甲苯和二甲苯，我們就忽略了它們「共進退」的特性。</p></li>
+<li><p><strong>資訊借用（Borrowing Strength）：</strong> 在貝氏多變量模型中，如果我們知道甲苯和二甲苯高度正相關（例如相關係數 <span class="math inline">\rho = 0.8</span>），那麼即使某次採樣中二甲苯的分析數據遺失了，但甲苯濃度很高，模型也會自動推斷二甲苯濃度可能也很高。這種透過相關性來增強推論能力的特性，是多變量貝氏分析的一大優勢。</p></li>
+<li><p><strong>聯合風險評估：</strong> 對於具有加成效應（Additive Effect）的化學物質，我們關心的是總劑量是否超標。多變量後驗分佈可以直接計算 <span class="math inline">\frac{C_1}{PEL_1} + \frac{C_2}{PEL_2}</span> 的機率分佈，正確處理 <span class="math inline">C_1</span> 和 <span class="math inline">C_2</span> 之間的相關性，這是傳統獨立分析無法做到的。</p></li>
+<li><p>儘管此節探討了變異數未知的複雜情況（涉及到 Inverse-Wishart 分佈），但對於初學者而言，理解相關性如何影響我們對聯合暴露風險的評估是首要任務。</p></li>
+</ul>
+<hr>
+</section>
+</div>
+<div id="tabset-10-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-4-tab">
+<ul>
+<li><p>雖然工業衛生師很少親自做老鼠實驗，但這個邏輯架構（羅吉斯迴歸 + 貝氏推論）完全適用於我們的領域：</p></li>
+<li><p><strong>流行病學劑量反應：</strong> 將「老鼠死亡」換成「工人聽力損失」或「肺功能異常」，將「劑量」換成「累積噪音暴露」或「粉塵濃度」。我們可以估計導致 10% 工人致病的閾值（Benchmark Dose, BMD）。</p></li>
+<li><p><strong>職業暴露限值（OEL）設定：</strong> 現代的 OEL 設定越來越依賴這種機率模型來推導 BMDL（Benchmark Dose Lower Confidence Limit），這本質上就是貝氏後驗區間的下限。</p></li>
+<li><p><strong>法規符合度判斷：</strong> 如果我們將模型改為預測「超過 OEL 的機率」，這就是 Expostats 等工具的核心邏輯。</p></li>
+</ul>
+<hr>
+</div>
+<div id="tabset-10-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-5-tab">
+<section id="從解析到模擬" class="level4">
+<h4 class="anchored" data-anchor-id="從解析到模擬">1 從解析到模擬</h4>
+<ul>
+<li><p>生物檢定範例標誌著一個分水嶺。對於簡單的常態模型（3.2節），我們有數學公式（t 分佈）。但對於像羅吉斯迴歸這樣更真實的模型，我們必須依賴計算機模擬。</p></li>
+<li><p>對於 1-2 個參數，<strong>網格逼近法</strong>是直觀且有效的。</p></li>
+<li><p>但如果參數增加到 3 個以上（例如我們引入了工廠間的變異、季節效應等），網格點的數量會呈指數爆炸（Curse of Dimensionality）。這時，我們就需要更高級的 <strong>馬可夫鏈蒙地卡羅（MCMC）</strong> 方法，如 Gibbs Sampling 或 Metropolis演算法。這些將在 BDA3 的後續章節介紹。</p></li>
+</ul>
+</section>
+<section id="職業衛生的ｂｄａ" class="level4">
+<h4 class="anchored" data-anchor-id="職業衛生的ｂｄａ">2 職業衛生的ＢＤＡ</h4>
+<ol type="1">
+<li><p><strong>建立模型：</strong> 根據數據特性選擇概似函數（如暴露數據用對數常態，問卷用多項式，二元結果用二項式）。</p></li>
+<li><p><strong>設定先驗：</strong> 如果有歷史數據或專家判斷，使用訊息先驗；否則使用無訊息先驗。</p></li>
+<li><p><strong>計算後驗：</strong> 簡單模型用解析解（共軛）或 Expostats 這樣的現成工具；複雜模型使用 JAGS/Stan 進行 MCMC 模擬。</p></li>
+<li><p><strong>推導決策變數：</strong> 從後驗樣本中計算我們真正關心的指標（如 95% 分位數、超標機率、LD50）。</p></li>
+<li><p><strong>決策分析：</strong> 基於後驗機率做出行動建議（如「該暴露群組有 90% 機率是安全的，建議降低監測頻率」）。</p></li>
+</ol>
+<hr>
+</section>
+<section id="建議" class="level4">
+<h4 class="anchored" data-anchor-id="建議">3 建議</h4>
+<ul>
+<li><p>貝氏統計為職業衛生暴露評估提供了一套嚴謹且靈活的數學框架。它不強迫我們在數據不足時做出武斷的點估計，而是允許我們誠實地擁抱不確定性。</p></li>
+<li><p><strong>此章</strong>教會我們如何處理擾亂參數，讓我們能專注於真正重要的風險指標。</p></li>
+<li><p><strong>第 3.7 節的生物檢定範例</strong>展示了即使在無法寫出公式的情況下，我們依然可以用計算力（網格法）來繪製出風險的全貌。</p></li>
+<li><p><strong>LD50 的推導</strong>邏輯與我們計算 OEL 的超標機率在本質上是相通的：它們都是從參數的後驗分佈中衍生出來的實務指標。</p></li>
+<li><p>對於職業安全衛生專家而言，不需要背誦繁複的積分公式，但必須掌握這種「分佈思考」的思維模式。當你面對一個少得可憐的採樣數據時，不要只給出一個平均值，試著給出一個分佈，告訴管理者風險的可能範圍。這才是貝氏統計賦予我們的真正力量。</p></li>
+</ul>
+<hr>
+</section>
+</div>
+<div id="tabset-10-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-6-tab">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 37%">
+<col style="width: 40%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>特性</strong></td>
+<td><strong>傳統頻率學派 (MLE)</strong></td>
+<td><strong>貝氏方法 (網格逼近)</strong></td>
+</tr>
+<tr class="even">
+<td><strong>參數估計</strong></td>
+<td>點估計 (<span class="math inline">\hat{\alpha}, \hat{\beta}</span>)</td>
+<td>後驗機率分佈 <span class="math inline">p(\alpha, \beta)</span></td>
+</tr>
+<tr class="odd">
+<td><strong>不確定性</strong></td>
+<td>漸近標準誤 (假設樣本數無限大)</td>
+<td>精確的機率圖譜 (適用於 <span class="math inline">n=20</span> 的小樣本)</td>
+</tr>
+<tr class="even">
+<td><strong>LD50 估計</strong></td>
+<td>單一數值 (如 1.2 g/ml)</td>
+<td>LD50 的機率直方圖 (包含偏態與長尾)</td>
+</tr>
+<tr class="odd">
+<td><strong>推論邏輯</strong></td>
+<td>“如果我們重複實驗無限次…”</td>
+<td>“基於<strong>這次</strong>觀測到的數據，機率是…”</td>
+</tr>
+<tr class="even">
+<td><strong>風險解讀</strong></td>
+<td>P 值、信賴區間</td>
+<td>毒性大於某閾值的具體機率</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tabset-10-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-7-tab">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 45%">
+<col style="width: 54%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>BDA3 概念</strong></td>
+<td><strong>職業衛生 (OSH) 應用</strong></td>
+</tr>
+<tr class="even">
+<td><strong>擾亂參數 (Nuisance Parameters)</strong></td>
+<td>在估計平均暴露時，處理未知的變異係數 (GSD)</td>
+</tr>
+<tr class="odd">
+<td><strong>常態模型 (t-分佈)</strong></td>
+<td>分析小樣本 (<span class="math inline">n&lt;10</span>) 的空氣採樣數據</td>
+</tr>
+<tr class="even">
+<td><strong>多項式模型 (Multinomial)</strong></td>
+<td>分析肌肉骨骼症狀調查問卷 (症狀分級)</td>
+</tr>
+<tr class="odd">
+<td><strong>生物檢定 (Logistic Regression)</strong></td>
+<td>劑量-反應評估、基準劑量 (BMD) 設定</td>
+</tr>
+<tr class="even">
+<td><strong>後驗預測 (Posterior Predictive)</strong></td>
+<td>驗證暴露模型是否能解釋現場的極端值</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div>
+</div>
+</div>
+</section>
+<section id="總結" class="level2">
+<h2 class="anchored" data-anchor-id="總結"><strong>3.8 總結</strong></h2>
+<p><strong>基礎建模與計算總結（Summary of elementary modeling and computation）</strong></p>
+<ul>
+<li>在現實世界，特別是職業衛生領域，我們面對的數據結構絕非單一參數所能描述。當你走進一家化工廠，評估勞工接觸苯（Benzene）或焊接燻煙（Welding fumes）的風險時，你面對的暴露數據通常呈現對數常態分佈（Lognormal distribution）。這意味著，你至少同時面對兩個未知的參數：<strong>GM與GSD</strong>。</li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset border">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true" href="">A. 章節重點</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false" href="">B. 職業衛生情境下的貝氏應用</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-3" role="tab" aria-controls="tabset-11-3" aria-selected="false" href="">C. 現代計算工具的應用</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-4" role="tab" aria-controls="tabset-11-4" aria-selected="false" href=""><strong>D. 從理論到實踐的轉化</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-5" role="tab" aria-controls="tabset-11-5" aria-selected="false" href=""><strong>E. 學習建議</strong></a></li></ul>
+<div class="tab-content border">
+<div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
+<ul>
+<li><p>在職業衛生中，當我們評估暴露風險時，我們最關心的往往是第 95 百分位數（95th percentile, X95）或是超越率（Exceedance Fraction），這些指標主要受平均暴露濃度影響，但也強烈依賴於變異程度。假設我們只想知道平均暴露濃度是否超過容許濃度（OEL），那麼變異數（Variance）對我們來說就是一個討厭參數<strong>（Nuisance Parameters）</strong>。</p></li>
+<li><p>在貝氏統計的框架下，我們有一個統一且優雅的解決方案：<strong>邊際化（Marginalization）</strong>。</p></li>
+<li><p>直觀意義極為深遠：<strong>我們對感興趣參數</strong> <span class="math inline">\theta_1</span> 的推論，是考慮了所有可能的討厭參數值之後的加權平均。</p></li>
+<li><p>當樣本數 <span class="math inline">n</span> 很小時（例如職業衛生中常見的 <span class="math inline">n=3</span>），t 分佈的尾部非常厚，這導致了極寬的信賴區間（Credible Interval）。這解釋了為什麼在 Hewett et al.&nbsp;(2006) 的論文中提到，傳統統計方法在小樣本下的 95% 上限（UCL）會大得離譜，甚至超過 OEL 的 20 倍 。貝氏分析透過這種數學結構，誠實地告訴了我們：「基於這麼少的數據，你的不確定性就是這麼大。」</p></li>
+</ul>
+</div>
+<div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
+<p><strong>Hewett et al.&nbsp;(2006) 論文深度解析</strong></p>
+<ul>
+<li>現在，讓我們將這些理論（常態模型、網格逼近、模擬推論）應用到你最關心的職業衛生領域。Hewett et al.&nbsp;(2006) 的經典論文《Rating Exposure Control Using Bayesian Decision Analysis》正是 BDA3 第三章理論的完美實踐。</li>
+</ul>
+<section id="問題背景小樣本的困境" class="level4">
+<h4 class="anchored" data-anchor-id="問題背景小樣本的困境">4.1 問題背景：小樣本的困境</h4>
+<ul>
+<li><p>在工業衛生實務中，我們經常面臨一個嚴峻的現實：<strong>數據極度稀缺</strong>。對於一個包含 50 名工人的相似暴露群組（SEG），一年可能產生 12,500 個工作日的暴露。然而，受限於預算，IH 可能一年只能收集 6 到 10 個樣本，甚至更少。這僅佔母體的 0.08% 。</p></li>
+<li><p>如果你使用傳統頻率學派的方法（例如計算 95% 信賴區間的上限 UCL），當樣本數 <span class="math inline">n=3</span> 時，由於 t 分佈的尾部極厚，計算出的 UCL 可能會是容許濃度（OEL）的 20 倍以上。這導致決策癱瘓：數據告訴你「可能沒事，也可能超標 20 倍」，這對風險管理者來說毫無用處。</p></li>
+</ul>
+</section>
+<section id="貝氏解決方案引入先驗與常態模型" class="level4">
+<h4 class="anchored" data-anchor-id="貝氏解決方案引入先驗與常態模型">4.2 貝氏解決方案：引入先驗與常態模型</h4>
+<ul>
+<li>Hewett 的方法直接對應 BDA3 Section 3.2 的常態模型，但做了一個關鍵的改變：<strong>引入訊息先驗（Informative Prior）</strong>。</li>
+</ul>
+<section id="數據模型與參數空間" class="level5">
+<h5 class="anchored" data-anchor-id="數據模型與參數空間">數據模型與參數空間</h5>
+<ul>
+<li><p>暴露數據 <span class="math inline">X</span> 通常服從對數常態分佈，取對數後 <span class="math inline">Y = \ln(X)</span> 服從常態分佈 <span class="math inline">N(\mu, \sigma^2)</span>。這正是 BDA3 3.2 節的標準模型。</p>
+<ul>
+<li><p>參數 <span class="math inline">\mu</span> 對應職業衛生中的 <strong>幾何平均數的對數（ln GM）</strong>。</p></li>
+<li><p>參數 <span class="math inline">\sigma</span> 對應職業衛生中的 <strong>幾何標準差的對數（ln GSD）</strong>。</p></li>
+</ul></li>
+<li><p>Hewett 將參數空間限制在一個「現實」的範圍內，例如 GSD 通常在 1.5 到 4.0 之間。這本身就是一種弱訊息先驗，排除了數學上可能但物理上不合理的極端變異數。</p></li>
+</ul>
+</section>
+<section id="先驗分佈的構建the-prior" class="level5">
+<h5 class="anchored" data-anchor-id="先驗分佈的構建the-prior">先驗分佈的構建（The Prior）</h5>
+<ul>
+<li><p>這是該方法的精髓。Hewett 提倡利用 IH 的「專業判斷（Professional Judgment）」來構建先驗分佈。</p></li>
+<li><p>IH 根據工廠的通風控制、原料毒性、操作頻率等，主觀判斷該暴露情境屬於「高度控制」還是「控制不佳」。</p></li>
+<li><p>這種定性的判斷被轉化為 <span class="math inline">(\mu, \sigma)</span> 參數空間上的機率分佈。例如，如果你認為控制很好，你的先驗機率密度就會集中在低 <span class="math inline">\mu</span> 和低 <span class="math inline">\sigma</span> 的區域。這對應了 BDA3 中提到的「訊息先驗」可以壓制小樣本帶來的巨大不確定性。</p></li>
+</ul>
+</section>
+<section id="似然函數likelihood與後驗計算" class="level5">
+<h5 class="anchored" data-anchor-id="似然函數likelihood與後驗計算">似然函數（Likelihood）與後驗計算</h5>
+<ul>
+<li><p>Hewett 使用的計算方法本質上就是 BDA3 Section 3.7 的 <strong>網格逼近法</strong>。</p>
+<ul>
+<li><p>他將 <span class="math inline">(\text{GM}, \text{GSD})</span> 的空間劃分為網格。</p></li>
+<li><p>計算每一組 <span class="math inline">(\text{GM}, \text{GSD})</span> 生成觀測數據的似然機率。</p></li>
+<li><p>將先驗網格與似然網格相乘，得到後驗網格。</p></li>
+</ul></li>
+<li><p>這完全是 Section 3.7 Bioassay 範例在職業衛生領域的再現，只是參數從 <span class="math inline">(\alpha, \beta)</span> 變成了 <span class="math inline">(\text{GM}, \text{GSD})</span>。</p></li>
+</ul>
+</section>
+</section>
+<section id="決策分析暴露等級分類" class="level4">
+<h4 class="anchored" data-anchor-id="決策分析暴露等級分類">4.3 決策分析：暴露等級分類</h4>
+<ul>
+<li>Hewett 的模型最終輸出不是一個單一的數值（如 mean），而是一個<strong>決策機率分佈</strong>。他將暴露情況分為五個等級（AIHA Exposure Categories），基於真實的第 95 百分位數（X95）與 OEL 的比值 ：</li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 22%">
+<col style="width: 30%">
+<col style="width: 25%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>暴露等級 (Category)</strong></td>
+<td><strong>描述 (Description)</strong></td>
+<td><strong>統計定義 (True X95 relative to OEL)</strong></td>
+<td><strong>建議行動 (Action)</strong></td>
+</tr>
+<tr class="even">
+<td><strong>Category 0</strong></td>
+<td>可忽略 (Negligible)</td>
+<td><span class="math inline">X_{95} \le 1\% \text{ OEL}</span></td>
+<td>無需行動</td>
+</tr>
+<tr class="odd">
+<td><strong>Category 1</strong></td>
+<td>高度控制 (Highly Controlled)</td>
+<td><span class="math inline">1\% &lt; X_{95} \le 10\% \text{ OEL}</span></td>
+<td>一般危害通識</td>
+</tr>
+<tr class="even">
+<td><strong>Category 2</strong></td>
+<td>控制良好 (Well Controlled)</td>
+<td><span class="math inline">10\% &lt; X_{95} \le 50\% \text{ OEL}</span></td>
+<td>化學品特定危害通識</td>
+</tr>
+<tr class="odd">
+<td><strong>Category 3</strong></td>
+<td>受控 (Controlled)</td>
+<td><span class="math inline">50\% &lt; X_{95} \le 100\% \text{ OEL}</span></td>
+<td>暴露監測、醫學監護</td>
+</tr>
+<tr class="even">
+<td><strong>Category 4</strong></td>
+<td>控制不佳 (Poorly Controlled)</td>
+<td><span class="math inline">X_{95} &gt; 100\% \text{ OEL}</span></td>
+<td>立即改善工程控制、佩戴呼吸防護具</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>決策輸出範例：</p></li>
+<li><p>經過貝氏計算後，我們得到的不是「X95 小於 10 ppm」，而是：「有 80% 的機率屬於 Category 2，有 15% 的機率屬於 Category 3，有 5% 的機率屬於 Category 4」。</p></li>
+<li><p>這種機率性的陳述（Probabilistic Statement）直接呼應了 BDA3 Section 3.8 中「透過後驗分佈來總結推論」的原則。這讓管理者能夠依據風險的機率進行決策，而不是被傳統統計中巨大的 UCL 嚇得無所適從。</p></li>
+</ul>
+</section>
+</div>
+<div id="tabset-11-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-3-tab">
+<section id="expostats-與進階模擬-lavoué-et-al.-2019" class="level4">
+<h4 class="anchored" data-anchor-id="expostats-與進階模擬-lavoué-et-al.-2019">Expostats 與進階模擬 (Lavoué et al., 2019)</h4>
+<ul>
+<li>隨著計算能力的提升，我們從 Hewett 時代的網格法進化到了現代的 MCMC（Markov Chain Monte Carlo）。Expostats 工具代表了 BDA3 第三章概念在現代計算環境下的極致應用。</li>
+</ul>
+</section>
+<section id="從網格到-mcmc" class="level4">
+<h4 class="anchored" data-anchor-id="從網格到-mcmc">1 從網格到 MCMC</h4>
+<ul>
+<li><p>Expostats 使用 JAGS（Just Another Gibbs Sampler）作為計算引擎。這對應了 BDA3 後續章節（第 11 章）的內容，但其核心模型依然是第三章的常態模型。</p></li>
+<li><p><strong>MCMC 的優勢</strong>：當模型變得更複雜（例如引入分層結構或處理設限數據）時，網格法會遇到「維度詛咒（Curse of Dimensionality）」。MCMC 允許我們在高維空間中高效抽樣。</p></li>
+<li><p>這正是 Section 3.8 預示的未來：從簡單的解析/網格計算，轉向通用的模擬算法。</p></li>
+</ul>
+</section>
+<section id="處理設限數據censored-data貝氏方法的殺手鐧" class="level4">
+<h4 class="anchored" data-anchor-id="處理設限數據censored-data貝氏方法的殺手鐧">2 處理設限數據（Censored Data）：貝氏方法的殺手鐧</h4>
+<ul>
+<li><p>在職業衛生中，我們經常遇到「未檢出（Non-detects, NDs）」的數據，即濃度低於偵測極限（LOD）。這是典型的左設限（Left-censored）數據。</p></li>
+<li><p><strong>傳統方法</strong>：常使用 <span class="math inline">LOD/2</span> 或 <span class="math inline">LOD/\sqrt{2}</span> 替換 ND 值。這在統計上是有偏誤的（Biased）。</p></li>
+<li><p><strong>貝氏方法（Expostats）</strong>：利用貝氏推論，將這些未檢出的數值視為<strong>參數</strong>（Parameters）而非固定的數據。在 MCMC 抽樣過程中，演算法會根據截斷的對數常態分佈，自動「填補（Impute）」這些 ND 值。</p></li>
+<li><p>這體現了 BDA3 的核心哲學：將所有未知量（包括缺失數據）都視為機率變數進行處理。Expostats 能同時處理左設限（<span class="math inline">&lt;x</span>）、右設限（<span class="math inline">&gt;x</span>）和區間設限（<span class="math inline">[a, b]</span>），這在理論上是處理 ND 數據的最佳解（Theoretically Optimal）<sup>1</sup>。</p></li>
+</ul>
+</section>
+<section id="關鍵指標的計算超標率與-p95" class="level4">
+<h4 class="anchored" data-anchor-id="關鍵指標的計算超標率與-p95">3 關鍵指標的計算：超標率與 P95</h4>
+<ul>
+<li>Expostats 關注兩個核心指標，這兩個指標都是參數 <span class="math inline">\mu</span> 和 <span class="math inline">\sigma</span> 的函數：</li>
+</ul>
+<ol type="1">
+<li><p>超標率（Exceedance Fraction）：暴露濃度超過 OEL 的機率。</p>
+<ul>
+<li><span class="math inline">\theta = P(X &gt; \text{OEL} | \mu, \sigma)</span></li>
+</ul></li>
+<li><p>第 95 百分位數（P95）：</p>
+<ul>
+<li><span class="math inline">X_{95} = \exp(\mu + 1.645\sigma)</span></li>
+</ul></li>
+</ol>
+<ul>
+<li><p>在貝氏框架下，我們不需要進行複雜的誤差傳播計算。我們只需要在 MCMC 的每一次迭代中，利用抽出的 <span class="math inline">(\mu^{(l)}, \sigma^{(l)})</span> 計算出對應的 <span class="math inline">\theta^{(l)}</span> 和 <span class="math inline">X_{95}^{(l)}</span>。重複成千上萬次後，我們就直接得到了這兩個指標的完整後驗分佈。</p></li>
+<li><p>這正是 Section 3.7 生物檢測範例中 LD50 計算邏輯的直接延伸：<strong>Simulate, then summarize</strong>。</p></li>
+</ul>
+</section>
+<section id="過度暴露風險overexposure-risk" class="level4">
+<h4 class="anchored" data-anchor-id="過度暴露風險overexposure-risk">4 過度暴露風險（Overexposure Risk）</h4>
+<ul>
+<li><p>Expostats 引入了一個強大的概念：超度暴露風險。這是指「真實的 P95 大於 OEL」的後驗機率。</p>
+<ul>
+<li><span class="math inline">P(\text{True } X_{95} \ge \text{OEL} | \text{Data})</span></li>
+</ul></li>
+<li><p>這是一個直接回答管理者問題的機率：「這個工作環境不合格的機率是多少？」如果這個機率大於 30%（或 5%），我們就判定為控制不佳。這種直接的機率陳述比頻率學派的 p-value 或信賴區間更直觀、更具行動導向 。</p></li>
+</ul>
+<hr>
+</section>
+</div>
+<div id="tabset-11-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-4-tab">
+<section id="oh-應用的對照表" class="level5">
+<h5 class="anchored" data-anchor-id="oh-應用的對照表"><strong>OH 應用的對照表</strong></h5>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 73%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>BDA3 Section 3.8 核心概念</td>
+<td>職業衛生暴露評估應用 (Hewett / Expostats)</td>
+</tr>
+<tr class="even">
+<td><strong>多參數模型 (Multiparameter Model)</strong></td>
+<td>暴露分佈由 GM (μ) 和 GSD (σ) 共同決定，缺一不可。風險決策同時依賴這兩個參數。</td>
+</tr>
+<tr class="odd">
+<td><strong>討厭參數 (Nuisance Parameters)</strong></td>
+<td>我們關心的是 P95 或超標率（主要受 μ 影響但包含 σ），σ 的不確定性必須被邊際化考慮進去。t 分佈的使用反映了這種不確定性。</td>
+</tr>
+<tr class="even">
+<td><strong>先驗資訊 (Prior Information)</strong></td>
+<td>利用 IH 的「專業判斷」或「歷史數據」構建 Informative Prior，解決小樣本 (n&lt;10) 帶來的決策困境。</td>
+</tr>
+<tr class="odd">
+<td><strong>模擬與推論 (Simulation as Inference)</strong></td>
+<td>不再依賴查表找 UCL，而是透過 Monte Carlo (MCMC) 模擬生成 P95 的後驗分佈，直接計算「超標風險機率」。</td>
+</tr>
+<tr class="even">
+<td><strong>計算策略</strong></td>
+<td>從早期的網格逼近（Hewett 的圖表）進化到現代的 MCMC 採樣（Expostats 的 JAGS 引擎）。</td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+<div id="tabset-11-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-5-tab">
+<ol type="1">
+<li><p><strong>直面不確定性</strong>：職業衛生的數據往往是骯髒且稀缺的。不要試圖用傳統統計去掩蓋這種不確定性（例如只報一個點估計值）。貝氏方法教導我們誠實地面對不確定性，並利用先驗知識來縮小它。</p></li>
+<li><p><strong>動手實作</strong>：不要只看公式。試著用 R 語言重現 Section 3.7 的 Bioassay 網格法。一旦你親手寫出那幾行程式碼，你會發現「後驗分佈」不再是抽象的概念，而是一個你可以存取、排序、畫圖的陣列。這將為你理解 Expostats 的運作原理打下堅實基礎。</p></li>
+<li><p><strong>理解模型假設</strong>：無論是 BDA3 的常態模型還是 Hewett 的決策分析，都假設數據服從（對數）常態分佈。在應用這些工具前，務必檢查你的數據是否符合這個假設（例如透過 Q-Q plot，Expostats 裡有提供）。</p></li>
+<li><p><strong>擁抱模擬</strong>：當你看到積分符號時，試著在腦海中將其轉化為「加權平均」或「蒙地卡羅模擬」。這會讓你更容易理解像 <span class="math inline">p(μ∣y)</span> 為什麼會變成 t 分佈這樣的抽象概念。</p></li>
+</ol>
+<ul>
+<li>透過理解 Section 3.8 的建模與計算摘要，並將其與 Hewett 的決策框架及 Expostats 工具連結，你已經站在了現代職業衛生統計學的制高點。這是一套能讓你在資料極度缺乏的惡劣環境下，依然能做出科學、理性且保護勞工健康的強大工具。</li>
+</ul>
+<hr>
+<p><strong>(參考文獻整合說明)</strong> 本報告深度整合了 <em>Bayesian Data Analysis</em> (Gelman et al.) 第三章的核心理論 ，並結合了 Hewett et al.&nbsp;(2006) 關於貝氏決策分析在暴露評估的應用 ，以及 Lavoué et al.&nbsp;(2019) 關於 Expostats 工具與設限數據處理的現代方法 。所有引用的概念與數據均來自於這些權威文獻，以確保報告的學術嚴謹性與實務參考價值。 &nbsp;</p>
+<hr>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset border">
+<ul class="nav nav-tabs" role="tablist"></ul>
+<div class="tab-content border">
+
+</div>
+</div>
 
 
 </section>
@@ -1087,13 +2270,14 @@ window.Quarto = {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
