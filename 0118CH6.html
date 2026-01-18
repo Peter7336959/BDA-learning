@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="何明信">
+
+<title>0118CH6 模式檢核 – Project of BDA</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-bcc2b4e864fb2217c649f7e1f6d25d6b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="css/w3.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Project of BDA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">介紹Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://peter7336959.github.io/EA/about.html" target="_blank"> 
+<span class="menu-text">咨詢服務</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://peter7336959.github.io/EA/about.html"> 
+<span class="menu-text">了解我們</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">0118CH6 模式檢核</li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="https://peter7336959.github.io/EA/news.html" class="sidebar-logo-link">
+      <img src="./icon/info-circle.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="./icon/info-circle.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">介紹</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">基本概念</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0102CH1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.機率與推論</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0104CH2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.單參數模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0109CH3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.多參數模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0112CH4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.漸近理論</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0118CH5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5.階層模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">6.持續新增</span>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">貝氏原理</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">續增中</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">暴露風險評估EA</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">續增中</span>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#模型檢核-model-checking" id="toc-模型檢核-model-checking" class="nav-link active" data-scroll-target="#模型檢核-model-checking"><strong>模型檢核</strong> Model checking</a></li>
+  </ul>
+<div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://peter7336959.github.io/EA/news.html"><i class="bi bi-link-45deg"></i>職安衛新知</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">0118CH6 模式檢核</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">何明信 <a href="mailto:he.peter70@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            創贊
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="模型檢核-model-checking" class="level2">
+<h2 class="anchored" data-anchor-id="模型檢核-model-checking"><strong>模型檢核</strong> Model checking</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset border">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">6.1 模型檢核的重要</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">6.2 從模型得出的推論合理嗎？</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">6.3 後驗預測檢核</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href=""><strong>青少年吸菸行為</strong>案例</a></li></ul>
+<div class="tab-content border">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<ul>
+<li><strong>不要盲目相信你的數學模型，要用數據去挑戰它。</strong></li>
+</ul>
+<section id="貝氏分析的第三部曲" class="level4">
+<h4 class="anchored" data-anchor-id="貝氏分析的第三部曲">1. 貝氏分析的第三部曲</h4>
+<ul>
+<li>標準的貝氏分析流程：</li>
+</ul>
+<ol type="1">
+<li><p><strong>建立機率模型</strong>（例如：假設苯的暴露濃度服從對數常態分佈 Log-normal）。</p></li>
+<li><p><strong>計算後驗分佈</strong>（例如：算出超過容許濃度 OEL 的機率有多少）。</p></li>
+<li><p><strong>評估模型與數據的適配度</strong>。</p></li>
+</ol>
+<ul>
+<li><strong>OSH應用：</strong> 想像你用 AIHA 的模式評估噪音暴露，算出某勞工有 95% 機率聽力受損。在寫報告前，你必須停下來問自己：「我選用的這個模型（公式），真的能描述現場忽大忽小的衝擊性噪音嗎？」如果模型本身選錯（例如把變動極大的噪音當成穩定噪音算），你算出來的「95%」就是垃圾進、垃圾出。</li>
+</ul>
+</section>
+<section id="為什麼必須做模型檢核" class="level4">
+<h4 class="anchored" data-anchor-id="為什麼必須做模型檢核">2. 為什麼必須做模型檢核？</h4>
+<ul>
+<li><p>將對問題的所有知識都轉化為機率分佈是非常困難的，因此我們的模型通常只是現實的「簡化版」。如果模型太差，貝氏推論（從先驗到後驗的過程）就會給出誤導性的結論 。</p></li>
+<li><p>因此，一個好的貝氏分析，必須檢查模型對數據的適配度（Adequacy of fit），以及該模型用於當前目的是否合理 。</p></li>
+<li><p>這裡的「模型」一詞，在作者定義中包含四個層面 ：</p>
+<ul>
+<li><p><strong>抽樣分佈：</strong> 數據是如何產生的（例如：常態分佈、泊松分佈）。</p></li>
+<li><p><strong>先驗分佈：</strong> 我們對參數的預設看法（例如：相信過去的暴露資料是可信的）。</p></li>
+<li><p><strong>階層結構：</strong> 數據的分層（例如：不同部門、不同ＳＥＧ、不同勞工之間的關聯）。</p></li>
+<li><p><strong>解釋變數：</strong> 回歸分析中放入的因子（例如：是否有佩戴防護具、通風設備風速）。</p></li>
+</ul></li>
+<li><p><strong>ＯＨＳ實務觀點：</strong> 在暴露評估中，我們常假設數據是 <strong>對數常態分佈 (Log-normal)</strong>。但如果現場是一個有洩漏點的製程，數據可能會出現「雙峰分佈」（正常運轉一波、洩漏時一波）。這時如果你堅持用單一的對數常態模型，就會低估高暴露風險。這就是模型檢核要抓出來的「不適配」。</p></li>
+</ul>
+</section>
+<section id="敏感度分析與模型改進" class="level4">
+<h4 class="anchored" data-anchor-id="敏感度分析與模型改進">3. 敏感度分析與模型改進</h4>
+<ul>
+<li><p><strong>敏感度分析 (Sensitivity Analysis)</strong> 的基本問題是：「如果我換另一個也蠻合理的模型（或先驗），結論會變多少？」。</p>
+<ul>
+<li><p>例如：如果我把幾何標準差（GSD）的先驗設定從 2.0 改成 2.5，這名勞工的風險等級會從 Category 2 變成 Category 4 嗎？</p></li>
+<li><p>這種情況下，目前的模型可能對數據適配度沒問題，但結論卻會因為假設不同而大幅跳動 。</p></li>
+</ul></li>
+<li><p><strong>模型檢核 (Model Checking)</strong> 則是更根本地問：數據是否支持我們現在用的這個模型？如果不支持，我們如何改進？</p></li>
+<li><p><strong>敏感度分析</strong>像是「換個濾毒罐品牌，防護效果差多少？」（假設不同，結果不同）；而<strong>模型檢核</strong>像是「這真的是氣體危害嗎？說不定是粉塵？」（模型本質的檢驗）。</p></li>
+</ul>
+</section>
+<section id="超級模型是不切實際的" class="level4">
+<h4 class="anchored" data-anchor-id="超級模型是不切實際的">4. 超級模型是不切實際的</h4>
+<ul>
+<li><p>理論上，我們可以建立一個包山包海的「超級模型（Super-model）」，把所有可能的情況、所有的先驗信念都混和進去 。但在實務上，這在概念上不可能，計算上也不可行 。</p></li>
+<li><p>所以，我們必須接受我們使用的是「不完美」的模型，並透過檢核來看看它們哪裡與現實脫節 。</p></li>
+</ul>
+</section>
+<section id="判斷模型缺陷" class="level4">
+<h4 class="anchored" data-anchor-id="判斷模型缺陷">5. 判斷模型缺陷</h4>
+<ul>
+<li><p><strong>我們不喜歡問「這個模型是對的還是錯的？」因為所有模型在現實中都不會是完美的真理</strong> 。 真正的問題應該是：<strong>「這個模型的缺陷，會不會對我們的實質推論造成顯著影響？」</strong></p></li>
+<li><p>舉例來說，書中提到用 Beta 分佈或常態分佈通常是為了「方便」，只要對最終推論沒有重大影響，這種假設就是安全的 。</p></li>
+<li><p><strong>ＯＨＳ應用：</strong>當我們在做暴露評估時，不需要去爭執數據是否「完美」服從對數常態分佈。</p>
+<ul>
+<li><p><strong>情況 A：</strong> 模型有點偏差，但算出來的 95% 上限值（UCL）是 10 ppm，而法規標準是 100 ppm。–&gt; <strong>結論：</strong> 這種偏差不重要，因為決策一樣是「合規」。</p></li>
+<li><p><strong>情況 B：</strong> 模型有點偏差，算出來 UCL 是 95 ppm，法規標準是 100 ppm。–&gt; <strong>結論：</strong> 這時候模型的準確度就生死攸關了！我們必須嚴格檢核模型，因為些微的偏差可能導致我們誤判合規，讓勞工暴露於危險中。</p></li>
+</ul></li>
+<li><p><strong>這就是所謂的 Bayesian Sensitivity Analysis 的核心任務：判斷何時可以安全地使用「方便的假設」</strong> 。</p></li>
+</ul>
+</section>
+<section id="小結" class="level4">
+<h4 class="anchored" data-anchor-id="小結">小結</h4>
+<ol type="1">
+<li><p><strong>要學會判斷</strong>：不要把採樣數據丟進 IHSTAT 或其他貝氏軟體，看到結果就交報告。要看圖、要看數據分佈。 <em>(你可以秀出一張包含數據點與擬合曲線的圖，問學員：這條線真的代表這些點嗎？)</em></p></li>
+<li><p><strong>模型是工具，不是真理：</strong>所有的暴露評估模型（包含 AIHA 的模型）都是對現場複雜環境的簡化。我們做 Model Checking 是為了確認這個簡化有沒有「過頭」，導致我們低估了工人的暴露風險。</p></li>
+<li><p><strong>實務導向的容錯率：</strong>如果在遠低於容許濃度的安全區，模型稍微不準沒關係；但在臨界值（Action Level 或 OEL）附近，必須進行嚴格的模型檢核與敏感度分析，因為這時的錯誤代價是勞工的健康或公司的法規責任。</p></li>
+</ol>
+<hr>
+</section>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<ul>
+<li><strong>統計模型無法包含你腦中所有的知識，所以你要用那些「沒寫進模型裡的專業知識」來檢查結果。</strong></li>
+</ul>
+<section id="善用未形式化的知識" class="level4">
+<h4 class="anchored" data-anchor-id="善用未形式化的知識">1. 善用未形式化的知識</h4>
+<ul>
+<li><p>在任何應用問題中，總會有一些知識是因為「方便」或「客觀」的考量，沒有被正式寫進先驗分佈 (Prior) 或似然函數 (Likelihood) 裡 。</p></li>
+<li><p>如果模型跑出來的結果，跟你這些「額外資訊」嚴重衝突，那就代表模型可能需要修正 。</p></li>
+<li><p>舉個例子，你在評估某個噴漆作業的甲苯暴露。</p></li>
+</ul>
+<blockquote class="blockquote">
+<ul>
+<li><p><strong>模型輸入：</strong> 你把過去 5 次的採樣數據丟進貝氏模型。</p></li>
+<li><p><strong>模型輸出：</strong> 模型預測該勞工有 10% 的機率暴露濃度超過 10,000 ppm。</p></li>
+<li><p><strong>你的「專業知識」：</strong> 甲苯在常溫下的飽和蒸氣壓根本達不到 10,000 ppm，除非勞工把頭塞進油漆桶裡加熱！</p></li>
+</ul>
+</blockquote>
+<ul>
+<li>這就是「推論不合理」。雖然數學運算沒錯（可能是因為使用了對數常態分佈，尾巴拖很長），但物理上不可能。這時候你就要修正模型（例如加上截斷分佈 Truncated distribution），而不是照抄結果數字。</li>
+</ul>
+</section>
+<section id="案例" class="level4">
+<h4 class="anchored" data-anchor-id="案例">2. 案例</h4>
+<ul>
+<li><p>想像你建立了一個「工廠事故風險模型」，預測各部門下個月的職災機率。</p></li>
+<li><p>模型結果： 預測 A 部門風險很低，B 部門風險很高。</p></li>
+<li><p>你的現場知識： 你昨天才去巡視 A 部門，發現他們換了一批完全沒經驗的外包工，而且安全護欄都被拆掉了（這些資訊還沒變成數據進入模型）。</p></li>
+<li><p>檢核： 模型的「低風險」推論顯然與你的「現場認知」不符。這時候你不能只相信數據，必須介入管理，因為模型尚未反應最新的現場變數。</p></li>
+</ul>
+</section>
+<section id="外部驗證" class="level4">
+<h4 class="anchored" data-anchor-id="外部驗證">3. 外部驗證</h4>
+<section id="external-validation" class="level5">
+<h5 class="anchored" data-anchor-id="external-validation">(External validation)</h5>
+<ul>
+<li><p><strong>外部驗證就是用模型預測「未來的數據」，然後等數據收集到了，再來比對準不準</strong> 。</p></li>
+<li><p><strong>標準是什麼？</strong></p>
+<ul>
+<li><p>後驗平均值 (Posterior means) 應該要接近長期平均。</p></li>
+<li><p>50% 的信賴區間 (50% intervals) 應該要真的包含到 50% 的真實值 。</p></li>
+<li><p>舉例來說，如果你預測某個數值有 50% 機率會落在 10~20 之間，結果做了一百次實驗，只有 10 次落在這個區間，那這個模型就是「過度自信」或「校正不良」了。</p></li>
+</ul></li>
+<li><p><strong>實務上的困難：</strong>在ＯＨＳ領域，我們不能說：「我的模型預測這個勞工明年會得過度暴露，我們等明年再來看看模型準不準。」這樣太不道德了。我們需要在拿到新數據<strong>之前</strong>就檢查模型。</p></li>
+<li><p><strong>解決方案：</strong>既然不能等未來數據，那我們就用現在算出來的模型，模擬出『假的』複製品數據，看看這些假數據跟我們手上的『真數據』長得像不像。</p></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="小結-1" class="level4">
+<h4 class="anchored" data-anchor-id="小結-1">小結</h4>
+<ol type="1">
+<li><p><strong>你是專家，模型只是助手。</strong> 貝氏統計允許（甚至鼓勵）我們用主觀知識來審視模型。</p></li>
+<li><p><strong>常識檢測：</strong> 如果模型告訴你某個粉塵濃度是負的，或是某個噪音暴露值高達 200 分貝，請相信你的常識，模型錯了。</p></li>
+<li><p>既然我們不能拿勞工的健康來做「外部驗證」（等出事了才證明模型準），那我們就需要學會下一招「後驗預測檢核」，在電腦裡做模擬演練。這也是為什麼我們要學貝氏統計的重要原因——它讓我們可以在不增加額外採樣成本的情況下，自我診斷模型的可靠度。</p></li>
+</ol>
+<hr>
+</section>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>(Posterior Predictive Checking, PPC)</p>
+<ul>
+<li><strong>「如果你的模型是對的，那用這個模型模擬出來的數據，應該要長得跟真實數據很像。」</strong></li>
+</ul>
+<section id="什麼是複製數據yrep" class="level4">
+<h4 class="anchored" data-anchor-id="什麼是複製數據yrep">1. 什麼是「複製數據」(<span class="math inline">y^{rep}</span>)？</h4>
+<ul>
+<li><p>在貝氏統計裡，我們有一個很強大的武器叫做「模擬」。</p></li>
+<li><p><strong>真實數據 (</strong><span class="math inline">y</span>)： 你昨天去現場採樣拿到的那 6 個苯濃度數據。</p></li>
+<li><p><strong>複製數據 (</strong><span class="math inline">y^{rep}</span>, Replicated Data)： 假設我們已經建立好了模型（包含求出了後驗分佈），我們叫電腦：「嘿，假設這套模型和參數是真的，請你依照同樣的條件（同樣採樣 6 人、同樣的製程變數），重新產生一組數據給我。」</p></li>
+<li><p>這組 <span class="math inline">y^{rep}</span> 就是「如果時光倒流，我們依照同樣的機制再做一次實驗，可能會看到的數據」。</p></li>
+<li><p>想像你在調查一個噪音作業場所。你採了 10 個樣本，算出平均 88 dBA，標準差 3 dBA。你假設它服從常態分佈。</p>
+<ul>
+<li><p>PPC （ Posterior Predictive Checking ）就是： 叫電腦用你算出的這個常態分佈，隨機吐出 10 個數字。</p></li>
+<li><p>如果你隨機吐出的數字大都在 85-91 dBA 之間，跟你實際採樣的數據很像，那模型這關通過。</p></li>
+<li><p>如果你實際採樣中有一個 110 dBA 的尖峰噪音，但電腦吐了幾千次數據，最大值都只有 95 dBA。這就代表你的「常態模型」根本無法解釋那個 110 dBA 的存在。 模型與現實脫節了。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="一致性檢查" class="level4">
+<h4 class="anchored" data-anchor-id="一致性檢查">2. 一致性檢查</h4>
+<ul>
+<li>如果真實數據在模型眼中看起來「極度不可能發生」（implausible），那就代表模型有缺陷，或者是隨機誤差搞鬼（但通常是模型有缺陷）。</li>
+</ul>
+</section>
+<section id="測試量-test-quantities-與-檢核方法" class="level4">
+<h4 class="anchored" data-anchor-id="測試量-test-quantities-與-檢核方法">3. 測試量 (Test Quantities) 與 檢核方法</h4>
+<ul>
+<li><p>我們怎麼比較「真實數據」跟「複製數據」像不像？用眼睛看是一種（下一節會講圖形法），但這節強調用 <strong>測試量 (Test quantity,</strong> <span class="math inline">T</span>) 來量化比較 。</p></li>
+<li><p><strong>什麼是測試量？</strong> 就是你關心的某個統計特徵。例如：最大值 (Max)、最小值 (Min)、變異數 (Variance)、或是「超過 OEL 的比例」。</p></li>
+<li><p><strong>操作步驟：</strong></p>
+<ol type="1">
+<li><p>電腦模擬 1000 次實驗，產生 1000 組 <span class="math inline">y^{rep}</span>。</p></li>
+<li><p>算出這 1000 組的測試量（例如算出 1000 個最大值）。</p></li>
+<li><p>看看你手上的「真實數據最大值」，有沒有落在這 1000 個模擬值的範圍內。</p></li>
+</ol></li>
+<li><p>ＯＨＳ應用：在暴露評估中，我們最怕的不是平均值算錯，而是忽略了高濃度尖峰。</p></li>
+<li><p>如果你假設暴露是「對數常態分佈 (Log-normal)」，但現場其實偶爾會有管線洩漏（Spikes）。</p>
+<ul>
+<li><p>你設定測試量 <span class="math inline">T = Max(y)</span>（最大值）。</p></li>
+<li><p>你發現真實採樣的最大值是 500 ppm。</p></li>
+<li><p>你的 Log-normal 模型模擬了 10,000 次，產生的最大值頂多只到 200 ppm。</p></li>
+<li><p>診斷： 你的模型太「溫馴」了，它低估了風險。你需要換一個能容納極端值的模型（例如混合模型 Mixture Model）。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="貝氏-p-值" class="level4">
+<h4 class="anchored" data-anchor-id="貝氏-p-值">4. 貝氏 P 值</h4>
+<section id="posterior-predictive-p-values" class="level5">
+<h5 class="anchored" data-anchor-id="posterior-predictive-p-values">(Posterior predictive p-values)</h5>
+<ul>
+<li><p><strong>在模擬的時空中，數據比真實數據更極端的機率是多少？</strong></p></li>
+<li><p>公式概念：<span class="math inline">Probability(T(y^{rep}) \ge T(y))</span>。</p></li>
+<li><p><strong>判讀：</strong></p>
+<ul>
+<li><p>如果 p-value 接近 <strong>0.5</strong>：代表真實數據跟模擬數據混在一起分不出來，<strong>模型適配度很好</strong> 。</p></li>
+<li><p>如果 p-value 接近 <strong>0</strong> 或 <strong>1</strong>（例如 &lt;0.01 或 &gt;0.99）：代表真實數據在模型眼中是「異類」，<strong>模型有重大缺陷</strong> 。</p></li>
+</ul></li>
+<li><p><strong>案例：二項式分佈的獨立性 (Binomial trials)</strong></p>
+<ul>
+<li><p>有一串 0 和 1 的數據（類似我們檢查勞工有無佩戴防護具，有戴/沒戴）。</p></li>
+<li><p>模型假設每次觀察都是獨立的。</p></li>
+<li><p>但真實數據是：110000011111…（看起來有群聚現象，戴了就會一直戴，沒戴就一直沒戴）。</p></li>
+<li><p>測試量 <span class="math inline">T</span> = 數值切換的次數 (switches)。</p></li>
+<li><p>結果發現真實的切換次數遠少於模擬數據，p-value 接近 0。這告訴我們「獨立性假設」錯了，勞工的行為是有連續性的（Autocorrelation）。</p></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="多重比較" class="level4">
+<h4 class="anchored" data-anchor-id="多重比較">5. 多重比較</h4>
+<ul>
+<li><p>我們不需要像傳統統計那樣擔心「多重比較」修正（Bonferroni correction）。因為我們的目的不是要「拒絕」模型，而是要了解模型的極限在哪裡。</p></li>
+<li><p>重點是：<strong>統計顯著性不等於 實務顯著性 (Practical significance)</strong>。</p></li>
+<li><p>如果你發現模型模擬的平均值是 10.1 ppm，真實平均是 10.2 ppm，雖然 p-value 可能顯示差異顯著（如果樣本夠大），但在職安衛實務上，這 0.1 ppm 的差距對健康風險評估根本沒差，我們就可以忽略這個模型缺陷。</p></li>
+</ul>
+<hr>
+</section>
+<section id="小結-2" class="level4">
+<h4 class="anchored" data-anchor-id="小結-2">小結</h4>
+<ol type="1">
+<li><p>模型是拿來用的，不是拿來拜的：不要算完後驗機率就交卷。請用你的模型「生」一些假數據出來。</p></li>
+<li><p>測試：問自己：「如果我不斷重複採樣，依照我設定的這個模型，我有機會看到像今天這麼高濃度的數據嗎？」如果答案是「幾乎不可能」，那只有兩種可能：你要嘛是剛好採到極端值，要嘛就是<strong>你的模型太樂觀，低估了現場的變異</strong>。</p></li>
+<li><p>選擇你在乎的指標：在職安衛中，我們在乎的是 Max (最大值) 和 95th percentile (第95百分位數)。做 PPC（ Posterior Predictive Checking ） 時，請專注檢查模型能不能準確預測這些「尾巴」的數值。如果模型連平均值都對不準，那通常是垃圾；但最危險的是模型平均值很準，卻完全預測不到極端的高暴露風險。</p></li>
+<li><p>承認無知是專業的表現：如果 PPC 顯示模型適配度差（p-value 很極端），請在報告中誠實寫出來：「本模型在預測尖峰濃度方面可能存在低估，建議採取更保守的風險管理措施。」這比盲目信任模型更具專業價值。</p></li>
+</ol>
+<hr>
+</section>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<section id="案例背景誰會變成老菸槍" class="level4">
+<h4 class="anchored" data-anchor-id="案例背景誰會變成老菸槍">案例背景：誰會變成老菸槍？</h4>
+<ul>
+<li><p><strong>對象：</strong> 研究追蹤了約 2,000 名澳洲青少年。</p></li>
+<li><p><strong>方法：</strong> 每 6 個月做一次問卷調查（Wave），共持續 3 年（共 6 波數據）<sup>2</sup>。</p></li>
+<li><p><strong>目的：</strong> 我們想知道哪些因素（如性別、父母是否吸菸）會影響青少年吸菸，以及他們是如何從「不吸菸」變成「吸菸」的 <sup>3</sup>。</p></li>
+</ul>
+</section>
+<section id="第一回合建立模型-1-標準階層對數回歸" class="level4">
+<h4 class="anchored" data-anchor-id="第一回合建立模型-1-標準階層對數回歸">第一回合：建立模型 1 (標準階層對數回歸)</h4>
+<p>研究者首先建立了一個標準的 <strong>階層邏輯斯回歸模型 (Hierarchical Logistic Regression)</strong> <sup>4</sup>。</p>
+<ul>
+<li><p><strong>假設：</strong> 每個孩子在每個時間點「吸菸的機率」，取決於他的性別、父母有沒有吸菸、以及時間趨勢。</p></li>
+<li><p><strong>特點：</strong> 每個孩子有一個自己的隨機參數 <span class="math inline">\alpha_j</span>（Individual effect），用來捕捉每個人不同的「吸菸傾向」<sup>5</sup>。</p></li>
+</ul>
+</section>
+<section id="模型一個孩子的吸菸機率是由哪些因素拼湊出來的" class="level4">
+<h4 class="anchored" data-anchor-id="模型一個孩子的吸菸機率是由哪些因素拼湊出來的">模型：<strong>「一個孩子的吸菸機率，是由哪些因素拼湊出來的？」</strong></h4>
+<hr>
+<section id="公式解讀pry_jt-1-logit-1dots" class="level5">
+<h5 class="anchored" data-anchor-id="公式解讀pry_jt-1-logit-1dots">📝 公式解讀：<span class="math inline">Pr(y_{jt} = 1) = logit^{-1}(\dots)</span></h5>
+<p>這個公式來自書中第 148 頁（PDF Page 8）<sup>11</sup>。我們逐項來翻譯它的物理意義：</p>
+</section>
+<section id="左邊pry_jt-1" class="level5">
+<h5 class="anchored" data-anchor-id="左邊pry_jt-1">1. 左邊：<span class="math inline">Pr(y_{jt} = 1)</span></h5>
+<ul>
+<li><p><strong>白話文：</strong> 第 <span class="math inline">j</span> 個學生，在第 <span class="math inline">t</span> 波調查（時間點）時，<strong>「吸菸（y=1）」的機率</strong>是多少？</p></li>
+<li><p><strong>職安衛類比：</strong> 就像我們想算「第 <span class="math inline">j</span> 位勞工，在第 <span class="math inline">t</span> 年，發生**職業病（y=1）**的機率」。</p></li>
+</ul>
+</section>
+<section id="外殼logit-1dots" class="level5">
+<h5 class="anchored" data-anchor-id="外殼logit-1dots">2. 外殼：<span class="math inline">logit^{-1}(\dots)</span></h5>
+<ul>
+<li><p><strong>白話文：</strong> 這是一個轉換函數（Inverse Logit）。因為右邊那一大串加加減減的算式算出來可能是負的（例如 -5）或很大的正數（例如 +10），但機率必須介於 <strong>0 到 1 (0%~100%)</strong> 之間。</p></li>
+<li><p>這個函數負責把那些亂七八糟的數字，強制壓縮轉換成 0%~100% 的機率值。</p></li>
+</ul>
+</section>
+<section id="核心變數與係數-beta-系列" class="level5">
+<h5 class="anchored" data-anchor-id="核心變數與係數-beta-系列">3. 核心變數與係數 (<span class="math inline">\beta</span> 系列)</h5>
+<p>括號裡面的這一串：$\beta_0 + \beta_1X_{j1} + \beta_2X_{j2} + \beta_3(1- X_{j2})t + \beta_4X_{j2}t + \alpha_j$</p>
+<p>就是我們認為會影響吸菸的「致病因子」。</p>
+<ul>
+<li><p><span class="math inline">\beta_0</span> (截距)：</p>
+<ul>
+<li>基礎的吸菸風險基準線。</li>
+</ul></li>
+<li><p><span class="math inline">\beta_1 X_{j1}</span> (父母吸菸影響)：</p>
+<ul>
+<li><p><span class="math inline">X_{j1}</span> 是「父母有沒有吸菸」的指標 <sup>2</sup>。</p></li>
+<li><p>如果父母吸菸 (<span class="math inline">X_{j1}=1</span>)，吸菸機率就會加上 <span class="math inline">\beta_1</span> 的權重。</p></li>
+<li><p><strong>OSH 類比：</strong> 就像「是否有家族病史」或「是否有不當作業習慣」。</p></li>
+</ul></li>
+<li><p><span class="math inline">\beta_2 X_{j2}</span> (性別影響)：</p>
+<ul>
+<li><p><span class="math inline">X_{j2}</span> 是「女性」指標 <sup>3</sup>。</p></li>
+<li><p>這項用來調整男女天生的吸菸率差異。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="最精彩的時間趨勢設計-time-trends" class="level5">
+<h5 class="anchored" data-anchor-id="最精彩的時間趨勢設計-time-trends">4. 最精彩的時間趨勢設計 (Time Trends)</h5>
+<p>這部分是這個公式最聰明的地方，請看這兩項：</p>
+<p>$$\beta_3(1- X_{j2})t + \beta_4X_{j2}t$$</p>
+<ul>
+<li><p><strong>它是怎麼運作的？</strong></p>
+<ul>
+<li><p>如果是男生 ($X_{j2}=0$)：</p>
+<p>後面的項變成 $\beta_4 \times 0 \times t = 0$（消失了）。</p>
+<p>前面的項變成 $\beta_3 \times (1-0) \times t = \beta_3 t$。</p>
+<p>👉 所以，$\beta_3$ 代表男生的吸菸率隨時間 $t$ 增加的斜率 4。</p></li>
+<li><p>如果是女生 ($X_{j2}=1$)：</p>
+<p>前面的項變成 $\beta_3 \times (1-1) \times t = 0$（消失了）。</p>
+<p>後面的項變成 $\beta_4 \times 1 \times t = \beta_4 t$。</p>
+<p>👉 所以，$\beta_4$ 代表女生的吸菸率隨時間 $t$ 增加的斜率 5。</p></li>
+</ul></li>
+<li><p>為什麼要這樣寫？</p>
+<p>這樣我們就可以在同一個公式裡，分別算出「男生越變越壞的速度」和「女生越變越壞的速度」是否不同。從圖 6.6 可以看出，女生吸菸率上升的速度似乎比男生快，這就是由 $\beta_3$ 和 $\beta_4$ 來控制的。</p></li>
+</ul>
+</section>
+<section id="靈魂人物alpha_j-個體效應-individual-effect" class="level5">
+<h5 class="anchored" data-anchor-id="靈魂人物alpha_j-個體效應-individual-effect">5. 靈魂人物：<span class="math inline">\alpha_j</span> (個體效應 Individual Effect)</h5>
+<p>最後這個 <span class="math inline">\alpha_j</span> 是貝氏階層模型（Hierarchical Model）的核心 <sup>666</sup>。</p>
+<ul>
+<li><p><strong>定義：</strong> 這是屬於第 <span class="math inline">j</span> 個學生<strong>獨一無二的參數</strong>。</p></li>
+<li><p><strong>意義：</strong> 即便兩個學生性別一樣、父母都吸菸、年級也一樣，他們吸菸的機率還是會不同。為什麼？因為每個人可能有不同的個性、交友圈、基因等「沒被測量到的特質」。</p></li>
+<li><p><strong>設定：</strong> 我們假設這些 <span class="math inline">\alpha_j</span> 服從一個常態分佈 <span class="math inline">N(0, \tau^2)</span> <sup>7</sup>。</p></li>
+</ul>
+<hr>
+</section>
+<section id="職安衛專家視角的應用-teaching-moment" class="level5">
+<h5 class="anchored" data-anchor-id="職安衛專家視角的應用-teaching-moment">👷 職安衛專家視角的應用 (Teaching Moment)</h5>
+<p>如果我們要用這個公式來分析工廠的 <strong>「噪音性聽力損失 (Noise-Induced Hearing Loss, NIHL)」</strong>，這個公式會變成這樣：</p>
+<p>$$Pr(聽損_{jt}=1) = logit^{-1}(\beta_0 + \beta_1 \cdot 沒戴耳塞 + \beta_2 \cdot 噪音區 + \dots + \alpha_j)$$</p>
+<ul>
+<li><p><span class="math inline">X_{j1}</span> (沒戴耳塞)： 行為因子。</p></li>
+<li><p><span class="math inline">X_{j2}</span> (噪音區)： 環境因子。</p></li>
+<li><p><span class="math inline">\beta_3, \beta_4</span> (時間項)： 代表隨著年資增加，聽力惡化的速度（可能不同部門惡化速度不同）。</p></li>
+<li><p>$\alpha_j$ (個體差異)： 這最重要！</p>
+<p>有些勞工真的很倒楣，明明都有戴耳塞，噪音也不是最大，但他就是聽力惡化了。這就是他的 $\alpha_j$ (易感性 Susceptibility) 特別高。</p>
+<blockquote class="blockquote">
+<p><strong>貝氏統計的強項</strong> 就在於它不只看整體的平均風險 (<span class="math inline">\beta</span>)，還能透過 <span class="math inline">\alpha_j</span> 幫我們把那些**「體質特別敏感」**的高風險勞工抓出來，進行重點保護。</p>
+</blockquote></li>
+</ul>
+<p>這樣解釋這個數學公式，有沒有覺得親切多了？它其實就是一個把「背景、環境、時間、個人體質」全部加總起來算風險的工具而已！</p>
+<p><strong>🤔 聽起來很合理對吧？這就是我們一般跑統計軟體會做的標準動作。但這模型好用嗎？讓我們來做 PPC。</strong></p>
+</section>
+</section>
+<section id="模型檢核設定三個測試關卡" class="level4">
+<h4 class="anchored" data-anchor-id="模型檢核設定三個測試關卡">模型檢核：設定三個測試關卡</h4>
+<p>為了檢驗模型，研究者選了三個反映現實狀況的 <strong>測試量 (Test Quantities,</strong> <span class="math inline">T(y)</span>) <sup>6</sup>：</p>
+<ol type="1">
+<li><p><strong>% Never-smokers：</strong> 從頭到尾都沒吸過菸的人有多少？</p></li>
+<li><p><strong>% Always-smokers：</strong> 從第一波到最後一波都在吸菸的人有多少？</p></li>
+<li><p><strong>% Incident smokers (發生率)：</strong> 一開始沒吸，但在研究期間「學壞了」開始吸菸且沒戒掉的人有多少？</p></li>
+</ol>
+<p>檢核結果：模型 1 的表現 (見 Table 6.1) <sup>77</sup></p>
+<ul>
+<li><p><strong>關卡 1 (從不吸菸)：</strong> 實際數據 77.3%。模型預測範圍 [75.5, 78.2]。</p>
+<ul>
+<li>👉 <strong>及格！</strong> 模型能抓到大部分乖乖牌學生的比例。</li>
+</ul></li>
+<li><p><strong>關卡 2 (總是吸菸)：</strong> 實際數據 5.1%。模型預測範圍 [5.0, 6.5]，p-value = 0.95。</p>
+<ul>
+<li>👉 <strong>勉強及格，但怪怪的。</strong> p-value 接近 1，表示模型預測出來的「老菸槍」數量幾乎總是比實際多（有高估傾向）。</li>
+</ul></li>
+<li><p><strong>關卡 3 (新發生吸菸者)：</strong> 實際數據 8.4%。模型預測範圍 [5.3, 7.9]，p-value = 0.005。</p>
+<ul>
+<li>👉 <strong>死當！</strong> 模型預測只有 5~8% 的人會變壞，但實際上高達 8.4%。模型嚴重低估了青少年「開始嘗試吸菸」的行為。</li>
+</ul></li>
+</ul>
+</section>
+<section id="第二回合改良模型-2-混合模型-mixture-model" class="level4">
+<h4 class="anchored" data-anchor-id="第二回合改良模型-2-混合模型-mixture-model">第二回合：改良模型 2 (混合模型 Mixture Model)</h4>
+<p>研究者看著數據（這就是 6.1 節說的「實務檢核」），發現數據呈現 雙峰現象：有一大群人是「鐵板一塊」完全不可能吸菸的，另一群人則是搖擺不定的。</p>
+<p>於是他們提出了 模型 2，引入了一個概念：「易感性 (Susceptibility)」 8。</p>
+<ul>
+<li><p><strong>新假設：</strong> 人被分成兩類。</p>
+<ul>
+<li><p><strong>免疫者 (Immune)：</strong> 吸菸機率直接設為 0（不管父母有沒有吸，他就是不吸）。</p></li>
+<li><p><strong>易感者 (Susceptible)：</strong> 只有這群人才會套用上面的邏輯斯回歸模型算機率 <sup>9</sup>。</p></li>
+</ul></li>
+</ul>
+<p>再度檢核：模型 2 的表現 <sup>10101010</sup></p>
+<ul>
+<li><p><strong>關卡 1 (% Never-smokers)：</strong> 依然及格。</p></li>
+<li><p><strong>關卡 2 (% Always-smokers)：</strong></p>
+<ul>
+<li><p>模型預測範圍修正為 [3.8, 6.3]，p-value = 0.44。</p></li>
+<li><p>👉 <strong>變好了！</strong> 0.44 非常接近 0.5，代表模型現在能精準抓到老菸槍的比例了。這是因為「混合模型」成功把那些「鐵定不吸」的人分出去，讓模型專注解釋會吸菸的那群人 <sup>11</sup>。</p></li>
+</ul></li>
+<li><p><strong>關卡 3 (% Incident smokers)：</strong></p>
+<ul>
+<li><p>實際數據 8.4%。模型預測範圍 [4.9, 7.8]，p-value = 0.004。</p></li>
+<li><p>👉 <strong>還是死當！</strong> 即便改良了模型，它依然無法解釋為什麼有那麼多青少年會在半路「轉性」開始吸菸 <sup>12</sup>。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="教授的職安衛觀點解析" class="level4">
+<h4 class="anchored" data-anchor-id="教授的職安衛觀點解析">🎓 教授的職安衛觀點解析</h4>
+<p>這個案例給我們三個非常重要的啟示：</p>
+<ol type="1">
+<li><p>單看平均值會死人：</p>
+<p>如果只看整體吸菸率，兩個模型可能都還行。但當我們把測試量拆解成「從不」、「總是」、「新發生」時，就發現模型根本抓不到「行為改變（Incident）」的動態。</p>
+<ul>
+<li><strong>OSH 應用：</strong> 在評估聽力損失時，不要只看全廠平均聽力閾值。要學這個案例，去檢查模型能不能預測 <strong>「本來聽力正常，今年突然惡化」</strong> 的那一群人 (Incident cases)。</li>
+</ul></li>
+<li><p>混合模型 (Mixture Model) 的威力：</p>
+<p>在職業衛生中，很多數據都有這種特性。例如「暴露評估」，有一群勞工可能根本不在污染源附近（暴露為 0），另一群人在操作機台（有暴露風險）。如果你強迫用一個對數常態分佈去套所有人，結果就會像模型 1 一樣偏差。這時要用 Zero-inflated model (零膨脹模型)，概念就跟這裡的「易感性模型」一樣。</p></li>
+<li><p>承認模型的極限：</p>
+<p>最後的結論很誠實：兩個模型都低估了「新發生吸菸者」。這告訴研究人員，目前的變數（性別、父母吸菸）還不足以解釋青少年為什麼會突然開始吸菸，可能還有朋友同儕效應沒被納入。</p>
+<ul>
+<li><strong>實務態度：</strong> 當你的模型 PPC 失敗（p-value &lt; 0.05），不要硬拗。這正好指出了你需要去現場調查的方向（例如：是不是漏掉了某個致病因子？）。</li>
+</ul></li>
+</ol>
+<p>總結來說，這個案例完美示範了 <strong>Model Checking 不是為了證明模型是對的，而是為了找出模型哪裡還不夠好</strong>，引導我們做更深入的科學探索。</p>
+</section>
+</div>
+</div>
+</div>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2026, 何明信</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
