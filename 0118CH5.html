@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="何明信">
+
+<title>0118CH5 階層模型 – Project of BDA</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./0112CH4.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-bcc2b4e864fb2217c649f7e1f6d25d6b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="css/w3.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Project of BDA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">介紹Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://peter7336959.github.io/EA/about.html" target="_blank"> 
+<span class="menu-text">咨詢服務</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://peter7336959.github.io/EA/about.html"> 
+<span class="menu-text">了解我們</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./0102CH1.html">基本概念</a></li><li class="breadcrumb-item"><a href="./0118CH5.html">5.階層模型</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="https://peter7336959.github.io/EA/news.html" class="sidebar-logo-link">
+      <img src="./icon/info-circle.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="./icon/info-circle.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">介紹</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">基本概念</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0102CH1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.機率與推論</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0104CH2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2.單參數模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0109CH3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3.多參數模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0112CH4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4.漸近理論</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./0118CH5.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">5.階層模型</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">6.持續新增</span>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">貝氏原理</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">續增中</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">暴露風險評估EA</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+ <span class="menu-text">續增中</span>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    <div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://peter7336959.github.io/EA/news.html"><i class="bi bi-link-45deg"></i>職安衛新知</a></li></ul></div></div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./0102CH1.html">基本概念</a></li><li class="breadcrumb-item"><a href="./0118CH5.html">5.階層模型</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">0118CH5 階層模型</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">何明信 <a href="mailto:he.peter70@gmail.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            創贊
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>階層模式（Hierarchical Models）</strong></p>
+<ul>
+<li>本章介紹如何把多個類似的實驗（或工廠、SEG）結合起來分析，這運用「借用力量（Borrowing Strength） 」。</li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset border">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">前言</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">5.1 建構事前分佈</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">5.2 可交換性與階層模式</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href=""><strong>5.3 共軛階層模式的貝氏分析</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false" href=""><strong>5.4 具可交換參數的常態模式</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-6" role="tab" aria-controls="tabset-1-6" aria-selected="false" href=""><strong>5.5 平行實驗</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-7" role="tab" aria-controls="tabset-1-7" aria-selected="false" href=""><strong>5.6 整合分析</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-8" role="tab" aria-controls="tabset-1-8" aria-selected="false" href=""><strong>5.7 變異數參數的「弱資訊事前分佈」</strong></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-9-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-9" role="tab" aria-controls="tabset-1-9" aria-selected="false" href="">5.9 節習題</a></li></ul>
+<div class="tab-content border">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<section id="為什麼需要hierarchical-model" class="level4">
+<h4 class="anchored" data-anchor-id="為什麼需要hierarchical-model">1.1 為什麼需要Hierarchical Model？</h4>
+<ul>
+<li><p>在傳統統計或簡單的貝氏分析中，我們通常只關注單一參數。但在現實世界，很多數據是有<strong>結構</strong>的。許多統計應用涉及多個參數，這些參數在問題結構上是相關聯的。</p></li>
+<li><p><strong>例</strong>：研究多個醫院的心臟病治療效果，我們預期這些醫院的參數（存活率 <span class="math inline">\theta_j</span>）應該彼此相關，因為它們都是「醫院」這個母體的一份子。</p></li>
+</ul>
+</section>
+<section id="ohs觀點" class="level4">
+<h4 class="anchored" data-anchor-id="ohs觀點">1.2 OHS觀點</h4>
+<ul>
+<li>如果你要評估一家大型石化公司的 <strong>「苯暴露風險」</strong>，該公司有 10 個不同的廠區（Plant A, Plant B…）。貝氏思維如下：</li>
+</ul>
+<ol type="1">
+<li><p><strong>完全獨立（No Pooling）</strong>：如果你認為每個廠區完全無關，只用該廠區的 3 個樣本來評估，誤差會非常大（不確定性太高）。</p></li>
+<li><p><strong>完全合併（Complete Pooling）</strong>：如果你認為每個廠區都一模一樣，把所有廠區的數據混在一起算一個平均值，你會忽略各廠區製程老舊程度、通風設備的差異（掩蓋了真實風險）。</p></li>
+<li><p><strong>階層模式（Partial Pooling）</strong>：這是中庸之道。我們假設這些廠區的風險參數 <span class="math inline">\theta_j</span> 是來自同一個「母體分佈」。我們允許各廠區有差異，但利用整體數據來修正個別廠區的估計。</p></li>
+</ol>
+</section>
+<section id="運作原理" class="level4">
+<h4 class="anchored" data-anchor-id="運作原理">1.3 運作原理</h4>
+<ul>
+<li><p><strong>母體分佈</strong>：我們假設個別單元（如各廠區）的參數 <span class="math inline">\theta_j</span>，是從一個共同的母體分佈抽樣出來的。</p></li>
+<li><p><strong>超參數（Hyperparameters）</strong>：這個母體分佈本身的參數（例如母體的平均值與變異數），我們稱為「超參數」。</p></li>
+<li><p><strong>優勢</strong>：階層模式可以容納足夠多的參數來擬合數據，同時透過母體分佈來約束參數，避免「過度擬合（Overfitting）」。這對於數據稀缺的職業衛生評估至關重要。</p></li>
+</ul>
+<hr>
+</section>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<ul>
+<li>當我們手邊有「歷史數據」時，如何利用它們來為當前的ＳＥＧ暴露實態建立一個合理的 <strong>事前分佈</strong>。（參數化）</li>
+</ul>
+<section id="分析單一暴露並參考歷史數據" class="level4">
+<h4 class="anchored" data-anchor-id="分析單一暴露並參考歷史數據">1. 分析單一暴露並參考歷史數據</h4>
+<ul>
+<li><strong>情境</strong>：我們要估計一個小實驗的參數 <span class="math inline">\theta</span>，利用類似的過去實驗（歷史數據）來建構事前分佈。<strong>我們假設</strong>：將「當前實驗」與「歷史實驗」視為來自同一母體的隨機樣本。</li>
+</ul>
+<section id="ｏｈｓ例噪音作業的聽力損失率" class="level5">
+<h5 class="anchored" data-anchor-id="ｏｈｓ例噪音作業的聽力損失率">ＯＨＳ例：噪音作業的聽力損失率</h5>
+<ul>
+<li><p>假設我們想評估 <strong>「當前」</strong> 某個新建沖壓工廠工人的聽力損失風險 <span class="math inline">\theta_{71}</span>（假設編號第 71 號）。</p>
+<ul>
+<li><p><strong>現況數據</strong>：我們剛檢查了 14 位工人，發現 4 位有聽力異常（<span class="math inline">4/14</span>）。</p></li>
+<li><p><strong>歷史數據</strong>：我們手邊有過去 70 個類似工廠的聽力檢查紀錄。</p></li>
+</ul></li>
+<li><p>如果只看當前數據，異常率是 <span class="math inline">4/14 = 28.6\%</span>。但這個樣本太小，誤差很大。如果過去 70 個工廠的平均異常率只有 10%，我們是否該懷疑這 28.6% 只是運氣不好（抽樣誤差）？</p></li>
+</ul>
+</section>
+</section>
+<section id="利用歷史數據估計母體分佈近似法" class="level4">
+<h4 class="anchored" data-anchor-id="利用歷史數據估計母體分佈近似法">2. 利用歷史數據估計母體分佈（近似法）</h4>
+<ol type="1">
+<li><p><strong>模型設定</strong>：</p>
+<ul>
+<li><p><strong>假設</strong>每個工廠的異常人數 <span class="math inline">y_j</span> 服從<strong>二項式分佈（Binomial）</strong>。</p></li>
+<li><p>每個工廠的風險機率 <span class="math inline">\theta_j</span> 服從 <strong>Beta 分佈</strong>（這是二項式的<strong>共軛事前分佈</strong>）。</p></li>
+<li><p>Beta 分佈有兩個參數 <span class="math inline">(\alpha, \beta)</span>，這就是<strong>超參數</strong>。</p></li>
+</ul></li>
+<li><p><strong>簡單估計法（非完全貝氏）</strong>：</p>
+<ul>
+<li><p>計算過去 70 個工廠的平均異常率和標準差。</p></li>
+<li><p>假設數據：平均值 0.136，標準差 0.103。</p></li>
+<li><p>利用公式反推 Beta 分佈的 <span class="math inline">\alpha</span> 和 <span class="math inline">\beta</span>。原文算出 <span class="math inline">(\alpha, \beta) = (1.4, 8.6)</span> ，這代表「所有類似工廠」的風險分佈大概長這樣。(可參考BDA3 Appendix A 公式 ，Beta 分佈的平均值與變異數公式，使用動差法反推)</p></li>
+</ul></li>
+<li><p><strong>應用於當前ＥＡ</strong>：</p>
+<ul>
+<li><p>將算出來的歷史分佈 Beta(1.4, 8.6) 當作 <strong>事前分佈</strong>。</p></li>
+<li><p>結合當前數據（4 人異常，10 人正常）。</p></li>
+<li><p><strong>事後分佈</strong>：<span class="math inline">Beta(1.4+4, 8.6+10) = Beta(5.4, 18.6)</span> 。</p></li>
+<li><p><strong>結果</strong>：新的估計值（事後平均）是 <strong>0.223</strong>。</p></li>
+<li><p><strong>比較</strong>：</p>
+<ul>
+<li><p>原始數據直接算：0.286 (28.6%)</p></li>
+<li><p>加入歷史經驗修正後：0.223 (22.3%)</p></li>
+<li><p><strong>我們的解讀</strong>：因為歷史經驗告訴我們異常率通常較低，所以貝氏方法把那個偏高的 28.6% 往下拉了一點（Shrinkage，這就是平滑化或修正的效果）。</p></li>
+</ul></li>
+</ul></li>
+</ol>
+</section>
+<section id="簡單估計法的問題" class="level4">
+<h4 class="anchored" data-anchor-id="簡單估計法的問題">3. 「簡單估計法」的問題</h4>
+<ul>
+<li><p><strong>問題一：雙重計算（Double Counting）</strong>：如果我們把那 70 個歷史工廠的數據拿來算出 <span class="math inline">\alpha, \beta</span>，然後又回頭用這個 <span class="math inline">\alpha, \beta</span> 去評估這 70 個工廠中的某一個，這樣數據被用了兩次，會高估精確度。</p></li>
+<li><p><strong>問題二：忽略了不確定性</strong>：我們直接把 <span class="math inline">(\alpha, \beta)</span> 鎖定為 (1.4, 8.6)，當作這就是真理。但實際上這兩個數字也是估計出來的，也有誤差。直接鎖定會讓我們低估了最終結果的不確定性。</p></li>
+<li><p><strong>問題三：</strong>事前分佈應該是「看數據之前」就有的，怎麼會是看完數據後才算出來的？</p>
+<h5 id="這些近似法的問題缺點顯示為什麼我們後面需要更進階的階層模式" class="anchored">這些近似法的問題（缺點），顯示為什麼我們後面需要更進階的階層模式。</h5></li>
+</ul>
+</section>
+<section id="資訊結合的邏輯" class="level4">
+<h4 class="anchored" data-anchor-id="資訊結合的邏輯">4. 資訊結合的邏輯</h4>
+<section id="為什麼我們要把它們視為一個整體joint-distribution" class="level5">
+<h5 class="anchored" data-anchor-id="為什麼我們要把它們視為一個整體joint-distribution">為什麼我們要把它們視為一個整體（Joint Distribution）？</h5>
+<ul>
+<li><p>假設有兩個工廠（工廠 26 和工廠 27），它們的數據一模一樣（例如都是 20 人中有 2 人異常）。</p></li>
+<li><p><strong>連結性</strong>：如果你後來得知工廠 26 的真實風險其實很低（例如 <span class="math inline">\theta_{26}=0.1</span>），這會不會影響你對工廠 27 的看法？</p></li>
+<li><p><strong>答案</strong>：<strong>會！</strong> 因為這暗示了這些工廠所屬的「母體環境」可能風險都偏低。既然工廠 26 和 27 很像，26 很低，27 應該也不高。</p></li>
+<li><p><strong>結論</strong>：這兩個參數在事後分佈中應該是 <strong>相依的 (Dependent)</strong>，不能分開獨立分析。這就是階層貝氏模式的核心精神。</p></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="小結" class="level4">
+<h4 class="anchored" data-anchor-id="小結">小結</h4>
+<section id="學會用歷史數據來建立事前分佈" class="level5">
+<h5 class="anchored" data-anchor-id="學會用歷史數據來建立事前分佈">學會用「歷史數據」來建立「事前分佈」。</h5>
+<ol type="1">
+<li><p><strong>保留舊資料</strong>：過去的暴露監測數據，是評估新製程或新工廠極為寶貴的資產。</p></li>
+<li><p><strong>修正小樣本偏差</strong>：當新採樣數不足時，利用歷史分佈（階層架構）可以避免我們被極端值誤導。</p></li>
+<li><p><strong>注意限制</strong>：近似法的「先算出固定超參數」的方法只是近似解，它可能低估了風險的不確定性。</p></li>
+<li><p>接下來：考慮「超參數不確定性」，我們必須將 <span class="math inline">\alpha, \beta</span> 也視為隨機變數來處理。</p></li>
+</ol>
+<hr>
+</section>
+</section>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<ul>
+<li><p><strong>可交換性 (Exchangeability)」</strong> 是貝氏階層模式的核心基礎，也是我們在職業衛生現場決定「能不能把這群人的數據合在一起分析？」的關鍵判斷標準。</p></li>
+<li><p>身為一名職業衛生專家，你測了 A 廠區的苯濃度，能不能拿來預測 B 廠區？或者，把 A、B、C 三個廠區的數據全部混在一起算個總平均合不合理？這就是 <strong>「可交換性」</strong> 在探討的問題。</p></li>
+</ul>
+<section id="可交換性" class="level4">
+<h4 class="anchored" data-anchor-id="可交換性">1. 「可交換性」？</h4>
+<ul>
+<li><p>在統計學上，如果你對一組參數 <span class="math inline">\theta_1, \dots, \theta_J</span>（例如 10 個不同工廠的平均暴露濃度）<strong>沒有任何額外的資訊</strong>可以用來區分它們，那麼這些參數對你來說就是「對稱」的。</p></li>
+<li><p><strong>定義</strong>：如果我們把這些參數的編號（標籤）隨意互換（Permutation），你的機率模型（Joint Probability Distribution）都不會改變，那我們就稱這些參數是 <strong>「可交換的」</strong>。</p>
+<ul>
+<li><strong>簡單說</strong>：在還沒看到數據之前，我們「無法區分」工廠 A 和工廠 B 誰的風險比較高。既然分不出來，就假設它們來自同一個「超級母體 (Superpopulation)」，擁有共同的特性。</li>
+</ul></li>
+</ul>
+</section>
+<section id="ｏｈｓ例" class="level4">
+<h4 class="anchored" data-anchor-id="ｏｈｓ例">ＯＨＳ例：</h4>
+<ul>
+<li><p>假設你有 5 個焊接工人（Worker A, B, C, D, E）。</p></li>
+<li><p><strong>可交換性</strong>：如果你只知道他們都是「焊接工」，沒有其他資訊，那你應該假設他們的暴露風險分佈是可交換的。你不會預設立場覺得 Worker A 一定比 Worker B 吸入更多燻煙。</p></li>
+<li><p><strong>不可交換</strong>：如果你知道 Worker A 是在「通風良好的戶外」工作，而 Worker B 是在「密閉狹窄空間」工作，這時候他們就 <strong>「不可交換」</strong> 了。因為你有額外資訊（通風條件）來區別他們。當然ＲＰＥ使用也是。</p></li>
+</ul>
+</section>
+<section id="無知是可交換-ignorance-implies-exchangeability" class="level4">
+<h4 class="anchored" data-anchor-id="無知是可交換-ignorance-implies-exchangeability">2. 無知是可交換 (Ignorance implies exchangeability)</h4>
+<ul>
+<li><p>課本名言：「通常，我們知道得越少，就越能自信地宣稱可交換性。」。如果你對這些工廠一無所知，你唯一的選擇就是把它們視為相似的群體來建模。</p></li>
+<li><p><strong>骰子比喻</strong>：給你一顆骰子，你還沒擲之前，你會假設 6 個面出現的機率是一樣的（對稱、可交換）。但如果你仔細測量發現骰子重心偏向某一邊（有了額外資訊），這種對稱性就被打破了。亦即，有額外資訊，便打破可交換性。</p></li>
+</ul>
+</section>
+<section id="條件可交換性-實務上" class="level4">
+<h4 class="anchored" data-anchor-id="條件可交換性-實務上">4. 條件可交換性 —實務上</h4>
+<ul>
+<li><p>現實中，我們很少真的「一無所知」。我們通常知道工廠的大小、製程、通風設備等。如果有了這些資訊，還能用階層模式嗎？當然可以！這就是 <strong>「條件可交換性」</strong>。</p></li>
+<li><p><strong>作法</strong>：我們把已知的差異（如：通風好壞、製程種類）當作 <strong>共變數 (Covariates,</strong> <span class="math inline">x_i</span>) 放進模型裡。</p></li>
+<li><p>公式概念： <span class="math inline">p(\theta_1, \dots, \theta_J | x_1, \dots, x_J)</span></p>
+<ul>
+<li>雖然 <span class="math inline">\theta</span>（暴露風險）本身不可交換，但在「考慮了通風條件 <span class="math inline">x</span>」之後，剩下的殘差或不確定性是可交換的。</li>
+</ul></li>
+</ul>
+</section>
+<section id="ohs應用seg-相似暴露群-的劃分" class="level4">
+<h4 class="anchored" data-anchor-id="ohs應用seg-相似暴露群-的劃分">5. OHS應用：SEG (相似暴露群) 的劃分</h4>
+<ul>
+<li><p>劃分 <strong>SEG (Similar Exposure Group)</strong> 的理論基礎：</p>
+<ul>
+<li><p>我們為什麼要把工人分組？就是要讓組內的工人 <strong>「在統計上是可交換的」</strong>。</p></li>
+<li><p>如果一組裡面混了「操作員」和「維修員」，他們的暴露型態不同，就違反了可交換性。</p></li>
+<li><p>解決方法：分層（Hierarchical）或分組。把操作員設為一組，維修員設為一組。在每一組內部，我們假設工人是可交換的，然後針對每一組建立各自的階層模型。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="對可交換性模型的反對意見" class="level4">
+<h4 class="anchored" data-anchor-id="對可交換性模型的反對意見">6. 對可交換性模型的反對意見</h4>
+<ul>
+<li><p>很多人會批評：「每個工廠、每個工人都是獨一無二的，你怎麼可以假設他們來自同一個分佈（可交換）？」。</p></li>
+<li><p>回應：是的，參數 <span class="math inline">\theta_j</span> 確實各不相同（就像每個人身高不同）。但 「可交換」並不是假設參數數值相同，而是假設它們背後的「產生機制」是相似的。</p></li>
+<li><p>除非你有具體的證據（數據或知識）能區分它們，否則「可交換性」是處理不確定性最合邏輯的假設。這就跟做回歸分析一樣，你也是假設殘差符合某個共同分佈。</p></li>
+</ul>
+</section>
+<section id="事後預測分佈-posterior-predictive-distributions" class="level4">
+<h4 class="anchored" data-anchor-id="事後預測分佈-posterior-predictive-distributions">7. 事後預測分佈 (Posterior Predictive Distributions)</h4>
+<ul>
+<li>在階層模式中，我們有兩層參數：</li>
+</ul>
+<ol type="1">
+<li><p><strong>個別參數</strong> <span class="math inline">\theta_j</span>（例如：某個特定工廠 A 的平均暴露濃度）。</p></li>
+<li><p><strong>超參數</strong> <span class="math inline">\phi</span>（例如：全公司所有工廠的整體分佈特性）。</p></li>
+</ol>
+<ul>
+<li>基於此，有兩種我們可能有興趣的預測情境 ：</li>
+</ul>
+<section id="情境一預測工廠ａ的未來" class="level5">
+<h5 class="anchored" data-anchor-id="情境一預測工廠ａ的未來">情境一：預測工廠Ａ的未來</h5>
+<ul>
+<li><p><strong>目標</strong>：預測未來的數據 <span class="math inline">\tilde{y}</span>，基於現有的參數 <span class="math inline">\theta_j</span>。</p></li>
+<li><p><strong>作法</strong>：直接使用我們已經算出來的該工廠事後參數 <span class="math inline">\theta_j</span>，去模擬新的數據。</p></li>
+<li><p>ＯＨＳ例：</p>
+<ul>
+<li><p>你是某化工廠的職安衛人員，你已經對「維修組 (SEG A)」進行了多次苯暴露採樣，算出他們的平均風險 <span class="math inline">\theta_{A}</span>。</p></li>
+<li><p><strong>問題</strong>：下週維修組要進行大修，我想預測他們下週的採樣數據 <span class="math inline">\tilde{y}</span> 可能會分佈在哪裡？會不會超過容許濃度 (PEL)？</p></li>
+<li><p><strong>應用</strong>：這是用來<strong>監控既有製程</strong>是否維持在受控狀態，因為我們已經有這個組的資料，所以預測會比較精準（不確定性較小）。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="情境二預測新工廠或新-seg的狀況" class="level5">
+<h5 class="anchored" data-anchor-id="情境二預測新工廠或新-seg的狀況">情境二：預測新工廠或新 SEG的狀況</h5>
+<ul>
+<li><p><strong>定義</strong>：這是一個全新的單元（如新工廠或新的 SEG），我們<strong>完全沒有它的數據</strong>，但它屬於同一個母體（Superpopulation）。</p></li>
+<li><p><strong>目標</strong>：預測一個<strong>新的參數</strong> <span class="math inline">\tilde{\theta}</span>，以及其對應的數據 <span class="math inline">\tilde{y}</span> 。</p></li>
+<li><p><strong>作法（兩步走）</strong>：</p>
+<ol type="1">
+<li><p>先根據超參數 <span class="math inline">\phi</span>（母體分佈），抽出一個新的參數 <span class="math inline">\tilde{\theta}</span>（模擬這個新工廠可能的平均風險）。</p></li>
+<li><p>再根據這個 <span class="math inline">\tilde{\theta}</span>，模擬出具體的測量數據 <span class="math inline">\tilde{y}</span>。</p></li>
+</ol></li>
+<li><p>ＯＨＳ例：</p></li>
+<li><p>公司蓋了一座「新廠房」，製程跟舊廠房（歷史數據）很像，但還沒開始運轉，也還沒採樣。</p></li>
+<li><p><strong>問題</strong>：環安衛經理問你：「根據舊廠的經驗，你預估這個新廠未來的暴露濃度大概是多少？需不需要預先加裝更強的通風設備？」</p></li>
+<li><p><strong>應用</strong>：這就是<strong>推估未採樣區域的風險</strong>。</p></li>
+<li><p><strong>關鍵差異</strong>：這裡的不確定性會比情境一<strong>大很多</strong>！因為我們連這個新廠是「優等生」還是「劣等生」都不知道，所以必須把「母體的變異（工廠間的差異）」全部考慮進去。</p></li>
+</ul>
+<hr>
+</section>
+<section id="概念比較" class="level5">
+<h5 class="anchored" data-anchor-id="概念比較">概念比較</h5>
+<p><strong>1. 情境一：針對「既有」工廠 (Existing Experiment)</strong></p>
+<blockquote class="blockquote">
+<p><strong>流程</strong>：拿現有的 <span class="math inline">\theta_j</span> (已知) <span class="math inline">\rightarrow</span> 預測 <span class="math inline">\tilde{y}</span> (未來數據)</p>
+</blockquote>
+<p><strong>2. 情境二：針對「全新」工廠 (New Experiment)</strong></p>
+<blockquote class="blockquote">
+<p><strong>流程</strong>：拿 <span class="math inline">\phi</span> (母體經驗) <span class="math inline">\rightarrow</span> 預測 <span class="math inline">\tilde{\theta}</span> (新廠體質) <span class="math inline">\rightarrow</span> 預測 <span class="math inline">\tilde{y}</span> (新廠數據)</p>
+</blockquote>
+<hr>
+</section>
+<section id="在職業衛生暴露評估報告中區分這兩者非常重要" class="level5">
+<h5 class="anchored" data-anchor-id="在職業衛生暴露評估報告中區分這兩者非常重要">在職業衛生暴露評估報告中，區分這兩者非常重要：</h5>
+<ol type="1">
+<li><p><strong>合規性判斷 (Compliance Testing)</strong>：通常是用<strong>情境一</strong>。我們想知道「這群已經在工作的勞工」，明天會不會超標。</p></li>
+<li><p><strong>風險管理與設計 (Risk Management &amp; Design)</strong>：通常是用<strong>情境二</strong>。當我們在規劃新產線，或者面對一個還沒預算去採樣的SEG時，我們利用階層模式的「母體分佈」來大膽假設它的風險範圍。</p>
+<p><strong>「事後預測分佈 (Posterior Predictive Distributions)」</strong> 是我們做決策、寫評估報告時最有用的產出。簡單來說，我們辛苦建立模型、算出參數，最終目的通常不是為了看參數本身，而是為了回答老闆或勞檢員的問題：<strong>「明天這名勞工的暴露會不會超標？」</strong> 或者 <strong>「那個還沒採樣的新廠區，風險大概是多少？」</strong></p></li>
+<li><p>這就是「預測」的功能。在階層模式中，預測分為兩種截然不同的情境。</p></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="小結-1" class="level4">
+<h4 class="anchored" data-anchor-id="小結-1">小結</h4>
+<ol type="1">
+<li><p><strong>判斷合併的標準</strong>：當你想把不同來源的採樣數據（不同廠區、不同班別）放在一起分析時，請先問：「這些來源是可交換的嗎？」</p>
+<ul>
+<li><p>如果是（無區別資訊），大膽使用階層模式，借用數據力量。</p></li>
+<li><p>如果不是（有明顯差異），請將差異因子（如區域、製程）納入模型（用回歸或分組），做成 <strong>「條件可交換」</strong> 的階層模型。</p></li>
+</ul></li>
+<li><p><strong>小樣本的救星</strong>：可交換性允許我們假設所有工廠都來自同一個「超級母體」。這讓我們在評估某個樣本數極少（n=3）的工廠時，可以合理地「參考」其他工廠的數據，避免因運氣不好而做出極端錯誤的風險判斷。</p></li>
+<li><p><strong>下一步</strong>：如何透過 <strong>貝氏定理</strong> 來計算那個共同的「超級母體」參數（也就是超參數）。</p></li>
+</ol>
+<hr>
+</section>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p><strong>(Bayesian analysis of conjugate hierarchical models)</strong></p>
+<ul>
+<li>我們對母體長相也不完全確定，所以我們要給母體參數（超參數）也建立一個機率分佈。</li>
+</ul>
+<section id="第一階段解析推導" class="level4">
+<h4 class="anchored" data-anchor-id="第一階段解析推導">第一階段：解析推導</h4>
+<section id="拆解聯合機率分佈" class="level5">
+<h5 class="anchored" data-anchor-id="拆解聯合機率分佈">1. 拆解聯合機率分佈</h5>
+<ul>
+<li><p>我們的目標是求出 聯合事後分佈 <span class="math inline">p(\theta, \phi | y)</span>。其中：</p>
+<ul>
+<li><p><span class="math inline">\theta = (\theta_1, ..., \theta_J)</span> 是各工廠的風險率。</p></li>
+<li><p><span class="math inline">\phi = (\alpha, \beta)</span> 是超參數（母體特性）。</p></li>
+<li><p><span class="math inline">y</span> 是數據。</p></li>
+</ul></li>
+<li><p>公式拆解如下： <span class="math inline">p(\theta, \phi | y) \propto \underbrace{p(\phi)}_{\text{超事前分佈}} \times \underbrace{p(\theta|\phi)}_{\text{母體分佈}} \times \underbrace{p(y|\theta)}_{\text{概似函數}}</span></p></li>
+</ul>
+</section>
+<section id="超參數的邊際分佈" class="level5">
+<h5 class="anchored" data-anchor-id="超參數的邊際分佈">2. 「超參數」的邊際分佈</h5>
+<ul>
+<li><p>先不管個別工廠 <span class="math inline">\theta</span>，只看數據 <span class="math inline">y</span> 告訴我們關於母體 <span class="math inline">\phi</span> 的什麼資訊。</p></li>
+<li><p>課本使用了一個條件機率公式的變形來求 <span class="math inline">p(\phi | y)</span> ：</p>
+<ul>
+<li><span class="math inline">p(\phi | y) = \frac{p(\theta, \phi | y)}{p(\theta | \phi, y)}</span></li>
+</ul></li>
+<li><p><strong>分子</strong>：是我們上面列出的聯合分佈。</p></li>
+<li><p><strong>分母</strong>：是假設 <span class="math inline">\phi</span> 已知的情況下，<span class="math inline">\theta</span> 的事後分佈（這在共軛模式下很容易算，就是 Beta 分佈）。</p></li>
+<li><p>個等式對 <strong>任何</strong> <span class="math inline">\theta</span> 值都成立。所以我們不需要做複雜的積分，只要把分子分母代入消去，就能得到只剩下 <span class="math inline">\phi</span> 的函數。</p></li>
+</ul>
+</section>
+<section id="找出條件事後分佈" class="level5">
+<h5 class="anchored" data-anchor-id="找出條件事後分佈">3. 找出條件事後分佈</h5>
+<ul>
+<li>一旦我們搞定了 <span class="math inline">\phi</span>（母體），個別工廠 <span class="math inline">\theta</span> 的分佈 <span class="math inline">p(\theta | \phi, y)</span> 就很簡單了。因為在共軛模式下（Beta-Binomial），只要 <span class="math inline">\alpha, \beta</span> 固定，<span class="math inline">\theta_j</span> 就是獨立的 Beta 分佈。</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="第二階段電腦模擬抽樣" class="level4">
+<h4 class="anchored" data-anchor-id="第二階段電腦模擬抽樣">第二階段：電腦模擬抽樣</h4>
+<ul>
+<li>數學推導完後，我們得到了一個關於超參數 <span class="math inline">\phi</span> 的複雜函數（通常長得不規則）。我們怎麼從中抽樣呢？課本介紹了 <strong>Grid Method（網格法）</strong>，這在參數很少（只有 <span class="math inline">\alpha, \beta</span> 兩個）時非常有效。</li>
+</ul>
+<section id="步驟-1抽取超參數-phi" class="level5">
+<h5 class="anchored" data-anchor-id="步驟-1抽取超參數-phi">步驟 1：抽取超參數 <span class="math inline">\phi</span></h5>
+<ol type="1">
+<li><p><strong>建立網格</strong>：因為我們不知道 <span class="math inline">\alpha, \beta</span> 是多少，我們在可能的範圍內撒下一張大網，例如在 <span class="math inline">\log(\alpha/\beta)</span> 和 <span class="math inline">\log(\alpha+\beta)</span> 的座標系上畫格子。</p></li>
+<li><p><strong>計算機率</strong>：對網格上的每一個點，算出它的 <span class="math inline">p(\phi | y)</span> 值。</p></li>
+<li><p><strong>抽樣</strong>：根據這些算出來的機率值，隨機抽取 1000 組 <span class="math inline">(\alpha, \beta)</span>。這 1000 組就代表了我們對「母體長相」的不確定性。</p></li>
+</ol>
+</section>
+<section id="步驟-2抽取參數-theta" class="level5">
+<h5 class="anchored" data-anchor-id="步驟-2抽取參數-theta">步驟 2：抽取參數 <span class="math inline">\theta</span></h5>
+<ul>
+<li><p>有了這 1000 組 <span class="math inline">(\alpha, \beta)</span> 後，對於每一組，我們再去抽取個別工廠的 <span class="math inline">\theta_j</span>。</p></li>
+<li><p>公式：<span class="math inline">\theta_j \sim Beta(\alpha + y_j, \beta + n_j - y_j)</span> 。</p></li>
+<li><p>因為我們做了 1000 次，所以每個工廠 <span class="math inline">\theta_j</span> 也會有 1000 個模擬值。</p></li>
+</ul>
+</section>
+</section>
+<section id="步驟-3預測未來" class="level4">
+<h4 class="anchored" data-anchor-id="步驟-3預測未來">步驟 3：預測未來</h4>
+<ul>
+<li>如果有需要（如上一節提到的情境），我們可以再根據抽出來的 <span class="math inline">\theta</span> 去模擬未來的數據 <span class="math inline">\tilde{y}</span> 。</li>
+</ul>
+<hr>
+</section>
+<section id="第三階段ohs實例應用" class="level4">
+<h4 class="anchored" data-anchor-id="第三階段ohs實例應用">第三階段：OHS實例應用</h4>
+<section id="設定超事前分佈-hyperprior" class="level5">
+<h5 class="anchored" data-anchor-id="設定超事前分佈-hyperprior">1. 設定「超事前分佈 (Hyperprior)」</h5>
+<ul>
+<li><p>我們要給 <span class="math inline">\alpha, \beta</span> 設定什麼樣的事前分佈 <span class="math inline">p(\alpha, \beta)</span>？</p></li>
+<li><p>例如我們工廠聽力損失的母體分佈一無所知，所以想設一個「無資訊 (Noninformative)」分佈。</p></li>
+<li><p><strong>陷阱</strong>：如果你直接設 Uniform Prior（均勻分佈），數學上會導致積分發散（Improper Posterior），也就是算出無窮大，模型會壞掉。</p></li>
+<li><p>解法：課本建議使用一個特定的擴散型事前分佈： <span class="math inline">p(\alpha, \beta) \propto (\alpha + \beta)^{-5/2}</span></p>
+<ul>
+<li>目的是讓數學積分能夠收斂，同時保持足夠的「平坦」，讓數據來說話。</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="結果比較全貝氏-vs.-近似法" class="level4">
+<h4 class="anchored" data-anchor-id="結果比較全貝氏-vs.-近似法">2. 結果比較：全貝氏 vs.&nbsp;近似法</h4>
+<ul>
+<li><p><strong>點估計差不多</strong>：兩者算出來的平均風險 <span class="math inline">\theta_j</span> 差異不大。</p></li>
+<li><p><strong>不確定性變大了</strong>：這是重點！全貝氏算出來的信賴區間（Posterior Interval）通常會<strong>比較寬</strong>。</p>
+<ul>
+<li><p><strong>近似法 (5.1)</strong>：假設 <span class="math inline">\alpha, \beta</span> 是固定的真理，忽略了我們其實不確定 <span class="math inline">\alpha, \beta</span> 是多少。</p></li>
+<li><p><strong>全貝氏 (5.3)</strong>：承認 <span class="math inline">\alpha, \beta</span> 也有誤差，並將這層不確定性傳遞給了 <span class="math inline">\theta_j</span>。</p></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="小結-2" class="level4">
+<h4 class="anchored" data-anchor-id="小結-2">小結</h4>
+<ul>
+<li>處理 <strong>「階層數據」</strong> 的黃金標準流程：</li>
+</ul>
+<ol type="1">
+<li><p><strong>不要太有自信</strong>：5.1 節的方法雖然快，但會讓你「過度自信（區間太窄）」。在評估致癌風險或工安事故率時，<strong>低估不確定性是危險的</strong>。全貝氏分析提供了更誠實的風險評估。</p></li>
+<li><p><strong>網格法的直觀意義</strong>：想像你在地圖上找寶藏（母體參數）。你不知道確切位置，所以你在地圖上畫格子，算出每一格有寶藏的機率。最後你不是「選一個點」，而是「根據機率抓一把點」帶走。這就是由 <span class="math inline">p(\phi|y)</span> 抽樣的意義。</p></li>
+<li><p><strong>收斂修正 (Shrinkage)</strong>：透過這個過程，樣本數少（<span class="math inline">n</span> 小）的工廠，其風險評估會被強烈地拉向「母體平均」；樣本數多（<span class="math inline">n</span> 大）的工廠，則會保留更多自己的特性。這自動平衡了整體經驗與個體數據。</p></li>
+</ol>
+<hr>
+</section>
+</div>
+<div id="tabset-1-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-5-tab">
+<ul>
+<li><p>5.3 節（二項式分佈）處理的是「生病/沒生病」這類二分法數據，這節處理的就是<strong>職業衛生與工安領域最常見的「連續型數據」</strong>。</p></li>
+<li><p><strong>化學暴露濃度</strong>（ppm, mg/m³）、<strong>噪音音量</strong>（dBA）、<strong>通風系統風速</strong>（m/s）、<strong>工時或作業頻率等，</strong>這些數據通常呈現常態分佈（或是經對數轉換後的對數常態分佈）。</p></li>
+</ul>
+<section id="數據結構與情境假設" class="level4">
+<h4 class="anchored" data-anchor-id="數據結構與情境假設">1. 數據結構與情境假設</h4>
+<ul>
+<li><p><strong>職業衛生情境</strong>：我們假設有 <span class="math inline">J</span> 個不同的工廠（或 <span class="math inline">J</span> 個不同的相似暴露群 SEG）。</p></li>
+<li><p><strong>數據</strong>：第 <span class="math inline">j</span> 個工廠有 <span class="math inline">n_j</span> 個採樣數據 <span class="math inline">y_{ij}</span>。</p></li>
+<li><p><strong>假設</strong>：</p>
+<ol type="1">
+<li><p>數據服從常態分佈：<span class="math inline">y_{ij} \sim N(\theta_j, \sigma^2_j)</span> 。</p></li>
+<li><p><strong>已知變異數</strong>：為了簡化，本節假設採樣的變異數 <span class="math inline">\sigma^2_j</span> 是已知的（這在樣本數夠大時是合理的近似）。</p></li>
+</ol></li>
+<li><p>我們的目標是估計每個工廠真實的平均暴露濃度 <span class="math inline">\theta_j</span>。</p></li>
+</ul>
+<hr>
+</section>
+<section id="部分合併-the-problem-of-pooling" class="level4">
+<h4 class="anchored" data-anchor-id="部分合併-the-problem-of-pooling">2. 部分合併 (The Problem of Pooling)</h4>
+<ul>
+<li><p>在決定如何估計 <span class="math inline">\theta_j</span> 時，傳統統計常面臨兩難 ：</p></li>
+<li><p><strong>不合併 (No Pooling)</strong>：<span class="math inline">\hat{\theta}_j = \bar{y}_{\cdot j}</span></p>
+<ul>
+<li><p><strong>作法</strong>：只相信該工廠自己的採樣平均值。</p></li>
+<li><p><strong>缺點</strong>：如果某個工廠只採了 2 個樣本（小樣本），結果剛好都很高，你就會誤判該工廠風險極高。這忽略了其他類似工廠的資訊。</p></li>
+</ul></li>
+<li><p><strong>完全合併 (Complete Pooling)</strong>：<span class="math inline">\hat{\theta}_j = \bar{y}_{\cdot \cdot}</span></p>
+<ul>
+<li><p><strong>作法</strong>：假設所有工廠都一模一樣，把所有數據混在一起算總平均。</p></li>
+<li><p><strong>缺點</strong>：這會掩蓋掉「髒工廠」與「乾淨工廠」的真實差異，導致對高風險廠區的警覺不足。</p></li>
+</ul></li>
+<li><p><strong>階層模式 (Partial Pooling / Shrinkage)</strong></p>
+<ul>
+<li><p>作法：加權平均。</p>
+<p><span class="math inline">\hat{\theta}_j \approx \lambda_j \bar{y}_{\cdot j} + (1 - \lambda_j) \bar{y}_{\text{all}}</span></p></li>
+<li><p>這就是本節的核心：利用母體分佈（<span class="math inline">\tau^2</span>）來決定要「拉」多少回來。</p></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="階層常態模式的架構" class="level4">
+<h4 class="anchored" data-anchor-id="階層常態模式的架構">3. 階層常態模式的架構</h4>
+<ul>
+<li><p>我們建立兩層模型來執行上述的「部分合併」：</p></li>
+<li><p><strong>第一層（採樣層）</strong>：每個工廠的平均值 <span class="math inline">\bar{y}_{\cdot j}</span> 來自以 <span class="math inline">\theta_j</span> 為中心的常態分佈 。</p></li>
+<li><p>第二層（母體層）：這些工廠的真實參數 <span class="math inline">\theta_j</span>，是從一個「超級母體」抽出來的：</p>
+<p><span class="math inline">\theta_j \sim N(\mu, \tau^2)</span></p>
+<ul>
+<li><p><span class="math inline">\mu</span>：所有工廠的總平均暴露。</p></li>
+<li><p><span class="math inline">\tau</span>：<strong>廠與廠之間的變異 (Between-group standard deviation)</strong>。這是關鍵參數！</p></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="貝氏分析收斂效應-the-shrinkage-effect" class="level4">
+<h4 class="anchored" data-anchor-id="貝氏分析收斂效應-the-shrinkage-effect">4. 貝氏分析：收斂效應 (The Shrinkage Effect)</h4>
+<ul>
+<li><p>數學結果是 <strong>條件事後分佈的平均值</strong>。假設我們知道了母體的特性（<span class="math inline">\mu, \tau</span>），那麼某個工廠 <span class="math inline">j</span> 的修正後估計值 <span class="math inline">\tilde{\theta}_j</span> 是 ：</p>
+<ul>
+<li><span class="math inline">\tilde{\theta}_j = \frac{ \frac{1}{\sigma_j^2}\bar{y}_{\cdot j} + \frac{1}{\tau^2}\mu }{ \frac{1}{\sigma_j^2} + \frac{1}{\tau^2} }</span></li>
+</ul></li>
+<li><p>這是一個 <strong>「精確度加權平均 (Precision-weighted average)」</strong>。</p></li>
+<li><p><strong>精確度 (Precision)</strong> 是變異數的倒數（<span class="math inline">1/\text{Variance}</span>）。變異越小，精確度越高，講話越大聲。</p></li>
+<li><p>加權這就像一場 <strong>拔河比賽</strong>：</p>
+<ul>
+<li><p><strong>左邊選手</strong>：該工廠自己的數據 <span class="math inline">\bar{y}_{\cdot j}</span>（力氣是 <span class="math inline">1/\sigma_j^2</span>，取決於樣本數多寡）。</p></li>
+<li><p><strong>右邊選手</strong>：整個行業的平均值 <span class="math inline">\mu</span>（力氣是 <span class="math inline">1/\tau^2</span>，取決於廠間差異大小）。</p></li>
+</ul></li>
+</ul>
+<section id="兩種極端情況" class="level5">
+<h5 class="anchored" data-anchor-id="兩種極端情況"><strong>兩種極端情況：</strong></h5>
+<ol type="1">
+<li><p><strong>如果該工廠樣本數很多 (</strong><span class="math inline">n_j</span> 大，<span class="math inline">\sigma_j</span> 小)：左邊力氣大，結果 <span class="math inline">\tilde{\theta}_j</span> 就會靠近自己的數據 <span class="math inline">\bar{y}_{\cdot j}</span>。（數據夠多，我相信自己）。</p></li>
+<li><p><strong>如果廠與廠之間差異很小 (</strong><span class="math inline">\tau</span> 小)：右邊力氣大，結果 <span class="math inline">\tilde{\theta}_j</span> 就會被強力拉向總平均 <span class="math inline">\mu</span>。（大家都差不多，你的極端值可能是誤差，我要把你修正回來）。</p></li>
+</ol>
+<ul>
+<li>這就是 <strong>收斂 (Shrinkage)</strong>：把不可靠的小樣本估計值，往母體平均的方向「拉」，以減少估計誤差。</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="處理超參數-tau" class="level4">
+<h4 class="anchored" data-anchor-id="處理超參數-tau">5. 處理超參數 <span class="math inline">\tau</span></h4>
+<ul>
+<li><p>在全貝氏分析中，我們必須算出 <span class="math inline">\tau</span>（廠間差異）的事後分佈 <span class="math inline">p(\tau|y)</span>。</p></li>
+<li><p><strong>為什麼要算</strong> <span class="math inline">\tau</span>？ 因為我們不知道這些工廠到底有多像。<span class="math inline">\tau</span> 越大，代表工廠間差異很大，我們就該少做一點收斂（Pooling）；<span class="math inline">\tau</span> 越小，代表工廠都很像，我們就該多做一點收斂。</p></li>
+<li><p>計算方法：課本推導出了一個公式 <span class="math inline">p(\tau|y)</span> ，這是一個關於 <span class="math inline">\tau</span> 的複雜函數。</p></li>
+</ul>
+</section>
+<section id="比較貝氏方法-vs.-傳統-anova" class="level4">
+<h4 class="anchored" data-anchor-id="比較貝氏方法-vs.-傳統-anova">比較：貝氏方法 vs.&nbsp;傳統 ANOVA</h4>
+<ul>
+<li><p>課本特別提到，傳統的變異數分析 (ANOVA) 也可以估計 <span class="math inline">\tau^2</span>（透過 <span class="math inline">MS_B</span> 和 <span class="math inline">MS_W</span>）。但 ANOVA 有一個致命缺點：</p></li>
+<li><p><strong>ANOVA 的算式可能算出負的變異數 (</strong><span class="math inline">\hat{\tau}^2 &lt; 0</span>)！ 。這在物理上是不可能的（變異數必須是正的）。</p></li>
+<li><p><strong>貝氏方法的優勢</strong>：我們計算的是 <span class="math inline">p(\tau|y)</span>，這個機率分佈自然地定義在 <span class="math inline">\tau &gt; 0</span> 的範圍內，永遠不會給出「負變異數」這種荒謬的結果。</p></li>
+</ul>
+<hr>
+</section>
+<section id="小結-3" class="level4">
+<h4 class="anchored" data-anchor-id="小結-3">6. 小結</h4>
+<ul>
+<li>在職業衛生暴露評估中，運用 5.4 節的流程如下：</li>
+</ul>
+<ol type="1">
+<li><p><strong>收集數據</strong>：取得 <span class="math inline">J</span> 個工廠的採樣數據。</p></li>
+<li><p><strong>模擬</strong> <span class="math inline">\tau</span>：利用電腦計算 <span class="math inline">\tau</span> 的事後分佈（了解工廠間的異質性）。</p></li>
+<li><p><strong>模擬</strong> <span class="math inline">\theta</span>：對於每一個可能的 <span class="math inline">\tau</span> 值，算出各工廠的風險 <span class="math inline">\theta_j</span>（利用上述的加權公式）。</p></li>
+<li><p><strong>得到結果</strong>：最終你會得到每個工廠風險的「機率分佈」，而不是一個死的數字。</p></li>
+</ol>
+<ul>
+<li>但你可能會問：「此節假設 <span class="math inline">\sigma_j^2</span>（採樣變異）是已知的，但在現場我根本不知道啊，我還要從數據裡估計它？」</li>
+</ul>
+<hr>
+</section>
+</div>
+<div id="tabset-1-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-6-tab">
+<p><strong>(parallel experiments in eight factories)</strong></p>
+<ul>
+<li>讓階層模式在「過度樂觀（相信個別數據）」與「過度保守（只相信平均值）」之間，找到科學的決策依據。</li>
+</ul>
+<section id="個廠區的安全教育成效" class="level4">
+<h4 class="anchored" data-anchor-id="個廠區的安全教育成效">1. 8 個廠區的安全教育成效</h4>
+<ul>
+<li><p>假設你是集團的職安衛總監，你在集團旗下的 8 個不同廠區（Factory A ~ H）推動了一項新的「危害預知訓練」。你想知道這個訓練到底有沒有效？能降低多少職災風險指數（或提升多少安全分數）？</p></li>
+<li><p>每所學校都進行了隨機對照試驗。</p>
+<ul>
+<li><p><span class="math inline">y_j</span>：該場教育訓練後的<strong>平均分數提升量</strong>（效果估計值）。</p></li>
+<li><p><span class="math inline">\sigma_j</span>：該估計值的<strong>標準誤 (Standard Error)</strong>（已知，因為樣本數夠大）。</p></li>
+</ul></li>
+<li><p>各廠回報的數據（對應 Table 5.2 ）：</p></li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 31%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>廠區 (School)</strong></td>
+<td><strong>觀測到的成效 (yj​) (分數提升量)</strong></td>
+<td><strong>標準誤 (σj​) (測量不確定性)</strong></td>
+<td><strong>廠區狀況解讀</strong></td>
+</tr>
+<tr class="even">
+<td><strong>A</strong></td>
+<td><strong>28</strong></td>
+<td><strong>15</strong></td>
+<td><strong>驚人的好！</strong> 但誤差很大（可能該廠人數少或變異大）。</td>
+</tr>
+<tr class="odd">
+<td><strong>B</strong></td>
+<td>8</td>
+<td>10</td>
+<td>普普通通。</td>
+</tr>
+<tr class="even">
+<td><strong>C</strong></td>
+<td><strong>-3</strong></td>
+<td><strong>16</strong></td>
+<td><strong>變差了？</strong> 訓練反而有害？但誤差也很大。</td>
+</tr>
+<tr class="odd">
+<td><strong>D</strong></td>
+<td>7</td>
+<td>11</td>
+<td>普通。</td>
+</tr>
+<tr class="even">
+<td><strong>E</strong></td>
+<td>-1</td>
+<td>9</td>
+<td>沒效果。</td>
+</tr>
+<tr class="odd">
+<td><strong>F</strong></td>
+<td>1</td>
+<td>11</td>
+<td>沒效果。</td>
+</tr>
+<tr class="even">
+<td><strong>G</strong></td>
+<td>18</td>
+<td>10</td>
+<td>看起來不錯。</td>
+</tr>
+<tr class="odd">
+<td><strong>H</strong></td>
+<td>12</td>
+<td>18</td>
+<td>好像有效，但很不確定。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>面對這張表，你會怎麼下結論？</p></li>
+<li><p><strong>A 廠長</strong>會說：「我的訓練超有效！提升了 28 分！全公司都該學我！」</p></li>
+<li><p><strong>C 廠長</strong>會很沮喪：「我們是不是做錯了什麼？怎麼反而退步了？」</p></li>
+<li><p>但身為職安衛及統計專家的你，看著那巨大的標準誤（例如 A 廠的 <span class="math inline">\sigma_A=15</span>），你心裡會打個大問號：<strong>A 廠真的有那麼好嗎？還是只是運氣好抽到了幾個聰明的工人？</strong></p></li>
+</ul>
+<hr>
+</section>
+<section id="傳統統計方法的困境" class="level4">
+<h4 class="anchored" data-anchor-id="傳統統計方法的困境">2. 傳統統計方法的困境</h4>
+<section id="方法一個別估計-no-pooling" class="level5">
+<h5 class="anchored" data-anchor-id="方法一個別估計-no-pooling">方法一：個別估計 ( No Pooling)</h5>
+<ul>
+<li><p><strong>作法</strong>：完全相信每個廠區的報告。認為 A 廠就是提升 28 分，C 廠就是退步 3 分。</p></li>
+<li><p><strong>問題</strong>：這忽略了「隨機誤差」。</p>
+<ul>
+<li><p>A 廠的 95% 信賴區間大約是 <span class="math inline">28 \pm 2 \times 15 = [-2, 58]</span>。這範圍大到包含了 0。</p></li>
+<li><p>雖然 A 看起來很高，但在統計上我們很難說它跟其他廠有顯著差異。</p></li>
+<li><p><strong>後果</strong>：你會錯誤地獎勵 A 廠長，並可能錯誤地懲罰 C 廠長，但其實這一切可能只是雜訊（Noise）。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="方法二完全合併-complete-pooling" class="level5">
+<h5 class="anchored" data-anchor-id="方法二完全合併-complete-pooling">方法二：完全合併 (Complete Pooling)</h5>
+<ul>
+<li><p><strong>作法</strong>：假設這 8 個廠區本質上是一模一樣的（<span class="math inline">\tau=0</span>），把所有數據混在一起算一個總平均。</p></li>
+<li><p><strong>計算</strong>：加權平均後，全公司的平均成效是 <strong>7.7 分</strong>，標準誤 <strong>4.1</strong>。</p></li>
+<li><p><strong>問題</strong>：這假設太強了。</p>
+<ul>
+<li><p>它暗示 A 廠的真實成效就是 7.7，而不是 28。</p></li>
+<li><p>它完全抹殺了「A 廠可能真的教得比較好」的可能性。</p></li>
+<li><p>卡方檢定 (<span class="math inline">\chi^2</span> test) 雖然沒有顯著拒絕「效果相同」的假設（因為誤差太大），但硬說所有廠區效果都一樣，並不符合科學直覺。</p></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="貝氏階層模式分析" class="level4">
+<h4 class="anchored" data-anchor-id="貝氏階層模式分析">3. 貝氏階層模式分析</h4>
+<ul>
+<li>我們採用 5.4 節的常態階層模式：</li>
+</ul>
+<ol type="1">
+<li><p><strong>第一層</strong>：<span class="math inline">y_j \sim N(\theta_j, \sigma_j^2)</span> （採樣誤差）</p></li>
+<li><p><strong>第二層</strong>：<span class="math inline">\theta_j \sim N(\mu, \tau^2)</span> （廠區間的真實差異）</p></li>
+<li><p><strong>第三層</strong>：對 <span class="math inline">\mu</span> 和 <span class="math inline">\tau</span> 設定無資訊事前分佈。</p></li>
+</ol>
+<section id="步驟一看看廠區間的差異-tau-到底有多大" class="level5">
+<h5 class="anchored" data-anchor-id="步驟一看看廠區間的差異-tau-到底有多大">步驟一：看看廠區間的差異 (<span class="math inline">\tau</span>) 到底有多大？</h5>
+<ul>
+<li><p>我們先計算 <span class="math inline">\tau</span>（廠間標準差）的事後分佈 <span class="math inline">p(\tau|y)</span>。</p></li>
+<li><p><strong>結果</strong>：分佈的高峰（Mode）在 0 附近，但也有一條長尾巴延伸到 10 甚至 20。</p></li>
+<li><p><strong>解讀</strong>：這告訴我們，數據<strong>最支持</strong>「各廠效果其實差不多 (<span class="math inline">\tau \approx 0</span>)」的假設，但<strong>也不排除</strong>「各廠間有顯著差異 (<span class="math inline">\tau &gt; 0</span>)」的可能性。貝氏分析保留了這種不確定性。</p></li>
+</ul>
+</section>
+<section id="步驟二收斂效應-shrinkage-修正後的真實成效" class="level5">
+<h5 class="anchored" data-anchor-id="步驟二收斂效應-shrinkage-修正後的真實成效">步驟二：收斂效應 (Shrinkage) —— 修正後的真實成效</h5>
+<ul>
+<li><p>利用電腦模擬，算出每個廠區 <span class="math inline">\theta_j</span> 的事後分佈中位數。</p></li>
+<li><p>讓我們看看 <strong>A 廠</strong> 發生了什麼事：</p>
+<ul>
+<li><p><strong>原始數據 (</strong><span class="math inline">y_A</span>)：28</p></li>
+<li><p><strong>貝氏修正後 (</strong><span class="math inline">\hat{\theta}_A</span>)：<strong>約 10</strong></p></li>
+<li><p><strong>發生了什麼？</strong> 估計值被從 28 強力拉回到了總平均（約 8）附近。</p></li>
+<li><p><strong>為什麼？</strong> 因為 <span class="math inline">\tau</span> 估計值偏小（大家差異不大），加上 A 廠的測量誤差 <span class="math inline">\sigma_A=15</span> 很大（數據不可靠），所以模型告訴我們：「別太相信那個 28 分，它大概率是虛高，真實情況應該跟其他人差不多，稍微好一點點而已。」</p></li>
+</ul></li>
+<li><p>再看看 <strong>C 廠</strong>：</p>
+<ul>
+<li><p><strong>原始數據 (</strong><span class="math inline">y_C</span>)：-3</p></li>
+<li><p><strong>貝氏修正後 (</strong><span class="math inline">\hat{\theta}_C</span>)：<strong>約 6</strong></p></li>
+<li><p><strong>發生了什麼？</strong> 被拉回了正值！</p></li>
+<li><p><strong>為什麼？</strong> 模型認為 C 廠不太可能真的那麼差（因為平均大家都有 8 分），那个 -3 分很可能是運氣不好測歪了。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="步驟三回答問題" class="level5">
+<h5 class="anchored" data-anchor-id="步驟三回答問題">步驟三：回答問題</h5>
+<ul>
+<li>現在你可以更有底氣地回答：</li>
+</ul>
+<ol type="1">
+<li><p><strong>「A 廠是不是最好的？」</strong></p>
+<ul>
+<li><p>透過模擬計算 <span class="math inline">P(\theta_A = \max(\theta))</span>。</p></li>
+<li><p>結果顯示，雖然 A 的觀測值最高，但在考慮誤差後，A 廠真的是第一名的機率其實不大。</p></li>
+<li><p>事實上，A 廠真實成效大於 28 分的機率 <strong>不到 10%</strong> 。</p></li>
+</ul></li>
+<li><p><strong>「這個訓練到底有沒有效？」</strong></p>
+<ul>
+<li><p>看總體平均 <span class="math inline">\mu</span> 的分佈。大部分質量落在正值區間。</p></li>
+<li><p><span style="color: red"><strong>結論：訓練普遍有效，平均提升約 8 分，但別指望能像 A 廠報告的那樣提升 28 分。</strong></span></p></li>
+</ul></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="小結-4" class="level4">
+<h4 class="anchored" data-anchor-id="小結-4">小結</h4>
+<ol type="1">
+<li><p><strong>不要被極端值騙了</strong>：在小樣本或高變異的職安數據中，那個表現最好（或最差）的單位，往往只是運氣最好（或最差）的，<strong>回歸均值</strong>是必然現象。</p></li>
+<li><p><strong>保護基層</strong>：如果 C 廠長因為數據是 -3 而要被懲處，你可以用貝氏分析幫他辯護：「根據全公司的數據結構，C 廠的真實績效很可能也是正的，那個 -3 只是統計誤差。」這就是數據的正義。</p></li>
+<li><p><strong>資源配置</strong>：不要看到 A 廠 28 分就投入所有預算去推廣 A 廠經驗。貝氏分析告訴你，A 廠的真實優勢可能沒那麼大。</p></li>
+</ol>
+<ul>
+<li>這就是階層模式的威力——它像一個穩重的智者，在眾人為極端數據歡呼或恐慌時，冷靜地告訴你：「<strong>別急，讓子彈飛一會兒，真實的情況通常比較中庸。</strong>」</li>
+</ul>
+<hr>
+</section>
+</div>
+<div id="tabset-1-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-7-tab">
+<p><strong>(Meta-analysis)</strong></p>
+<ul>
+<li><p>期刊時常看到「Meta-analysis（整合分析）」這個詞，(例)通常是學者把過去幾十年關於「矽肺病風險」或「輪班工作與癌症」的所有研究蒐集起來，做一個大總結。</p></li>
+<li><p>在貝氏統計的眼中，<strong>整合分析其實就是階層模式的標準應用</strong>。我們把每一篇發表的論文（Study）視為階層模式中的一個「群組（Group）」或「實驗」，利用我們在 5.4 節學到的技術，將它們有機地結合起來。</p></li>
+</ul>
+<hr>
+<section id="什麼是整合分析" class="level4">
+<h4 class="anchored" data-anchor-id="什麼是整合分析">1. 什麼是整合分析？</h4>
+<section id="ohs例防護具介入成效" class="level5">
+<h5 class="anchored" data-anchor-id="ohs例防護具介入成效">OHS例：防護具介入成效</h5>
+<ul>
+<li><p>假設你想評估「全面配戴防護眼鏡能否降低眼部受傷率」，你蒐集了過去 20 年在不同國家、不同工廠做的 22 份研究報告。</p></li>
+<li><p>Study 1：某小工廠，樣本 50 人，結論「沒差」。</p></li>
+<li><p>Study 4：某大集團，樣本 3000 人，結論「顯著有效」。</p></li>
+<li><p>你的任務：給出一個<strong>綜合結論</strong>。到底有效沒效？如果我明天在一間新工廠實施，預期效果是多少？</p></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="數據前處理" class="level4">
+<h4 class="anchored" data-anchor-id="數據前處理">2. 數據前處理</h4>
+<section id="將二分法轉為常態分佈" class="level5">
+<h5 class="anchored" data-anchor-id="將二分法轉為常態分佈">將「二分法」轉為「常態分佈」</h5>
+<ul>
+<li><p>處理二項式數據是用 Beta 分佈，但在整合分析中，為了計算方便且能利用常態階層模式，我們通常會先做一個轉換。</p></li>
+<li><p><strong>指標選擇</strong>：我們不直接比「受傷率差值」，而是用 <strong>「對數勝算比 (Log-odds ratio)」</strong>，記為 <span class="math inline">y_j</span> 。</p>
+<ul>
+<li><p>如果 <span class="math inline">y_j &lt; 0</span>：代表介入有效（死亡/受傷率降低）。</p></li>
+<li><p>如果 <span class="math inline">y_j = 0</span>：代表沒效。</p></li>
+<li><p>如果 <span class="math inline">y_j &gt; 0</span>：代表有害。</p></li>
+</ul></li>
+<li><p>常態近似假設：雖然原始數據是受傷人數（二項式），但當樣本數夠大時，這個算出來的對數勝算比 <span class="math inline">y_j</span> 近似服從常態分佈： <span class="math inline">y_j \sim N(\theta_j, \sigma_j^2)</span></p>
+<ul>
+<li><p><span class="math inline">\theta_j</span>：第 <span class="math inline">j</span> 個研究的真實效果。</p></li>
+<li><p><span class="math inline">\sigma_j^2</span>：該研究的抽樣變異（由該研究的樣本數決定）。</p></li>
+</ul></li>
+<li><p>為什麼要這樣做？因為一旦轉成常態分佈，我們就可以直接套用 5.4 節 那套強大的「加權公式」了！</p></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="推論目的-goals-of-inference" class="level4">
+<h4 class="anchored" data-anchor-id="推論目的-goals-of-inference">3. 推論目的 (Goals of Inference)</h4>
+<ul>
+<li><p>在整合這些研究時，我們有三種選擇，這對應到先前學到的概念：</p></li>
+<li><p><strong>完全相同 (Complete Pooling)</strong>：假設這 22 個研究根本是在做同一件事，唯一的差別只是抽樣誤差。</p>
+<ul>
+<li><em>ＯＨＳ觀點</em>：假設美國化工廠的工安文化跟印度紡織廠的一模一樣。這顯然太武斷。</li>
+</ul></li>
+<li><p><strong>完全無關 (No Pooling)</strong>：假設這些研究彼此毫無關係。Study 1 的結果對 Study 2 沒有任何參考價值。</p>
+<ul>
+<li><em>ＯＨＳ觀點</em>：這放棄了整合的意義，我們就不用做 Meta-analysis 了。</li>
+</ul></li>
+<li><p><strong>可交換 (Exchangeable / Hierarchical Model)</strong>：這是貝氏的核心。我們承認各研究有差異（工廠環境不同、執行力度不同），但它們都在評估「同一個介入措施」，所以它們的效果 <span class="math inline">\theta_j</span> 來自同一個母體分佈。</p></li>
+</ul>
+<hr>
+</section>
+<section id="分析結果收斂-shrinkage" class="level4">
+<h4 class="anchored" data-anchor-id="分析結果收斂-shrinkage">4. 分析結果：收斂 (Shrinkage)</h4>
+<ul>
+<li>運用階層模式分析後，我們得到了各研究的修正後效果 <span class="math inline">\theta_j</span>。觀察課本 Table 5.4 的數據，你會發現熟悉的現象：</li>
+</ul>
+<p><img src="images/Table5.4.png" class="img-fluid"></p>
+<ul>
+<li><p><strong>大樣本研究 (如 Study 4)</strong>：原始數據標準誤很小 (<span class="math inline">\sigma_j=0.14</span>)。它的貝氏估計值跟原始數據幾乎一樣。它「定住」了整體趨勢。</p></li>
+<li><p><strong>小樣本研究 (如 Study 2)</strong>：原始數據顯示效果超好 (Log-odds = -0.74，死亡率大幅下降)，但標準誤很大 (<span class="math inline">\sigma_j=0.48</span>)。貝氏分析把它「拉」回了總平均，修正後的估計值變成了 -0.40 左右。</p></li>
+<li><p><strong>結論</strong>：那個看起來像奇蹟的 Study 2，很可能只是運氣好。<u><strong>階層模式幫我們過濾掉了這種雜訊。</strong></u></p></li>
+</ul>
+<p><em>(圖示概念：森林圖 (Forest Plot)。原始數據的信賴區間長短不一，經過貝氏階層模式收斂後，所有估計值會向中心靠攏，且信賴區間通常會變窄，除了那些原本就極度不準確的小研究。)</em></p>
+<hr>
+</section>
+<section id="對未來的預測" class="level4">
+<h4 class="anchored" data-anchor-id="對未來的預測">5. 對「未來」的預測</h4>
+<ul>
+<li><p>這是 5.6 節對職業衛生專家最有價值的一段 。</p></li>
+<li><p>傳統的 Meta-analysis 往往只告訴你「平均效果 (Overall Mean, <span class="math inline">\mu</span>)」是多少。</p>
+<ul>
+<li><p>課本結果：平均效果 <span class="math inline">\mu</span> 的 95% 信賴區間是 <span class="math inline">[-0.37, -0.11]</span>。</p></li>
+<li><p><strong>解讀</strong>：看起來這個藥（或介入措施）整體來說是有效的，因為區間都小於 0。</p></li>
+</ul></li>
+<li><p><strong>但是！</strong> 如果你是要決定「是否在一間<strong>新工廠</strong>實施這個措施」，你看的不能只是平均值。你要看的是 <strong>「預測效果 (Predicted Effect,</strong> <span class="math inline">\tilde{\theta}_j</span>)」。</p>
+<ul>
+<li><p><strong>新研究的預測區間</strong>：<span class="math inline">[-0.58, 0.11]</span>。</p></li>
+<li><p><strong>驚人的發現</strong>：雖然平均來說有效，但這個預測區間<strong>包含了正值</strong>（0.11）。</p></li>
+<li><p><strong>機率解釋</strong>：這代表雖然這措施平均有效，但在一個<strong>新環境</strong>下，它有 <strong>超過 10% 的機率</strong> 可能是無效甚至有害的（<span class="math inline">P(\tilde{\theta}_j &gt; 0) &gt; 10\%</span>）。</p></li>
+</ul></li>
+</ul>
+<p><img src="images/Table5.5.png" class="img-fluid"></p>
+<ul>
+<li><p>這解釋了為什麼有些安全措施在 A 廠很成功，搬到 B 廠卻失敗。</p>
+<ul>
+<li><p>因為母體標準差 <span class="math inline">\tau</span>（異質性）存在。</p></li>
+<li><p>貝氏分析誠實地告訴你：<strong>「平均而言這是好主意，但別保證在你的廠一定有效。你仍有 10% 的風險會失敗。」</strong></p></li>
+<li><p>這比單純給一個「平均有效」的結論，更能幫助管理者進行風險決策。</p></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="小結-5" class="level4">
+<h4 class="anchored" data-anchor-id="小結-5">小結</h4>
+<ol type="1">
+<li><p><strong>整合分析即階層模式</strong>：不要被醫學術語嚇到，這就是把不同來源的 <span class="math inline">y_j</span> 和 <span class="math inline">\sigma_j</span> 丟進我們在 5.4 節學的那個常態模型裡。</p></li>
+<li><p><strong>標準誤 (</strong><span class="math inline">\sigma_j</span>) 是權重：在整合文獻時，樣本數大（<span class="math inline">\sigma_j</span> 小）的研究講話比較大聲，模型會自動處理這件事，你不需要手動加權。</p></li>
+<li><p><strong>關注</strong> <span class="math inline">\tau</span> (異質性)：如果 <span class="math inline">\tau</span> 很大，代表各研究間差異懸殊，這時候「平均效果」意義不大，你要特別小心推廣到新環境的風險。</p></li>
+<li><p><strong>預測未來的風險</strong>：如果要評估新專案，請務必看 <strong>Predicted Effect</strong> 的區間，而不是 Overall Mean 的區間。前者才包含了真實世界的不確定性。</p></li>
+</ol>
+<hr>
+</section>
+</div>
+<div id="tabset-1-8" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-8-tab">
+<p><strong>(Weakly informative priors for variance parameters)</strong></p>
+<ul>
+<li><p>身為職業衛生專家，我必須特別強調: <strong>「數據太少」</strong> 是常態。</p></li>
+<li><p>你可能只有 <strong>3 個</strong> 相似暴露群 (SEG) 的數據，或者只有 <strong>3 個</strong> 分廠的工安紀錄。當群組數量 <span class="math inline">J</span> 很小（例如 <span class="math inline">J &lt; 5</span>）時，你在軟體裡隨便選的一個「預設事前分佈」，可能會導致完全錯誤的風險評估結論。</p></li>
+<li><p>如何避開這個陷阱？（找我們 - 專家群😆？）</p></li>
+</ul>
+<hr>
+<section id="問題的根源當-j-很小時tau-很難算" class="level4">
+<h4 class="anchored" data-anchor-id="問題的根源當-j-很小時tau-很難算">1. 問題的根源：當 <span class="math inline">J</span> 很小時，<span class="math inline">\tau</span> 很難算</h4>
+<ul>
+<li><p>在階層模式中，<span class="math inline">\tau</span> 代表「群組間的標準差」（例如：廠與廠之間的差異程度）。</p></li>
+<li><p>如果你有 50 個工廠的數據，數據本身就足以告訴你 <span class="math inline">\tau</span> 是多少，事前分佈影響不大。</p></li>
+<li><p>但如果你只有 <strong>3 個工廠</strong>，數據提供的資訊非常少。這時候，你設定的事前分佈 <span class="math inline">p(\tau)</span> 就會強烈主導結果。</p></li>
+<li><p>OHS情境：你有 3 個工廠 (A, B, C)。</p>
+<ul>
+<li><p>A 廠平均暴露 80。</p></li>
+<li><p>B 廠平均暴露 82。</p></li>
+<li><p>C 廠平均暴露 78。</p></li>
+</ul></li>
+<li><p><strong>問題</strong>：這三個廠的差異 (<span class="math inline">\tau</span>) 到底是多少？</p>
+<ul>
+<li><p>是差異很小 (<span class="math inline">\tau \approx 2</span>)？</p></li>
+<li><p>還是其實差異可能很大，只是剛好抽到這三個接近的？</p></li>
+</ul></li>
+<li><p>因為只有 3 個樣本，數據很難排除「<span class="math inline">\tau</span> 其實很大」的可能性。</p></li>
+</ul>
+<hr>
+</section>
+<section id="那些年我們用錯的事前分佈" class="level4">
+<h4 class="anchored" data-anchor-id="那些年我們用錯的事前分佈">2. 那些年，我們用錯的事前分佈</h4>
+<p>(Common Noninformative Priors)</p>
+<ul>
+<li>課本檢討了幾種常見的「無資訊」事前分佈，並指出它們在小樣本下的危險性。</li>
+</ul>
+<section id="inverse-gamma-epsilon-epsilon-軟體的預設陷阱" class="level5">
+<h5 class="anchored" data-anchor-id="inverse-gamma-epsilon-epsilon-軟體的預設陷阱">(1) Inverse-Gamma <span class="math inline">(\epsilon, \epsilon)</span> — 軟體的預設陷阱</h5>
+<ul>
+<li><p><strong>背景</strong>：在早期貝氏軟體（如 BUGS）中，這是變異數 <span class="math inline">\tau^2</span> 的標準預設值（為了數學計算方便，共軛特性。通常設 <span class="math inline">\epsilon</span> 為很小的數，如 0.001。</p></li>
+<li><p><strong>問題</strong>：Inverse-Gamma 分佈在 0 的地方機率是 0。</p></li>
+<li><p><strong>後果</strong>：它會強迫 <span class="math inline">\tau</span> <strong>遠離 0</strong>。即使數據顯示這 3 個工廠其實一模一樣 (<span class="math inline">\tau=0</span>)，這個事前分佈也會強行告訴模型：「不！它們一定有差異！」</p></li>
+<li><p><strong>職安衛影響</strong>：你會<strong>高估</strong>廠間差異，導致收斂效果 (Shrinkage) 變差，無法有效借用其他廠的數據來修正誤差。</p></li>
+</ul>
+</section>
+<section id="uniform-on-logtau-數學上的地雷" class="level5">
+<h5 class="anchored" data-anchor-id="uniform-on-logtau-數學上的地雷">(2) Uniform on <span class="math inline">\log(\tau)</span> —數學上的地雷</h5>
+<ul>
+<li><p><strong>作法</strong>：假設 <span class="math inline">\log(\tau)</span> 是均勻分佈。</p></li>
+<li><p><strong>問題</strong>：這會導致事後分佈無法積分（Improper Posterior），算出來的機率總和是無限大。這是數學上的死路，不能用。</p></li>
+</ul>
+</section>
+</section>
+<section id="uniform-on-tau-0-a-8-個工廠時還可以但-3-個就不行" class="level4">
+<h4 class="anchored" data-anchor-id="uniform-on-tau-0-a-8-個工廠時還可以但-3-個就不行">(3) Uniform on <span class="math inline">\tau</span> (0, A) — 8 個工廠時還可以，但 3 個就不行</h4>
+<ul>
+<li><p><strong>作法</strong>：假設 <span class="math inline">\tau</span> 在一個很寬的範圍（例如 0 到 100）是均勻分佈。</p></li>
+<li><p><strong>表現</strong>：</p>
+<ul>
+<li><p><span class="math inline">J=8</span> (八所工廠)：表現不錯，結果合理 。</p></li>
+<li><p><span class="math inline">J=3</span> (三所工廠)：因為只有 3 個數據，無法限制 <span class="math inline">\tau</span> 的上限。事前分佈認為 <span class="math inline">\tau=1000</span> 的機率跟 <span class="math inline">\tau=1</span> 一樣高。結果事後分佈會有一個<strong>超級長甚至發散的右尾 (Right tail)</strong> 。</p></li>
+</ul></li>
+<li><p><strong>職安影響</strong>：模型會誤以為廠間差異巨大，導致完全不進行收斂 (No Pooling)，退化成個別估計。</p></li>
+</ul>
+<hr>
+</section>
+<section id="救星弱資訊事前分佈-weakly-informative-priors" class="level4">
+<h4 class="anchored" data-anchor-id="救星弱資訊事前分佈-weakly-informative-priors"><strong>3. 救星：弱資訊事前分佈 (Weakly Informative Priors)</strong></h4>
+<ul>
+<li>既然「完全無資訊」在小樣本會出事，我們就給它一點點資訊，這就是 <strong>「弱資訊 (Weakly Informative)」</strong> 的概念。</li>
+</ul>
+<section id="什麼是弱資訊" class="level5">
+<h5 class="anchored" data-anchor-id="什麼是弱資訊">什麼是「弱資訊」？</h5>
+<ul>
+<li><p>我們雖然不知道確切的 <span class="math inline">\tau</span>，但根據物理或專業知識，我們知道它<strong>不可能大到離譜</strong>。</p></li>
+<li><p>例如：評估噪音暴露，廠與廠之間的平均分貝數差異，頂多是 10-20 dBA，不可能差到 1000 dBA。</p></li>
+</ul>
+</section>
+<section id="推薦選擇half-cauchy-分佈-或是-half-t" class="level5">
+<h5 class="anchored" data-anchor-id="推薦選擇half-cauchy-分佈-或是-half-t">推薦選擇：Half-Cauchy 分佈 (或是 Half-t)</h5>
+<ul>
+<li><p>課本強烈推薦使用 <strong>Half-Cauchy</strong> 分佈（只取正半邊的柯西分佈）來描述 <span class="math inline">\tau</span> 。</p></li>
+<li><p><strong>特點</strong>：</p>
+<ol type="1">
+<li><p><strong>在 0 附近很平坦</strong>：允許 <span class="math inline">\tau</span> 很小（接受工廠間無差異的可能性），不像 Inverse-Gamma 那樣排斥 0。</p></li>
+<li><p><strong>尾巴厚但收斂</strong>：它允許 <span class="math inline">\tau</span> 變大，但會給予輕微的約束，不讓它像 Uniform 那樣無限制地飄到無限大。</p></li>
+<li><p><strong>設定方法</strong>：設定一個寬鬆的尺度參數 <span class="math inline">A</span>（Scale Parameter）。例如設 <span class="math inline">A=25</span>（大於我們預期的最大差異）。</p></li>
+</ol></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="實例3-所學校的實驗" class="level4">
+<h4 class="anchored" data-anchor-id="實例3-所學校的實驗">4. 實例：3 所學校的實驗</h4>
+<ul>
+<li>課本為了證明這一點，特地把 8 所學校的數據刪減到只剩 3 所，模擬極端小樣本的情況 。</li>
+</ul>
+</section>
+<section id="實驗-a使用-uniform-prior" class="level4">
+<h4 class="anchored" data-anchor-id="實驗-a使用-uniform-prior">實驗 A：使用 Uniform Prior</h4>
+<ul>
+<li><p><strong>結果</strong>：事後分佈的尾巴長到天邊去。</p></li>
+<li><p><strong>解讀</strong>：模型說「這三間學校的差異可能高達幾百幾千分！」這顯然不合常理（SAT 總分才 800）。這導致估計完全失效。</p></li>
+</ul>
+</section>
+<section id="實驗-b使用-half-cauchy-prior-scale25" class="level4">
+<h4 class="anchored" data-anchor-id="實驗-b使用-half-cauchy-prior-scale25">實驗 B：使用 Half-Cauchy Prior (Scale=25)</h4>
+<ul>
+<li><p><strong>結果</strong>：事後分佈很漂亮地收斂了，尾巴被壓下來了。</p></li>
+<li><p><strong>解讀</strong>：模型說「雖然數據少，但我限制了差異不會大到離譜。」這樣的估計結果（收斂程度）遠比 Uniform 合理。</p></li>
+</ul>
+</section>
+<section id="小結-6" class="level4">
+<h4 class="anchored" data-anchor-id="小結-6">小結</h4>
+<ul>
+<li>這節是你在操作貝氏軟體（如 Stan, JAGS, 或 R packages）時的救命稻草：</li>
+</ul>
+<ol type="1">
+<li><p><strong>警惕小樣本 (</strong><span class="math inline">J &lt; 5</span>)：當你要合併分析的廠區、班別或 SEG 數量很少時，<strong>絕對不要</strong>使用軟體預設的 Inverse-Gamma（例如 <code>dgamma(0.001, 0.001)</code>）。這會毀了你的分析。</p></li>
+<li><p><strong>物理限制是好朋友</strong>：利用你對職業衛生的專業知識（噪音、化學濃度的物理極限），為模型設定一個「弱資訊」的邊界。</p>
+<ul>
+<li>比如：設定 <span class="math inline">\tau \sim \text{Half-Cauchy}(0, 25)</span>。這是在告訴模型：「廠間差異大概在 25 以內，雖然我不確定，但請不要猜 1000。」</li>
+</ul></li>
+<li><p><strong>檢查事後分佈圖</strong>：做完分析後，一定要把 <span class="math inline">\tau</span> 的分佈圖畫出來（像 Figure 5.9 那樣）。</p>
+<ul>
+<li>如果看到它在 0 的地方由高聳的尖峰變成 0（被推開），或者尾巴無限延伸，那就是事前分佈設錯了。</li>
+</ul></li>
+</ol>
+<ul>
+<li>有了階層模式，你不再只是看著幾個零星的採樣數據發愁，而是能整間公司的經驗，為每一個角落的勞工提供更精準的保護。這套工具是你從「數據記錄員」進階為「風險預測專家」的關鍵武器。</li>
+</ul>
+</section>
+</div>
+<div id="tabset-1-9" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-9-tab">
+
+</div>
+</div>
+</div>
+
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./0112CH4.html" class="pagination-link" aria-label="4.漸近理論">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">4.漸近理論</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2026, 何明信</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
